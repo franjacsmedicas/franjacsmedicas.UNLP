@@ -64,7 +64,7 @@ const SITE_CONFIG = {
 
         eyebrow: "Franja Morada · Ciencias Médicas UNLP",
 
-        heroTitle: "TU FACULTAD.<br><span>TU LUGAR.</span>",
+        heroTitle: "LOGRANDO LA FACULTAD<br><span>QUE SOÑAMOS.</span>",
 
         heroText: "Información, recursos, actividades y propuestas para acompañarte durante tu vida universitaria en Ciencias Médicas.",
 
