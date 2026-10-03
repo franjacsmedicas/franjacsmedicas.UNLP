@@ -48,7 +48,7 @@ const SITE_CONFIG = {
 
         news1: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0ioCJVSS1xOhG8aRvWaaULxjl16x15Gr0l3V0YO9quA&s=10",
 
-        news2: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=85",
+        news2: "https://www.instagram.com/p/Dd9jkOpzupj/media/?size=l",
 
         news3: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=900&q=85"
     },
