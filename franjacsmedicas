@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Franja Morada | Ciencias Médicas UNLP</title>
+    <meta
+        name="description"
+        content="Franja Morada Ciencias Médicas UNLP. Información, recursos, actividades y propuestas para estudiantes."
+    >
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --bordo: #68152b;
+            --bordo-oscuro: #430d1c;
+            --bordo-claro: #8d2945;
+            --negro: #111111;
+            --gris: #f4f4f4;
+            --blanco: #ffffff;
+            --texto: #222222;
+            --sombra: 0 12px 35px rgba(0,0,0,.10);
+            --radio: 18px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            color: var(--texto);
+            background: var(--blanco);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255,255,255,.96);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,.08);
+        }
+
+        .nav {
+            max-width: 1200px;
+            margin: auto;
+            height: 78px;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+        }
+
+        .brand-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--bordo);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Anton", sans-serif;
+            font-size: 20px;
+        }
+
+        .brand-text {
+            line-height: 1.05;
+        }
+
+        .brand-text strong {
+            display: block;
+            font-size: 15px;
+        }
+
+        .brand-text span {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            list-style: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            transition: .25s;
+        }
+
+        .nav-links a:hover {
+            color: var(--bordo);
+        }
+
+        .nav-button {
+            background: var(--bordo);
+            color: white !important;
+            padding: 11px 18px;
+            border-radius: 8px;
+        }
+
+        .menu-btn {
+            display: none;
+            border: none;
+            background: none;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            min-height: 760px;
+            padding: 150px 25px 90px;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(50,8,20,.95) 0%,
+                    rgba(68,12,29,.87) 50%,
+                    rgba(68,12,29,.45) 100%
+                ),
+                url("https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1800&q=85")
+                center/cover;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            margin: auto;
+        }
+
+        .eyebrow {
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 2px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            opacity: .85;
+        }
+
+        .hero h1 {
+            font-family: "Anton", sans-serif;
+            text-transform: uppercase;
+            font-size: clamp(55px, 9vw, 105px);
+            line-height: .92;
+            max-width: 850px;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 span {
+            color: #f3dfe5;
+        }
+
+        .hero p {
+            max-width: 620px;
+            margin-top: 28px;
+            font-size: 18px;
+            color: rgba(255,255,255,.88);
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 35px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 23px;
+            border-radius: 9px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: .25s;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--bordo);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255,255,255,.6);
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--bordo);
+        }
+
+        /* =========================
+           ACCESOS
+        ========================= */
+
+        .quick-access {
+            max-width: 1100px;
+            margin: -65px auto 0;
+            position: relative;
+            z-index: 10;
+            padding: 0 20px;
+        }
+
+        .access-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .access-card {
+            background: white;
+            border-radius: var(--radio);
+            padding: 27px 20px;
+            box-shadow: var(--sombra);
+            transition: .25s;
+            border: 1px solid #eee;
+        }
+
+        .access-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .access-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: #f4e7eb;
+            color: var(--bordo);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            margin-bottom: 17px;
+        }
+
+        .access-card h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .access-card p {
+            font-size: 12px;
+            color: #777;
+        }
+
+        /* =========================
+           SECCIONES
+        ========================= */
+
+        section {
+            padding: 100px 25px;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        .section-header {
+            margin-bottom: 45px;
+        }
+
+        .section-label {
+            color: var(--bordo);
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .section-title {
+            font-family: "Anton", sans-serif;
+            font-size: clamp(42px, 6vw, 65px);
+            text-transform: uppercase;
+            line-height: 1;
+            margin-top: 8px;
+        }
+
+        .section-description {
+            max-width: 620px;
+            color: #666;
+            margin-top: 15px;
+        }
+
+        /* =========================
+           NOVEDADES
+        ========================= */
+
+        .news {
+            background: var(--gris);
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: var(--radio);
+            overflow: hidden;
+            border: 1px solid #eee;
+            transition: .25s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--sombra);
+        }
+
+        .news-image {
+            height: 210px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .news-main .news-image {
+            height: 300px;
+        }
+
+        .news-content {
+            padding: 24px;
+        }
+
+        .news-tag {
+            color: var(--bordo);
+            text-transform: uppercase;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .news-content h3 {
+            font-size: 20px;
+            margin: 8px 0;
+            line-height: 1.25;
+        }
+
+        .news-content p {
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* =========================
+           PROPUESTAS
+        ========================= */
+
+        .proposal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .proposal-image {
+            min-height: 500px;
+            border-radius: 25px;
+            background:
+                linear-gradient(
+                    rgba(68,13,30,.25),
+                    rgba(68,13,30,.25)
+                ),
+                url("https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1000&q=85")
+                center/cover;
+        }
+
+        .proposal-list {
+            margin-top: 30px;
+            display: grid;
+            gap: 18px;
+        }
+
+        .proposal-item {
+            display: flex;
+            gap: 16px;
+            padding: 18px;
+            border-radius: 13px;
+            background: #f7f7f7;
+        }
+
+        .proposal-number {
+            font-family: "Anton", sans-serif;
+            color: var(--bordo);
+            font-size: 25px;
+        }
+
+        .proposal-item h4 {
+            margin-bottom: 4px;
+        }
+
+        .proposal-item p {
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* =========================
+           CTA
+        ========================= */
+
+        .cta {
+            background: var(--bordo);
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-family: "Anton", sans-serif;
+            text-transform: uppercase;
+            font-size: clamp(45px, 7vw, 75px);
+            line-height: .95;
+        }
+
+        .cta p {
+            max-width: 580px;
+            margin: 20px auto 30px;
+            color: rgba(255,255,255,.8);
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            background: #111;
+            color: white;
+            padding: 60px 25px 25px;
+        }
+
+        .footer-grid {
+            max-width: 1150px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 50px;
+        }
+
+        footer h3 {
+            margin-bottom: 15px;
+        }
+
+        footer p,
+        footer a {
+            color: #aaa;
+            font-size: 13px;
+        }
+
+        footer ul {
+            list-style: none;
+        }
+
+        footer li {
+            margin-bottom: 8px;
+        }
+
+        footer a:hover {
+            color: white;
+        }
+
+        .copyright {
+            max-width: 1150px;
+            margin: 45px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: #777;
+            font-size: 11px;
+        }
+
+        /* =========================
+           ANIMACIONES
+        ========================= */
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .nav-links {
+                position: absolute;
+                top: 78px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                align-items: stretch;
+                padding: 20px 25px;
+                gap: 0;
+                box-shadow: 0 10px 20px rgba(0,0,0,.08);
+
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(-10px);
+                transition: .25s;
+            }
+
+            .nav-links.active {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translateY(0);
+            }
+
+            .nav-links li {
+                padding: 13px 0;
+            }
+
+            .nav-button {
+                text-align: center;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .access-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .news-main .news-image {
+                height: 230px;
+            }
+
+            .proposal {
+                grid-template-columns: 1fr;
+            }
+
+            .proposal-image {
+                min-height: 350px;
+                order: 2;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .nav {
+                height: 70px;
+            }
+
+            .brand-mark {
+                width: 39px;
+                height: 39px;
+            }
+
+            .brand-text strong {
+                font-size: 13px;
+            }
+
+            .brand-text span {
+                font-size: 9px;
+            }
+
+            .hero {
+                min-height: 680px;
+                padding-top: 125px;
+            }
+
+            .hero h1 {
+                font-size: 58px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .quick-access {
+                margin-top: -45px;
+            }
+
+            .access-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .access-card {
+                padding: 20px 15px;
+            }
+
+            section {
+                padding: 75px 20px;
+            }
+
+            .proposal-image {
+                min-height: 280px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header>
+        <nav class="nav">
+
+            <a href="#inicio" class="brand">
+                <div class="brand-mark">FM</div>
+
+                <div class="brand-text">
+                    <strong>FRANJA MORADA</strong>
+                    <span>CIENCIAS MÉDICAS · UNLP</span>
+                </div>
+            </a>
+
+            <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">
+                ☰
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#recursos">Recursos</a></li>
+                <li><a href="#novedades">Novedades</a></li>
+                <li><a href="#propuestas">Propuestas</a></li>
+                <li>
+                    <a href="#contacto" class="nav-button">
+                        Contacto
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+    </header>
+
+
+    <!-- =========================
+         HERO
+    ========================= -->
+
+    <main id="inicio">
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="eyebrow">
+                    Franja Morada · Ciencias Médicas UNLP
+                </div>
+
+                <h1>
+                    TU FACULTAD.<br>
+                    <span>TU LUGAR.</span>
+                </h1>
+
+                <p>
+                    Información, recursos, actividades y propuestas
+                    para acompañarte durante tu vida universitaria
+                    en Ciencias Médicas.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="#recursos" class="btn btn-primary">
+                        Conocé nuestros recursos
+                    </a>
+
+                    <a href="#novedades" class="btn btn-outline">
+                        Ver novedades
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ACCESOS RÁPIDOS
+        ========================= -->
+
+        <div class="quick-access" id="recursos">
+
+            <div class="access-grid">
+
+                <a href="#" class="access-card fade-in">
+
+                    <div class="access-icon">🎓</div>
+
+                    <h3>Ingreso 2027</h3>
+
+                    <p>
+                        Todo lo que necesitás para empezar.
+                    </p>
+
+                </a>
+
+
+                <a href="#" class="access-card fade-in">
+
+                    <div class="access-icon">📚</div>
+
+                    <h3>Planes de estudio</h3>
+
+                    <p>
+                        Consultá las carreras y sus materias.
+                    </p>
+
+                </a>
+
+
+                <a href="#" class="access-card fade-in">
+
+                    <div class="access-icon">📖</div>
+
+                    <h3>Biblioteca virtual</h3>
+
+                    <p>
+                        Material de estudio para tu cursada.
+                    </p>
+
+                </a>
+
+
+                <a href="#" class="access-card fade-in">
+
+                    <div class="access-icon">🗺️</div>
+
+                    <h3>Mapas FCM</h3>
+
+                    <p>
+                        Encontrá aulas, sedes y espacios.
+                    </p>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             NOVEDADES
+        ========================= -->
+
+        <section class="news" id="novedades">
+
+            <div class="container">
+
+                <div class="section-header fade-in">
+
+                    <span class="section-label">
+                        Actualidad
+                    </span>
+
+                    <h2 class="section-title">
+                        Novedades
+                    </h2>
+
+                    <p class="section-description">
+                        Todas las actividades, noticias y propuestas
+                        que tenemos para vos.
+                    </p>
+
+                </div>
+
+
+                <div class="news-grid">
+
+                    <article class="news-card news-main fade-in">
+
+                        <div
+                            class="news-image"
+                            style="background-image:
+                            url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=85')">
+                        </div>
+
+                        <div class="news-content">
+
+                            <span class="news-tag">
+                                Actividades
+                            </span>
+
+                            <h3>
+                                Formación y actividades para estudiantes
+                            </h3>
+
+                            <p>
+                                Conocé las próximas propuestas y espacios
+                                de formación que estamos preparando.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="news-card fade-in">
+
+                        <div
+                            class="news-image"
+                            style="background-image:
+                            url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=85')">
+                        </div>
+
+                        <div class="news-content">
+
+                            <span class="news-tag">
+                                FCM
+                            </span>
+
+                            <h3>
+                                Conocé tu Facultad
+                            </h3>
+
+                            <p>
+                                Un recorrido para conocer los espacios
+                                que forman parte de nuestra facultad.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="news-card fade-in">
+
+                        <div
+                            class="news-image"
+                            style="background-image:
+                            url('https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=900&q=85')">
+                        </div>
+
+                        <div class="news-content">
+
+                            <span class="news-tag">
+                                Estudiantes
+                            </span>
+
+                            <h3>
+                                Nuevos recursos para la cursada
+                            </h3>
+
+                            <p>
+                                Accedé a herramientas pensadas para
+                                acompañarte durante el año.
+                            </p>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PROPUESTAS
+        ========================= -->
+
+        <section id="propuestas">
+
+            <div class="container">
+
+                <div class="proposal">
+
+                    <div class="proposal-image fade-in"></div>
+
+                    <div class="fade-in">
+
+                        <span class="section-label">
+                            Universidad
+                        </span>
+
+                        <h2 class="section-title">
+                            Propuestas
+                        </h2>
+
+                        <p class="section-description">
+                            Una Facultad que acompañe a sus estudiantes
+                            necesita herramientas, información y espacios
+                            de participación.
+                        </p>
+
+
+                        <div class="proposal-list">
+
+                            <div class="proposal-item">
+
+                                <div class="proposal-number">
+                                    01
+                                </div>
+
+                                <div>
+                                    <h4>
+                                        Más herramientas para estudiar
+                                    </h4>
+
+                                    <p>
+                                        Materiales y recursos accesibles
+                                        para acompañar la cursada.
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div class="proposal-item">
+
+                                <div class="proposal-number">
+                                    02
+                                </div>
+
+                                <div>
+                                    <h4>
+                                        Información clara
+                                    </h4>
+
+                                    <p>
+                                        Una plataforma donde encontrar
+                                        rápidamente lo que necesitás.
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div class="proposal-item">
+
+                                <div class="proposal-number">
+                                    03
+                                </div>
+
+                                <div>
+                                    <h4>
+                                        Más participación estudiantil
+                                    </h4>
+
+                                    <p>
+                                        Espacios para escuchar ideas,
+                                        necesidades y propuestas.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CTA
+        ========================= -->
+
+        <section class="cta" id="contacto">
+
+            <div class="container fade-in">
+
+                <h2>
+                    Hagamos comunidad
+                </h2>
+
+                <p>
+                    Queremos que esta web sea una herramienta para
+                    todos los estudiantes de Ciencias Médicas.
+                </p>
+
+                <a
+                    href="https://www.instagram.com/"
+                    target="_blank"
+                    class="btn btn-primary"
+                >
+                    Seguinos en Instagram
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+
+    <footer>
+
+        <div class="footer-grid">
+
+            <div>
+
+                <h3>
+                    Franja Morada
+                </h3>
+
+                <p>
+                    Ciencias Médicas · Universidad Nacional de La Plata.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    Secciones
+                </h3>
+
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#recursos">Recursos</a></li>
+                    <li><a href="#novedades">Novedades</a></li>
+                    <li><a href="#propuestas">Propuestas</a></li>
+                </ul>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+                    Redes
+                </h3>
+
+                <ul>
+                    <li>
+                        <a href="https://www.instagram.com/" target="_blank">
+                            Instagram
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            WhatsApp
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            Contacto
+                        </a>
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+
+
+        <div class="copyright">
+            © 2026 Franja Morada · Ciencias Médicas UNLP
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================= -->
+
+    <script>
+
+        /* MENÚ MOBILE */
+
+        const menuBtn = document.getElementById("menuBtn");
+        const navLinks = document.getElementById("navLinks");
+
+        menuBtn.addEventListener("click", () => {
+
+            navLinks.classList.toggle("active");
+
+            if (navLinks.classList.contains("active")) {
+                menuBtn.textContent = "✕";
+            } else {
+                menuBtn.textContent = "☰";
+            }
+
+        });
+
+
+        /* CERRAR MENÚ AL HACER CLICK */
+
+        document.querySelectorAll(".nav-links a").forEach(link => {
+
+            link.addEventListener("click", () => {
+
+                navLinks.classList.remove("active");
+                menuBtn.textContent = "☰";
+
+            });
+
+        });
+
+
+        /* ANIMACIONES AL HACER SCROLL */
+
+        const observer = new IntersectionObserver(
+            entries => {
+
+                entries.forEach(entry => {
+
+                    if (entry.isIntersecting) {
+
+                        entry.target.classList.add("visible");
+
+                    }
+
+                });
+
+            },
+            {
+                threshold: 0.12
+            }
+        );
+
+
+        document
+            .querySelectorAll(".fade-in")
+            .forEach(element => observer.observe(element));
+
+
+        /* HEADER CON SOMBRA AL SCROLLEAR */
+
+        const header = document.querySelector("header");
+
+        window.addEventListener("scroll", () => {
+
+            if (window.scrollY > 50) {
+
+                header.style.boxShadow =
+                    "0 5px 20px rgba(0,0,0,.08)";
+
+            } else {
+
+                header.style.boxShadow = "none";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
