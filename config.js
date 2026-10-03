@@ -1,11 +1,7 @@
-/* =========================================================
-   PANEL DE CONFIGURACIÓN — FRANJA MORADA CIENCIAS MÉDICAS UNLP
-   ========================================================= */
+/* PANEL DE CONFIGURACIÓN — FRANJA MORADA CIENCIAS MÉDICAS UNLP */
 
 const SITE_CONFIG = {
-    site: {
-        title: "Franja Morada | Ciencias Médicas UNLP"
-    },
+    site: { title: "Franja Morada | Ciencias Médicas UNLP" },
 
     colors: {
         bordo: "#68152b",
@@ -20,9 +16,9 @@ const SITE_CONFIG = {
     images: {
         hero: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1800&q=85",
         proposal: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1000&q=85",
-        news1: "img/comunidad-morada.jpg",
-        news2: "Biomed2.png",
-        news3: "img/novedad-3.jpg"
+        news1: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0ioCJVSS1xOhG8aRvWaaULxjl16x15Gr0l3V0YO9quA&s=10",
+        news2: "https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.githhub-io/main/Biomed2.png",
+        news3: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=85"
     },
 
     texts: {
