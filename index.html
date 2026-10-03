@@ -11,7 +11,9 @@
     >
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="config.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 
     <link
         href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap"
@@ -29,6 +31,10 @@
             --texto: #222222;
             --sombra: 0 12px 35px rgba(0,0,0,.10);
             --radio: 18px;
+
+            /* IMÁGENES CONTROLADAS DESDE config.js */
+            --hero-image: var(--hero-image);
+            --proposal-image: var(--proposal-image);
         }
 
         * {
@@ -363,6 +369,10 @@
             box-shadow: var(--sombra);
         }
 
+        .news-image-1 { background-image: var(--news-image-1); }
+        .news-image-2 { background-image: var(--news-image-2); }
+        .news-image-3 { background-image: var(--news-image-3); }
+
         .news-image {
             height: 210px;
             background-size: cover;
@@ -683,8 +693,8 @@
                 <div class="brand-mark">FM</div>
 
                 <div class="brand-text">
-                    <strong>FRANJA MORADA</strong>
-                    <span>CIENCIAS MÉDICAS · UNLP</span>
+                    <strong data-config="brandName">FRANJA MORADA</strong>
+                    <span data-config="brandSubtitle">CIENCIAS MÉDICAS · UNLP</span>
                 </div>
             </a>
 
@@ -718,28 +728,25 @@
             <div class="hero-content">
 
                 <div class="eyebrow">
-                    Franja Morada · Ciencias Médicas UNLP
+                    <span data-config="eyebrow">Franja Morada · Ciencias Médicas UNLP</span>
                 </div>
 
                 <h1>
-                    TU FACULTAD.<br>
-                    <span>TU LUGAR.</span>
+                    <span data-config="heroTitle">TU FACULTAD.<br><span>TU LUGAR.</span></span>
                 </h1>
 
                 <p>
-                    Información, recursos, actividades y propuestas
-                    para acompañarte durante tu vida universitaria
-                    en Ciencias Médicas.
+                    <span data-config="heroText">Información, recursos, actividades y propuestas para acompañarte durante tu vida universitaria en Ciencias Médicas.</span>
                 </p>
 
                 <div class="hero-buttons">
 
                     <a href="#recursos" class="btn btn-primary">
-                        Conocé nuestros recursos
+                        <span data-config="heroPrimaryButton">Conocé nuestros recursos</span>
                     </a>
 
                     <a href="#novedades" class="btn btn-outline">
-                        Ver novedades
+                        <span data-config="heroSecondaryButton">Ver novedades</span>
                     </a>
 
                 </div>
@@ -770,7 +777,7 @@
                 </a>
 
 
-                <a href="ingreso-2027.html" class="access-card fade-in">
+                <a href="planes-estudio.html" class="access-card fade-in">
 
                     <div class="access-icon">📚</div>
 
@@ -783,7 +790,7 @@
                 </a>
 
 
-                <a href="planes-estudio.html" class="access-card fade-in">
+                <a href="biblioteca.html" class="access-card fade-in">
 
                     <div class="access-icon">📖</div>
 
@@ -796,7 +803,7 @@
                 </a>
 
 
-                <a href="biblioteca.html" class="access-card fade-in">
+                <a href="mapas.html" class="access-card fade-in">
 
                     <div class="access-icon">🗺️</div>
 
@@ -828,12 +835,11 @@
                     </span>
 
                     <h2 class="section-title">
-                        Novedades
+                        <span data-config="newsTitle">Novedades</span>
                     </h2>
 
                     <p class="section-description">
-                        Todas las actividades, noticias y propuestas
-                        que tenemos para vos.
+                        <span data-config="newsDescription">Todas las actividades, noticias y propuestas que tenemos para vos.</span>
                     </p>
 
                 </div>
@@ -845,8 +851,7 @@
 
                         <div
                             class="news-image"
-                            style="background-image:
-                            url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=85')">
+                            class="news-image news-image-1">
                         </div>
 
                         <div class="news-content">
@@ -873,8 +878,7 @@
 
                         <div
                             class="news-image"
-                            style="background-image:
-                            url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=85')">
+                            class="news-image news-image-2">
                         </div>
 
                         <div class="news-content">
@@ -901,8 +905,7 @@
 
                         <div
                             class="news-image"
-                            style="background-image:
-                            url('https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=900&q=85')">
+                            class="news-image news-image-3">
                         </div>
 
                         <div class="news-content">
@@ -950,7 +953,7 @@
                         </span>
 
                         <h2 class="section-title">
-                            Propuestas
+                            <span data-config="proposalTitle">Propuestas</span>
                         </h2>
 
                         <p class="section-description">
@@ -1041,12 +1044,11 @@
             <div class="container fade-in">
 
                 <h2>
-                    Hagamos comunidad
+                    <span data-config="ctaTitle">Hagamos comunidad</span>
                 </h2>
 
                 <p>
-                    Queremos que esta web sea una herramienta para
-                    todos los estudiantes de Ciencias Médicas.
+                    <span data-config="ctaText">Queremos que esta web sea una herramienta para todos los estudiantes de Ciencias Médicas.</span>
                 </p>
 
                 <a
@@ -1054,7 +1056,7 @@
                     target="_blank"
                     class="btn btn-primary"
                 >
-                    Seguinos en Instagram
+                    <span data-config="instagramButton">Seguinos en Instagram</span>
                 </a>
 
             </div>
@@ -1133,7 +1135,7 @@
 
 
         <div class="copyright">
-            © 2026 Franja Morada · Ciencias Médicas UNLP
+            © <span data-config="year">2026</span> Franja Morada · Ciencias Médicas UNLP
         </div>
 
     </footer>
@@ -1144,6 +1146,48 @@
     ========================= -->
 
     <script>
+
+
+        /* =========================
+           CONFIGURACIÓN CENTRAL
+           Editá config.js para cambiar
+           colores, imágenes, textos y redes.
+        ========================= */
+
+        if (typeof SITE_CONFIG !== "undefined") {
+
+            const root = document.documentElement;
+
+            root.style.setProperty("--bordo", SITE_CONFIG.colors.bordo);
+            root.style.setProperty("--bordo-oscuro", SITE_CONFIG.colors.bordoOscuro);
+            root.style.setProperty("--bordo-claro", SITE_CONFIG.colors.bordoClaro);
+            root.style.setProperty("--negro", SITE_CONFIG.colors.negro);
+            root.style.setProperty("--gris", SITE_CONFIG.colors.gris);
+            root.style.setProperty("--blanco", SITE_CONFIG.colors.blanco);
+            root.style.setProperty("--texto", SITE_CONFIG.colors.texto);
+
+            root.style.setProperty("--hero-image", 'url("' + SITE_CONFIG.images.hero + '")');
+            root.style.setProperty("--proposal-image", 'url("' + SITE_CONFIG.images.proposal + '")');
+            root.style.setProperty("--news-image-1", 'url("' + SITE_CONFIG.images.news1 + '")');
+            root.style.setProperty("--news-image-2", 'url("' + SITE_CONFIG.images.news2 + '")');
+            root.style.setProperty("--news-image-3", 'url("' + SITE_CONFIG.images.news3 + '")');
+
+            document.querySelectorAll("[data-config]").forEach(element => {
+                const key = element.dataset.config;
+
+                if (SITE_CONFIG.texts[key] !== undefined) {
+                    element.innerHTML = SITE_CONFIG.texts[key];
+                }
+            });
+
+            const instagramLinks = document.querySelectorAll('a[href="https://www.instagram.com/"]');
+
+            instagramLinks.forEach(link => {
+                link.href = SITE_CONFIG.social.instagram;
+            });
+
+            document.title = SITE_CONFIG.site.title;
+        }
 
         /* MENÚ MOBILE */
 
