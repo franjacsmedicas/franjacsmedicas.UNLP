@@ -96,21 +96,28 @@
             font-weight: 800;
         }
 
-        .brand-mark {
-            width: 44px;
-            height: 44px;
+        .brand-logo {
+            width: 185px;
+            height: 48px;
             border-radius: 10px;
             background: var(--bordo);
-            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: "Anton", sans-serif;
-            font-size: 20px;
+            padding: 7px 12px;
+            overflow: hidden;
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
         }
 
         .brand-text {
             line-height: 1.05;
+            display: none;
         }
 
         .brand-text strong {
@@ -619,9 +626,10 @@
                 height: 70px;
             }
 
-            .brand-mark {
-                width: 39px;
-                height: 39px;
+            .brand-logo {
+                width: 155px;
+                height: 42px;
+                padding: 6px 10px;
             }
 
             .brand-text strong {
@@ -690,7 +698,9 @@
         <nav class="nav">
 
             <a href="#inicio" class="brand">
-                <div class="brand-mark">FM</div>
+                <div class="brand-logo">
+                    <img src="https://franjamoradalp.com.ar/wp-content/uploads/2024/07/Logo-horizontal.png" alt="Franja Morada" data-config-image="logo">
+                </div>
 
                 <div class="brand-text">
                     <strong data-config="brandName">FRANJA MORADA</strong>
