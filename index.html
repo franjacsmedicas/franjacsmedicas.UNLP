@@ -290,6 +290,37 @@
             transform: translateY(-8px);
         }
 
+        .access-ingreso {
+            position: relative;
+            min-height: 180px;
+            overflow: hidden;
+            color: white;
+            background: url("https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/ingreso.png") center/cover;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .access-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(50,8,20,.12), rgba(50,8,20,.88));
+        }
+
+        .access-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .access-ingreso h3 {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .access-ingreso p {
+            color: rgba(255,255,255,.9);
+        }
+
         .access-icon {
             width: 45px;
             height: 45px;
@@ -784,15 +815,13 @@
 
             <div class="access-grid">
 
-                <a href="ingreso-2027.html" class="access-card fade-in">
+                <a href="ingreso-2027.html" class="access-card access-ingreso fade-in">
 
-                    <div class="access-icon">🎓</div>
-
-                    <h3>Ingreso 2027</h3>
-
-                    <p>
-                        Todo lo que necesitás para empezar.
-                    </p>
+                    <div class="access-overlay"></div>
+                    <div class="access-content">
+                        <h3>Ingreso 2027</h3>
+                        <p>Todo lo que necesitás para empezar.</p>
+                    </div>
 
                 </a>
 
