@@ -11,7 +11,7 @@
     >
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <script src="config.js"></script>
+    <script src="config.js?v=2"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 
@@ -33,8 +33,11 @@
             --radio: 18px;
 
             /* IMÁGENES CONTROLADAS DESDE config.js */
-            --hero-image: var(--hero-image);
-            --proposal-image: var(--proposal-image);
+            --hero-image: none;
+            --proposal-image: none;
+            --news-image-1: none;
+            --news-image-2: none;
+            --news-image-3: none;
         }
 
         * {
@@ -176,7 +179,7 @@
                     rgba(68,12,29,.87) 50%,
                     rgba(68,12,29,.45) 100%
                 ),
-                url("https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1800&q=85")
+                var(--hero-image)
                 center/cover;
             color: white;
             display: flex;
@@ -432,7 +435,7 @@
                     rgba(68,13,30,.25),
                     rgba(68,13,30,.25)
                 ),
-                url("https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1000&q=85")
+                var(--proposal-image)
                 center/cover;
         }
 
@@ -883,9 +886,7 @@
 
                     <article class="news-card fade-in">
 
-                        <div
-                            class="news-image"
-                            class="news-image news-image-2">
+                        <div class="news-image news-image-2">
                         </div>
 
                         <div class="news-content">
@@ -910,9 +911,7 @@
 
                     <article class="news-card fade-in">
 
-                        <div
-                            class="news-image"
-                            class="news-image news-image-3">
+                        <div class="news-image news-image-3">
                         </div>
 
                         <div class="news-content">
