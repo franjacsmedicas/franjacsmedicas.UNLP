@@ -48,7 +48,7 @@ const SITE_CONFIG = {
 
         news1: "img/comunidad-morada.jpg",
 
-        news2: "img/biologia-parcial-2.jpg",
+        news2:Biomed2.png ,
 
         news3: "img/novedad-3.jpg"
     },
