@@ -46,7 +46,7 @@ const SITE_CONFIG = {
 
         proposal: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1000&q=85",
 
-        news1: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=85",
+        news1: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0ioCJVSS1xOhG8aRvWaaULxjl16x15Gr0l3V0YO9quA&s=10",
 
         news2: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=900&q=85",
 
