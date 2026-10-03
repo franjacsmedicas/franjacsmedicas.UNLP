@@ -46,11 +46,11 @@ const SITE_CONFIG = {
 
         proposal: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1000&q=85",
 
-        news1: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0ioCJVSS1xOhG8aRvWaaULxjl16x15Gr0l3V0YO9quA&s=10",
+        news1: "img/comunidad-morada.jpg",
 
-        news2: "https://www.instagram.com/p/Dd9jkOpzupj/media/?size=l",
+        news2: "img/biologia-parcial-2.jpg",
 
-        news3: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=900&q=85"
+        news3: "img/novedad-3.jpg"
     },
 
     /* =========================
