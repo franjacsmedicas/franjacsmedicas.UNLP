@@ -1,0 +1,42 @@
+/* Identidad visual global · Franja Morada Ciencias Médicas UNLP */
+html{background:#faf8f9}
+body{
+  background-color:#faf8f9 !important;
+  background-image:
+    radial-gradient(circle at 8% 14%,rgba(104,21,43,.055) 0 2px,transparent 2.5px),
+    radial-gradient(circle at 92% 72%,rgba(104,21,43,.045) 0 2px,transparent 2.5px),
+    linear-gradient(135deg,transparent 0 49.7%,rgba(104,21,43,.025) 49.8% 50.2%,transparent 50.3%),
+    linear-gradient(45deg,transparent 0 49.7%,rgba(104,21,43,.018) 49.8% 50.2%,transparent 50.3%);
+  background-size:100% 100%,100% 100%,180px 180px,220px 220px;
+  background-attachment:fixed;
+}
+main,.wrap{position:relative}
+section{position:relative}
+section:not(.hero):not(.cta):after{
+  content:"";
+  position:absolute;
+  width:90px;
+  height:90px;
+  right:2%;
+  top:28px;
+  border-top:1px solid rgba(104,21,43,.10);
+  border-right:1px solid rgba(104,21,43,.10);
+  border-radius:0 22px 0 0;
+  pointer-events:none;
+}
+section:not(.hero):not(.cta):before{
+  content:"";
+  position:absolute;
+  width:45px;
+  height:5px;
+  left:0;
+  top:8px;
+  background:rgba(104,21,43,.12);
+  border-radius:99px;
+  transform:skewX(-18deg);
+  pointer-events:none;
+}
+@media(max-width:600px){
+  section:not(.hero):not(.cta):after{width:55px;height:55px;right:4%;top:22px}
+  section:not(.hero):not(.cta):before{width:32px;top:5px}
+}
