@@ -248,3 +248,21 @@ main .article-card p, main .article-card li{
 .career-card a{
   color:#68152b !important;
 }
+
+/* Navegación: texto granate sobre el encabezado claro */
+header .nav a,
+header .nav a:visited,
+header .nav a:hover,
+header .nav a:focus,
+header .nav .brand,
+header .nav .brand strong,
+header .nav .brand span,
+header .nav .back{
+  color:#68152b !important;
+  -webkit-text-fill-color:#68152b !important;
+}
+header .nav .mark,
+header .nav .mark *{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
