@@ -39,6 +39,6 @@ const SITE_CONFIG = {
     },
 
     social: {
-        instagram: "https://www.instagram.com/"
+        instagram: "https://www.instagram.com/franjacsmedicas.unlp/"
     }
 };
