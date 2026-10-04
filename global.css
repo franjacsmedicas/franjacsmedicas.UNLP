@@ -292,3 +292,43 @@ header nav a:focus,
   color:#fff !important;
   -webkit-text-fill-color:#fff !important;
 }
+
+/* NAVEGACION GLOBAL: todos los menus superiores en granate */
+header,
+header nav,
+header .nav,
+nav,
+.nav{
+  color:#68152b !important;
+}
+header a,
+header a:link,
+header a:visited,
+header a:hover,
+header a:active,
+header a:focus,
+nav a,
+nav a:link,
+nav a:visited,
+nav a:hover,
+nav a:active,
+nav a:focus,
+.nav a,
+.nav a:link,
+.nav a:visited,
+.nav a:hover,
+.nav a:active,
+.nav a:focus,
+header .brand,
+header .brand strong,
+header .brand span,
+header .back{
+  color:#68152b !important;
+  -webkit-text-fill-color:#68152b !important;
+}
+header .mark,
+header .mark *{
+  background:#68152b !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
