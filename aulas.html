@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distribución de aulas | Ciencias Médicas UNLP</title>
+<meta name="description" content="Distribución de aulas de Ciencias Médicas UNLP. Guía visual para encontrar aulas y espacios de cursada.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--b:#68152b;--bd:#430d1c;--bc:#8d2945;--n:#111;--g:#f4f4f4;--text:#222;--white:#fff;--shadow:0 12px 35px rgba(0,0,0,.10);--r:18px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,Arial,sans-serif;color:var(--text);background:#fff;line-height:1.6}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+header{position:fixed;top:0;left:0;width:100%;z-index:20;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.08)}
+.nav{height:78px;max-width:1200px;margin:auto;padding:0 25px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800}
+.logo{width:185px;height:48px;border-radius:10px;background:var(--b);padding:7px 12px;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1)}
+.back{color:var(--b);font-size:14px;font-weight:800}
+.hero{margin-top:78px;padding:85px 25px 90px;background:linear-gradient(120deg,var(--bd),var(--b));color:#fff}
+.wrap{max-width:1150px;margin:auto}
+.eyebrow{text-transform:uppercase;font-size:12px;letter-spacing:2px;font-weight:800;opacity:.8;margin-bottom:15px}
+.hero h1,.section-title{font-family:Anton,sans-serif;text-transform:uppercase;line-height:.95}
+.hero h1{font-size:clamp(55px,9vw,100px)}
+.hero p{max-width:700px;margin-top:22px;color:rgba(255,255,255,.84);font-size:17px}
+.section{padding:80px 25px}
+.label{color:var(--b);text-transform:uppercase;font-size:12px;font-weight:800;letter-spacing:2px}
+.section-title{font-size:clamp(42px,6vw,65px);margin-top:8px}
+.intro{max-width:720px;color:#666;margin-top:15px}
+.aulas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:42px}
+.aula-card{background:#fff;border:1px solid #e9e9e9;border-radius:var(--r);overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,.07);transition:.25s;cursor:pointer}
+.aula-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
+.aula-image{background:var(--g);aspect-ratio:4/3;overflow:hidden}
+.aula-image img{width:100%;height:100%;object-fit:cover}
+.aula-info{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.aula-info h2{font-family:Anton,sans-serif;text-transform:uppercase;font-size:25px;line-height:1;color:var(--n)}
+.aula-info span{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--b)}
+.note{margin-top:35px;background:var(--g);border-left:5px solid var(--b);border-radius:14px;padding:20px;color:#666;font-size:13px}
+.cta{background:var(--b);color:#fff;text-align:center;padding:70px 25px}
+.cta h2{font-family:Anton,sans-serif;text-transform:uppercase;font-size:clamp(40px,6vw,65px);line-height:.95}
+.cta p{max-width:600px;margin:15px auto 25px;color:rgba(255,255,255,.8)}
+.btn{display:inline-flex;background:#fff;color:var(--b);padding:13px 20px;border-radius:9px;font-weight:800;font-size:13px}
+footer{background:#111;color:#aaa;text-align:center;padding:30px 25px;font-size:12px}
+.modal{position:fixed;inset:0;background:rgba(17,17,17,.94);z-index:100;display:none;align-items:center;justify-content:center;padding:25px}
+.modal.active{display:flex}
+.modal-inner{width:min(1050px,100%);max-height:92vh;display:flex;flex-direction:column;align-items:center}
+.modal img{max-width:100%;max-height:78vh;width:auto;height:auto;object-fit:contain;border-radius:10px}
+.modal-top{width:100%;display:flex;align-items:center;justify-content:space-between;color:#fff;margin-bottom:12px}
+.modal-title{font-family:Anton,sans-serif;text-transform:uppercase;font-size:30px}
+.close{border:0;background:#fff;color:var(--b);width:42px;height:42px;border-radius:50%;font-size:25px;cursor:pointer;font-weight:700}
+@media(max-width:850px){.aulas-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:550px){.nav{height:70px;padding:0 18px}.logo{width:155px;height:42px}.hero{margin-top:70px;padding:70px 20px}.section{padding:65px 20px}.aulas-grid{grid-template-columns:1fr;gap:18px}.aula-info h2{font-size:28px}.modal{padding:15px}.modal img{max-height:80vh}.modal-title{font-size:25px}}
+</style>
+</head>
+<body>
+<header>
+<nav class="nav">
+<a class="brand" href="index.html"><div class="logo"><img src="https://franjamoradalp.com.ar/wp-content/uploads/2024/07/Logo-horizontal.png" alt="Franja Morada"></div></a>
+<a class="back" href="index.html">← Inicio</a>
+</nav>
+</header>
+
+<section class="hero">
+<div class="wrap">
+<div class="eyebrow">Franja Morada · Ciencias Médicas UNLP</div>
+<h1>DISTRIBUCIÓN<br>DE AULAS</h1>
+<p>Una guía visual para ubicar las aulas de la Facultad y saber dónde tenés que ir para cursar.</p>
+</div>
+</section>
+
+<main>
+<section class="section">
+<div class="wrap">
+<span class="label">Guía rápida</span>
+<h2 class="section-title">Encontrá tu aula</h2>
+<p class="intro">Consultá las nueve placas con la distribución de aulas. Tocá cualquier imagen para verla ampliada.</p>
+
+<div class="aulas-grid">
+<article class="aula-card" data-aula="1">
+<div class="aula-image"><img src="https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/aulas%201.png" alt="Distribución de aulas 1" loading="lazy"></div>
+<div class="aula-info"><h2>Aulas 1</h2><span>Ver ampliada</span></div>
+</article><article class="aula-card" data-aula="2">
+<div class="aula-image"><img src="https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/aulas%202.png" alt="Distribución de aulas 2" loading="lazy"></div>
+<div class="aula-info"><h2>Aulas 2</h2><span>Ver ampliada</span></div>
+</article><article class="aula-card" data-aula="3">
+<div class="aula-image"><img src="https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/aulas%203.png" alt="Distribución de aulas 3" loading="lazy"></div>
+<div class="aula-info"><h2>Aulas 3</h2><span>Ver ampliada</span></div>
+</article><article class="aula-card" data-aula="4">
+<div class="aula-image"><img src="https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/aulas%204.png" alt="Distribución de aulas 4" loading="lazy"></div>
+<div class="aula-info"><h2>Aulas 4</h2><span>Ver ampliada</span></div>
+</article><article class="aula-card" data-aula="5">
+<div class="aula-image"><img src="https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/aulas%205.png" alt="Distribución de aulas 5" loading="lazy"></div>
+<div class="aula-info"><h2>Aulas 5</h2><span>Ver ampliada</span></div>
+</article><article class="aula-card" data-aula="6">
+<div class="aula-image"><img src="https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/aulas%206.png" alt="Distribución de aulas 6" loading="lazy"></div>
+<div class="aula-info"><h2>Aulas 6</h2><span>Ver ampliada</span></div>
+</article><article class="aula-card" data-aula="7">
+<div class="aula-image"><img src="https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/aulas%207.png" alt="Distribución de aulas 7" loading="lazy"></div>
+<div class="aula-info"><h2>Aulas 7</h2><span>Ver ampliada</span></div>
+</article><article class="aula-card" data-aula="8">
+<div class="aula-image"><img src="https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/aulas%208.png" alt="Distribución de aulas 8" loading="lazy"></div>
+<div class="aula-info"><h2>Aulas 8</h2><span>Ver ampliada</span></div>
+</article><article class="aula-card" data-aula="9">
+<div class="aula-image"><img src="https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/aulas%209.png" alt="Distribución de aulas 9" loading="lazy"></div>
+<div class="aula-info"><h2>Aulas 9</h2><span>Ver ampliada</span></div>
+</article>
+</div>
+
+<div class="note"><strong>Importante:</strong> antes de dirigirte a un aula, verificá siempre la comisión, el horario y las indicaciones de la cátedra. Esta sección reproduce la información de las placas de distribución incorporadas a la web.</div>
+</div>
+</section>
+
+<section class="cta">
+<div class="wrap">
+<h2>¿No encontrás tu aula?</h2>
+<p>Guardá esta página para consultar rápidamente la distribución cuando estés en la Facultad.</p>
+<a class="btn" href="mapas.html">Ver mapas FCM</a>
+</div>
+</section>
+</main>
+
+<footer>© 2026 Franja Morada · Ciencias Médicas UNLP</footer>
+
+<div class="modal" id="modal" aria-hidden="true">
+<div class="modal-inner">
+<div class="modal-top"><div class="modal-title" id="modalTitle">Aulas 1</div><button class="close" id="close" aria-label="Cerrar">×</button></div>
+<img id="modalImage" src="" alt="">
+</div>
+</div>
+
+<script>
+const cards=document.querySelectorAll(".aula-card");
+const modal=document.getElementById("modal");
+const modalImage=document.getElementById("modalImage");
+const modalTitle=document.getElementById("modalTitle");
+const close=document.getElementById("close");
+cards.forEach(card=>{
+ card.addEventListener("click",()=>{
+  const n=card.dataset.aula;
+  modalImage.src="https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/aulas%20"+n+".png";
+  modalImage.alt="Distribución de aulas "+n;
+  modalTitle.textContent="Aulas "+n;
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden","false");
+  document.body.style.overflow="hidden";
+ });
+});
+function closeModal(){modal.classList.remove("active");modal.setAttribute("aria-hidden","true");document.body.style.overflow=""}
+close.addEventListener("click",closeModal);
+modal.addEventListener("click",e=>{if(e.target===modal)closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+</script>
+</body>
+</html>
