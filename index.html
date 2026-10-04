@@ -300,10 +300,30 @@
             display: block;
         }
 
-        .access-ingreso > img {
+        .access-ingreso > img,
+        .access-planes > img {
             width: 100%;
             height: auto;
             display: block;
+        }
+
+        .access-planes {
+            position: relative;
+            min-height: 0;
+            padding: 0;
+            overflow: hidden;
+            color: white;
+            display: block;
+        }
+
+        .access-planes h3 {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .access-planes p {
+            color: rgba(255,255,255,.9);
         }
 
         .access-overlay {
@@ -833,15 +853,15 @@
                 </a>
 
 
-                <a href="planes-estudio.html" class="access-card fade-in">
+                <a href="planes-estudio.html" class="access-card access-planes fade-in">
 
-                    <div class="access-icon">📚</div>
+                    <img src="plan.jpeg" alt="Planes de estudio · Franja Morada Ciencias Médicas UNLP">
+                    <div class="access-overlay"></div>
+                    <div class="access-content">
+                        <h3>Planes de estudio</h3>
 
-                    <h3>Planes de estudio</h3>
-
-                    <p>
-                        Consultá las carreras y sus materias.
-                    </p>
+                    <p>Consultá las carreras y sus materias.</p>
+                    </div>
 
                 </a>
 
