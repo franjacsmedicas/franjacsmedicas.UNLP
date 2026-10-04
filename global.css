@@ -99,3 +99,73 @@ h1,h2,h3,h4,h5,h6,
 .date{
   color:#fff !important;
 }
+
+
+/* Contraste global sobre el fondo bordó: todos los textos fuera de superficies claras */
+body,
+main,
+main p,
+main li,
+main td,
+main th,
+main label,
+main small,
+main strong,
+main span,
+main a,
+section p,
+section li,
+section label,
+section small,
+section span,
+.hero p,
+.hero .eyebrow,
+.hero .tag,
+.section-description,
+.desc,
+.intro,
+.news-content p,
+.news-content .date,
+.news-content .news-tag,
+.card p,
+.card li,
+.cta p,
+.cta span,
+footer,
+footer p,
+footer span,
+footer a{
+  color:#fff !important;
+}
+
+/* Excepciones: superficies claras conservan texto oscuro para mantener legibilidad */
+.card,
+.news-card,
+.doc,
+.material,
+.article-card,
+.white-card,
+.table-wrap,
+.modal-content{
+  color:#222;
+}
+.card p,.card li,.card span,.card small,.card label,
+.news-card p,.news-card span,
+.doc p,.doc li,.doc span,
+.material p,.material li,.material span,
+.article-card p,.article-card li,.article-card span,
+.white-card p,.white-card li,.white-card span,
+.table-wrap p,.table-wrap td,.table-wrap th,
+.modal-content p,.modal-content li,.modal-content span{
+  color:#222 !important;
+}
+
+/* Elementos de navegación y botones */
+nav a,
+.nav a,
+.menu a,
+.btn,
+.button,
+button{
+  color:#fff !important;
+}
