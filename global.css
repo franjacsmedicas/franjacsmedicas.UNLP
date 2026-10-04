@@ -403,3 +403,14 @@ a.btn-oficial *,
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
 }
+
+/* CONTACTO: TEXTO BLANCO */
+header a[href*="contacto"],
+nav a[href*="contacto"],
+.nav a[href*="contacto"],
+header a[href*="contacto"] *,
+nav a[href*="contacto"] *,
+.nav a[href*="contacto"] *{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
