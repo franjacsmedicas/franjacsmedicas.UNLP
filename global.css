@@ -52,3 +52,13 @@ section:not(.hero):not(.cta):before{
   section:not(.hero):not(.cta):after{width:55px;height:55px;right:4%;top:22px}
   section:not(.hero):not(.cta):before{width:32px;top:5px}
 }
+
+/* Dejar visible el fondo global entre los bloques de contenido */
+main,
+main > section,
+.section,
+.content,
+.wrap,
+.news{
+  background-color:transparent !important;
+}
