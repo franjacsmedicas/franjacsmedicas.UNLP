@@ -18,7 +18,7 @@ section{padding:35px 0 65px}.label{color:var(--bordo);font-size:12px;text-transf
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}.card{background:var(--gris);border-radius:17px;padding:25px;border:1px solid #e8e8e8}.card .num{font-family:Anton;color:var(--bordo);font-size:32px}.card h3{margin:8px 0;font-size:19px}.card p{font-size:14px;color:#666}
 .timeline{display:grid;gap:14px;margin-top:28px}.step{display:grid;grid-template-columns:70px 1fr;gap:18px;align-items:start;padding:20px;background:#fff;border:1px solid #eee;border-radius:15px;box-shadow:0 5px 18px rgba(0,0,0,.04)}.date{font-family:Anton;color:var(--bordo);font-size:21px}
 .materials{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:30px}.material{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--bordo2),var(--bordo));color:#fff;border-radius:18px;padding:30px;box-shadow:var(--sombra)}.material-tag{text-transform:uppercase;font-size:10px;letter-spacing:1.5px;font-weight:800;opacity:.75}.material h3{font-family:Anton;font-size:32px;text-transform:uppercase;line-height:1;margin:10px 0}.material p{font-size:14px;color:rgba(255,255,255,.84);max-width:480px}.material-actions{margin-top:22px}.material-btn{display:inline-block;background:#fff;color:var(--bordo);padding:11px 16px;border-radius:9px;font-weight:800;font-size:13px;margin-right:7px}.material-btn.alt{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.6)}.docs{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px}.doc{padding:23px;border-radius:16px;background:#fafafa;border:1px solid #eee}.doc h3{margin-bottom:10px}.doc ul{padding-left:20px;color:#555;font-size:14px}
-.careers{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:28px}.career{padding:18px 14px;border:1px solid #eee;border-radius:14px;text-align:center;font-weight:700;background:#fff;box-shadow:0 4px 15px rgba(0,0,0,.04)}
+.careers{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:28px}.career{border:1px solid #eee;border-radius:14px;background:#fff;box-shadow:0 4px 15px rgba(0,0,0,.04);overflow:hidden}.career-toggle{width:100%;border:0;background:#fff;padding:20px 14px;text-align:center;font:700 16px Inter,sans-serif;color:var(--texto);cursor:pointer;position:relative}.career-toggle:after{content:"⌄";display:block;color:var(--bordo);font-size:20px;line-height:1;margin-top:7px;transition:transform .2s}.career.open .career-toggle:after{transform:rotate(180deg)}.career-info{display:none;padding:0 17px 19px;border-top:1px solid #eee;text-align:left}.career.open .career-info{display:block}.career-meta{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0 10px}.career-meta span{font-size:11px;font-weight:800;color:var(--bordo);background:#f7eef1;border-radius:999px;padding:5px 8px}.career-info p{font-size:13px;color:#666;line-height:1.55}.career-info strong{color:#333}
 .cta{background:var(--bordo);color:#fff;border-radius:22px;padding:45px;margin:25px 0 75px;text-align:center}.cta h2{font-family:Anton;font-size:46px;text-transform:uppercase}.cta p{max-width:650px;margin:12px auto 25px;color:rgba(255,255,255,.82)}.btn{display:inline-block;background:#fff;color:var(--bordo);padding:13px 20px;border-radius:9px;font-weight:800;font-size:14px;margin:5px}.btn.alt{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.6)}
 footer{background:#111;color:#aaa;text-align:center;padding:28px;font-size:12px}
 @media(max-width:800px){.grid,.docs,.materials{grid-template-columns:1fr}.careers{grid-template-columns:1fr 1fr}.back{font-size:12px}}
@@ -97,8 +97,36 @@ footer{background:#111;color:#aaa;text-align:center;padding:28px;font-size:12px}
 <span class="label">Oferta académica</span><h2 class="title">Carreras</h2>
 <p class="desc">La información oficial de Ingreso 2027 corresponde a las siguientes carreras:</p>
 <div class="careers">
-<div class="career">Medicina</div><div class="career">Enfermería Universitaria</div><div class="career">Lic. en Nutrición</div><div class="career">Lic. en Obstetricia</div><div class="career">Tecnicatura en Prácticas Cardiológicas</div>
+<div class="career">
+<button class="career-toggle" type="button" aria-expanded="false">Medicina</button>
+<div class="career-info"><div class="career-meta"><span>6 años</span><span>Médico/a</span></div><p><strong>¿De qué se trata?</strong> Formación integral para el cuidado de la salud, el diagnóstico, tratamiento y prevención de enfermedades, con una sólida base científica y clínica.</p><p><strong>Al graduarte:</strong> obtenés el título de <strong>Médico/a</strong>. La carrera combina formación básica, clínica y prácticas en ámbitos de atención de la salud.</p></div>
 </div>
+<div class="career">
+<button class="career-toggle" type="button" aria-expanded="false">Enfermería Universitaria</button>
+<div class="career-info"><div class="career-meta"><span>3 años</span><span>Enfermero/a Universitario/a</span></div><p><strong>¿De qué se trata?</strong> Forma profesionales preparados para brindar cuidados de enfermería, promover la salud, prevenir enfermedades y acompañar a las personas en distintas etapas y situaciones de atención.</p><p><strong>Al graduarte:</strong> obtenés el título de <strong>Enfermero/a Universitario/a</strong> y podés desempeñarte en equipos de salud y distintos ámbitos asistenciales y comunitarios.</p></div>
+</div>
+<div class="career">
+<button class="career-toggle" type="button" aria-expanded="false">Lic. en Nutrición</button>
+<div class="career-info"><div class="career-meta"><span>5 años</span><span>Licenciado/a en Nutrición</span></div><p><strong>¿De qué se trata?</strong> Aborda la alimentación y la nutrición desde una perspectiva biológica, clínica y social, incluyendo la promoción de hábitos saludables y la prevención de enfermedades.</p><p><strong>Al graduarte:</strong> obtenés el título de <strong>Licenciado/a en Nutrición</strong>, con formación para intervenir en diferentes áreas del campo de la nutrición.</p></div>
+</div>
+<div class="career">
+<button class="career-toggle" type="button" aria-expanded="false">Lic. en Obstetricia</button>
+<div class="career-info"><div class="career-meta"><span>4 años</span><span>Licenciado/a en Obstetricia</span></div><p><strong>¿De qué se trata?</strong> Formación centrada en la salud sexual y reproductiva, el embarazo, parto, puerperio y atención integral de la persona gestante y del recién nacido.</p><p><strong>Al graduarte:</strong> obtenés el título de <strong>Licenciado/a en Obstetricia</strong>. Incluye una importante formación clínica y una Práctica Final Obligatoria.</p></div>
+</div>
+<div class="career">
+<button class="career-toggle" type="button" aria-expanded="false">Tecnicatura en Prácticas Cardiológicas</button>
+<div class="career-info"><div class="career-meta"><span>3 años</span><span>Técnico/a Universitario/a</span></div><p><strong>¿De qué se trata?</strong> Forma profesionales del equipo de salud capacitados para participar en prácticas y estudios cardiológicos, preparar equipos y colaborar en procedimientos bajo la supervisión y responsabilidad del cardiólogo.</p><p><strong>Al graduarte:</strong> obtenés el título de <strong>Técnico/a Universitario/a en Prácticas Cardiológicas</strong>.</p></div>
+</div>
+</div>
+<script>
+document.querySelectorAll('.career-toggle').forEach(function(button){
+  button.addEventListener('click',function(){
+    var card=this.parentElement;
+    var isOpen=card.classList.toggle('open');
+    this.setAttribute('aria-expanded',isOpen?'true':'false');
+  });
+});
+</script>
 </section>
 
 <div class="cta">
