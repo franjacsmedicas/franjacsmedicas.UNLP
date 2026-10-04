@@ -169,3 +169,34 @@ nav a,
 button{
   color:#fff !important;
 }
+
+
+/* Corrección final de contraste: contenido de páginas internas sobre fondo bordó */
+main h1, main h2, main h3, main h4, main h5, main h6,
+main .title, main .section-title, main .section-label,
+main .eyebrow, main .tag, main .subtitle, main .section-heading,
+main .section-header, main .lead, main .intro,
+main p, main li, main dt, main dd,
+main .content p, main .content li,
+main .wrap p, main .wrap li,
+main section h1, main section h2, main section h3, main section h4,
+main section h5, main section h6,
+main section p, main section li,
+main .article p, main .article li,
+main .article-content p, main .article-content li,
+main .article-content h1, main .article-content h2, main .article-content h3,
+main .article-content h4, main .article-content h5, main .article-content h6{
+  color:#fff !important;
+}
+
+/* Superficies claras: texto oscuro únicamente dentro de bloques blancos */
+main .card h1, main .card h2, main .card h3, main .card h4, main .card h5, main .card h6,
+main .card p, main .card li, main .card span, main .card small,
+main .news-card h1, main .news-card h2, main .news-card h3, main .news-card h4,
+main .news-card p, main .news-card li, main .news-card span,
+main .doc h1, main .doc h2, main .doc h3, main .doc h4, main .doc p,
+main .material h1, main .material h2, main .material h3, main .material h4, main .material p,
+main .article-card h1, main .article-card h2, main .article-card h3, main .article-card h4,
+main .article-card p, main .article-card li{
+  color:#222 !important;
+}
