@@ -200,3 +200,51 @@ main .article-card h1, main .article-card h2, main .article-card h3, main .artic
 main .article-card p, main .article-card li{
   color:#222 !important;
 }
+
+
+/* Texto negro sobre cualquier superficie blanca o clara */
+.card,
+.card *,
+.news-card,
+.news-card *,
+.doc,
+.doc *,
+.material,
+.material *,
+.article-card,
+.article-card *,
+.white-card,
+.white-card *,
+.table-wrap,
+.table-wrap *,
+.modal-content,
+.modal-content *,
+.content-card,
+.content-card *,
+.info-card,
+.info-card *,
+.notice,
+.notice *,
+.download-card,
+.download-card *,
+.career-card,
+.career-card *{
+  color:#111 !important;
+}
+
+/* Links sobre superficies blancas */
+.card a,
+.news-card a,
+.doc a,
+.material a,
+.article-card a,
+.white-card a,
+.table-wrap a,
+.modal-content a,
+.content-card a,
+.info-card a,
+.notice a,
+.download-card a,
+.career-card a{
+  color:#68152b !important;
+}
