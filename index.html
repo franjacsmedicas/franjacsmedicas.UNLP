@@ -292,12 +292,18 @@
 
         .access-ingreso {
             position: relative;
-            min-height: 180px;
+            min-height: 0;
+            padding: 0;
             overflow: hidden;
             color: white;
             background: url("https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/ingreso.png") center/cover;
-            display: flex;
-            align-items: flex-end;
+            display: block;
+        }
+
+        .access-ingreso > img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         .access-overlay {
@@ -817,6 +823,7 @@
 
                 <a href="ingreso-2027.html" class="access-card access-ingreso fade-in">
 
+                    <img src="ingreso.png" alt="Ingreso 2027 · Franja Morada Ciencias Médicas UNLP">
                     <div class="access-overlay"></div>
                     <div class="access-content">
                         <h3>Ingreso 2027</h3>
