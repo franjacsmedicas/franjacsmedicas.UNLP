@@ -266,3 +266,29 @@ header .nav .mark *{
   color:#fff !important;
   -webkit-text-fill-color:#fff !important;
 }
+
+/* NAV SUPERIOR: enlaces granate sobre fondo claro */
+header nav a,
+header nav a:link,
+header nav a:visited,
+header nav a:hover,
+header nav a:active,
+header nav a:focus,
+.nav a,
+.nav a:link,
+.nav a:visited,
+.nav a:hover,
+.nav a:active,
+.nav a:focus,
+.nav .back,
+.nav .brand,
+.nav .brand strong,
+.nav .brand span{
+  color:#68152b !important;
+  -webkit-text-fill-color:#68152b !important;
+}
+.nav .mark,
+.nav .mark *{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
