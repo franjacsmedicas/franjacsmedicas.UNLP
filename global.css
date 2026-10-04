@@ -332,3 +332,11 @@ header .mark *{
   color:#fff !important;
   -webkit-text-fill-color:#fff !important;
 }
+
+/* Contacto en la navegación: texto blanco */
+header a[href*="contacto"],
+nav a[href*="contacto"],
+.nav a[href*="contacto"]{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
