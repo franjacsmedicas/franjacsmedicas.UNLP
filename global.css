@@ -385,4 +385,21 @@ a.btn-oficial *,
 .hero-copy .btn.alt{
   color:#fff !important;
   -webkit-text-fill-color:#fff !important;
+}/* TEXTOS BLANCOS DENTRO DE CAJAS GRANATE */
+.material,
+.material *,
+.access-ingreso,
+.access-ingreso *,
+.access-biblioteca,
+.access-biblioteca *,
+.access-mapas,
+.access-mapas *,
+.access-aulas,
+.access-aulas *,
+.hero-copy,
+.hero-copy *,
+.cta,
+.cta * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
