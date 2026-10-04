@@ -290,84 +290,65 @@
             transform: translateY(-8px);
         }
 
-        .access-ingreso {
-            position: relative;
-            min-height: 0;
-            padding: 0;
+        .access-ingreso,
+        .access-planes,
+        .access-biblioteca,
+        .access-mapas {
+            min-height: 190px;
+            padding: 28px 24px;
             overflow: hidden;
             color: white;
-            background: url("https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.UNLP/main/ingreso.png") center/cover;
-            display: block;
+            display: flex;
+            align-items: flex-end;
+            border: none;
+            box-shadow: var(--sombra);
         }
 
-        .access-ingreso > img,
-        .access-planes > img {
-            width: 100%;
-            height: auto;
-            display: block;
+        .access-ingreso {
+            background: var(--bordo);
         }
 
         .access-planes {
-            position: relative;
-            min-height: 0;
-            padding: 0;
-            overflow: hidden;
-            color: white;
-            display: block;
+            background: var(--negro);
         }
 
-        .access-planes h3 {
-            color: white;
-            font-size: 20px;
-            margin-bottom: 5px;
+        .access-biblioteca {
+            background: var(--bordo-oscuro);
         }
 
-        .access-planes p {
-            color: rgba(255,255,255,.9);
+        .access-mapas {
+            background: var(--bordo-claro);
         }
 
-        .access-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(50,8,20,.12), rgba(50,8,20,.88));
+        .access-ingreso:hover,
+        .access-planes:hover,
+        .access-biblioteca:hover,
+        .access-mapas:hover {
+            transform: translateY(-8px);
+        }
+
+        .access-ingreso > img,
+        .access-planes > img,
+        .access-overlay,
+        .access-icon,
+        .access-card p {
+            display: none;
         }
 
         .access-content {
             position: relative;
             z-index: 1;
-        }
-
-        .access-ingreso h3 {
-            color: white;
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .access-ingreso p {
-            color: rgba(255,255,255,.9);
-        }
-
-        .access-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 10px;
-            background: #f4e7eb;
-            color: var(--bordo);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 21px;
-            margin-bottom: 17px;
+            width: 100%;
         }
 
         .access-card h3 {
-            font-size: 16px;
-            margin-bottom: 5px;
-        }
-
-        .access-card p {
-            font-size: 12px;
-            color: #777;
+            font-family: "Anton", sans-serif;
+            text-transform: uppercase;
+            color: white;
+            font-size: clamp(25px, 2.4vw, 34px);
+            line-height: 1;
+            letter-spacing: .5px;
+            margin: 0;
         }
 
         /* =========================
@@ -842,53 +823,27 @@
             <div class="access-grid">
 
                 <a href="ingreso-2027.html" class="access-card access-ingreso fade-in">
-
-                    <img src="ingreso.png" alt="Ingreso 2027 · Franja Morada Ciencias Médicas UNLP">
-                    <div class="access-overlay"></div>
                     <div class="access-content">
                         <h3>Ingreso 2027</h3>
-                        <p>Todo lo que necesitás para empezar.</p>
                     </div>
-
                 </a>
-
 
                 <a href="planes-estudio.html" class="access-card access-planes fade-in">
-
-                    <img src="plan.jpeg" alt="Planes de estudio · Franja Morada Ciencias Médicas UNLP">
-                    <div class="access-overlay"></div>
                     <div class="access-content">
                         <h3>Planes de estudio</h3>
-
-                    <p>Consultá las carreras y sus materias.</p>
                     </div>
-
                 </a>
 
-
-                <a href="biblioteca.html" class="access-card fade-in">
-
-                    <div class="access-icon">📖</div>
-
-                    <h3>Biblioteca virtual</h3>
-
-                    <p>
-                        Material de estudio para tu cursada.
-                    </p>
-
+                <a href="biblioteca.html" class="access-card access-biblioteca fade-in">
+                    <div class="access-content">
+                        <h3>Biblioteca virtual</h3>
+                    </div>
                 </a>
 
-
-                <a href="mapas.html" class="access-card fade-in">
-
-                    <div class="access-icon">🗺️</div>
-
-                    <h3>Mapas FCM</h3>
-
-                    <p>
-                        Encontrá aulas, sedes y espacios.
-                    </p>
-
+                <a href="mapas.html" class="access-card access-mapas fade-in">
+                    <div class="access-content">
+                        <h3>Mapas FCM</h3>
+                    </div>
                 </a>
 
             </div>
