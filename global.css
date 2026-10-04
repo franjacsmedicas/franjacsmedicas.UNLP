@@ -340,3 +340,49 @@ nav a[href*="contacto"],
   color:#fff !important;
   -webkit-text-fill-color:#fff !important;
 }
+
+/* CONTRASTE GLOBAL: toda caja/superficie granate usa texto blanco */
+.nav-button,
+.access-ingreso,
+.access-biblioteca,
+.access-mapas,
+.access-aulas,
+.hero-copy,
+.material,
+.cta,
+.back,
+.btn-oficial,
+a.btn-oficial,
+.official-btn{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
+.nav-button *,
+.access-ingreso *,
+.access-biblioteca *,
+.access-mapas *,
+.access-aulas *,
+.hero-copy *,
+.material *,
+.cta *,
+.back *,
+.btn-oficial *,
+a.btn-oficial *,
+.official-btn *{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
+/* Botones blancos dentro de cajas granate conservan texto granate */
+.material .material-btn:not(.alt),
+.cta .btn:not(.alt),
+.hero-copy .btn:not(.alt){
+  background:#fff !important;
+  color:#68152b !important;
+  -webkit-text-fill-color:#68152b !important;
+}
+.material .material-btn.alt,
+.cta .btn.alt,
+.hero-copy .btn.alt{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
