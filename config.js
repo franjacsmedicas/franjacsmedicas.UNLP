@@ -14,7 +14,7 @@ const SITE_CONFIG = {
     },
 
     images: {
-        hero: "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&w=1800&q=85",
+        hero: "fachada.jpg",
         proposal: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1000&q=85",
         news1: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0ioCJVSS1xOhG8aRvWaaULxjl16x15Gr0l3V0YO9quA&s=10",
         news2: "https://raw.githubusercontent.com/franjacsmedicas/franjacsmedicas.githhub-io/main/Biomed2.png",
