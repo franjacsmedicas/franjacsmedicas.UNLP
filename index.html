@@ -324,10 +324,28 @@
             background: var(--bordo);
         }
 
+        .access-padron {
+            background: linear-gradient(135deg, var(--bordo-claro), var(--bordo));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .access-padron::after {
+            content: "PADRÓN 2026";
+            position: absolute;
+            right: 18px;
+            top: 18px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            opacity: .65;
+        }
+
         .access-ingreso:hover,
         .access-planes:hover,
         .access-biblioteca:hover,
-        .access-mapas:hover {
+        .access-mapas:hover,
+        .access-padron:hover {
             transform: translateY(-8px);
         }
 
@@ -831,6 +849,7 @@ section.hero .hero-buttons a.btn-primary span{
                 <li><a href="biblioteca.html">Biblioteca</a></li>
                 <li><a href="mapas.html">Mapas</a></li>
                 <li><a href="aulas.html">Aulas</a></li>
+                <li><a href="padron.html">¿Dónde voto?</a></li>
                 <li><a href="agenda.html">Agenda</a></li>
                 <li><a href="buscar.html">Buscar</a></li>
                 <li><a href="contacto.html" class="nav-button">Contacto</a></li>
@@ -916,6 +935,12 @@ section.hero .hero-buttons a.btn-primary span{
                 <a href="aulas.html" class="access-card access-aulas fade-in">
                     <div class="access-content">
                         <h3>Distribución de aulas</h3>
+                    </div>
+                </a>
+
+                <a href="padron.html" class="access-card access-padron fade-in">
+                    <div class="access-content">
+                        <h3>¿Dónde voto?</h3>
                     </div>
                 </a>
 
