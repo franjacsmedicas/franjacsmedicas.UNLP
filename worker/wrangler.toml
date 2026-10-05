@@ -1,0 +1,8 @@
+name = "fcm-padron-api"
+main = "src/index.js"
+compatibility_date = "2026-10-05"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "fcm-padron"
+database_id = "REEMPLAZAR_CON_DATABASE_ID"
