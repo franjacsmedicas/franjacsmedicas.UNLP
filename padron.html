@@ -235,9 +235,9 @@ async function consultar(legajo){
   progressBar.style.width='0%';
   progressText.textContent='Buscando en los dos padrones…';
 
-  const [principal,doble]=await Promise.all([
-    buscarEnPdf(MAIN_PDF,legajo,'Padrón provisorio'),
-    buscarEnPdf(DOUBLE_PDF,legajo,'Doble empadronados')
+  const [doble,principal]=await Promise.all([
+    buscarEnPdf(DOUBLE_PDF,legajo,'Doble empadronados'),
+    buscarEnPdf(MAIN_PDF,legajo,'Padrón provisorio')
   ]);
 
   return {principal,doble};
@@ -262,7 +262,7 @@ form.addEventListener('submit',async e=>{
     const data=await consultar(legajo);
     progress.classList.remove('show');
 
-    const r=data.principal.encontrado ? data.principal : data.doble.encontrado ? data.doble : null;
+    const r=data.doble.encontrado ? data.doble : data.principal.encontrado ? data.principal : null;
 
     if(!r){
       result.innerHTML='<h3>Legajo no encontrado</h3><p>No encontramos <strong>'+escapeHtml(legajo)+'</strong> en ninguno de los dos archivos 2026.</p>';
@@ -271,11 +271,16 @@ form.addEventListener('submit',async e=>{
 
     const alerta='';
 
+    const dobleInfo=r.doble
+      ? '<p><strong>Tipo:</strong> Doble empadronado</p><p><strong>Fuente:</strong> PDF de doble empadronados</p>'
+      : '';
+
     result.innerHTML=
       '<h3>Resultado de la consulta</h3>'+
       '<p><strong>Nombre:</strong> '+escapeHtml(r.nombre)+'</p>'+
       '<p><strong>Legajo:</strong> '+escapeHtml(legajo)+'</p>'+
       '<p><strong>Condición:</strong> '+escapeHtml(r.estado)+'</p>'+
+      dobleInfo+
       alerta;
   }catch(error){
     console.error(error);
