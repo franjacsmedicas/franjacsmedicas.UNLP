@@ -128,7 +128,7 @@ const navLinks=document.getElementById('navLinks');
 menuBtn.addEventListener('click',()=>navLinks.classList.toggle('active'));
 document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('active')));
 
-const PADRON_DATA_URL = 'https://raw.githubusercontent.com/franjacsmedicasUNLP/consulta-padron-fcm-unlp-api/main/api/_data.json';
+const PADRON_DATA_URL = 'https://cdn.jsdelivr.net/gh/franjacsmedicasUNLP/consulta-padron-fcm-unlp-api@main/api/_data.json';
 let padronData = null;
 let padronLoadPromise = null;
 
