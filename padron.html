@@ -197,7 +197,12 @@ function extraerCondicionesDoble(linea, legajo){
   s=s.replace(/\bDNI\s*[-:]?\s*\d+\b/gi,'');
   s=s.replace(/\d{7,9}/g,'');
   s=s.replace(/^\s*[-:|]+\s*/,'').trim();
-  return s || extraerEstado(linea);
+
+  // El PDF de doble empadronados contiene las condiciones por dependencia
+  // como bloques del tipo "04 ING. CUM. 05 CUMPLE". Conservamos únicamente
+  // esos bloques y su texto, sin mezclar otros datos de la fila.
+  const bloques=s.match(/\b\d{2}\s+(?:ING\.\s*CUM\.|CUMPLE(?:\s+CONDICION)?|NO\s+CUMPLE|INGRESANTE)\b(?:\s+\d{2}\s+(?:ING\.\s*CUM\.|CUMPLE(?:\s+CONDICION)?|NO\s+CUMPLE|INGRESANTE)\b)*/gi);
+  return bloques ? bloques.join(' ') : (s || 'No especificadas');
 }
 
 function construirLineas(items){
