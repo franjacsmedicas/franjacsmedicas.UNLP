@@ -90,9 +90,9 @@ footer p{color:#aaa!important;font-size:13px}
 <div class="wrap">
 <section class="panel">
 <h2>Consultá tu padrón</h2>
-<p class="lead">Ingresá tu DNI para realizar la consulta.</p>
+<p class="lead">Ingresá tu número de legajo para realizar la consulta.</p>
 <form class="form" id="padronForm">
-<input id="dni" inputmode="numeric" autocomplete="off" maxlength="12" placeholder="Ingresá tu DNI, sin puntos" aria-label="DNI">
+<input id="legajo" inputmode="text" autocomplete="off" maxlength="20" placeholder="Ingresá tu número de legajo" aria-label="Número de legajo">
 <button class="consultar" type="submit">CONSULTAR</button>
 </form>
 
@@ -103,13 +103,12 @@ footer p{color:#aaa!important;font-size:13px}
 <div class="result" id="result" aria-live="polite"></div>
 
 <div class="security">
-<strong>Privacidad</strong>
-<p>La consulta utiliza el padrón público 2026 como fuente y facilita la búsqueda por DNI. Las mesas electorales todavía no fueron asignadas, por lo que ese dato se incorporará cuando esté disponible.</p>
+<strong>Privacidad</strong>\n<p>La consulta utiliza el padrón público 2026 como fuente y facilita la búsqueda por número de legajo. Las mesas electorales todavía no fueron asignadas, por lo que ese dato se incorporará cuando esté disponible.</p>
 </div>
 </section>
 
 <div class="info-grid">
-<article class="info"><div class="num">01</div><h3>Ingresá tu DNI</h3><p>Escribilo sin puntos ni espacios.</p></article>
+<article class="info"><div class="num">01</div><h3>Ingresá tu legajo</h3><p>Escribí tu número de legajo tal como figura en el padrón.</p></article>
 <article class="info"><div class="num">02</div><h3>Consultá</h3><p>El sistema buscará tu registro en el padrón.</p></article>
 <article class="info"><div class="num">03</div><h3>Revisá la información</h3><p>La versión final mostrará únicamente la información necesaria para la consulta electoral.</p></article>
 </div>
@@ -120,7 +119,7 @@ footer p{color:#aaa!important;font-size:13px}
 
 <script>
 const form=document.getElementById('padronForm');
-const dni=document.getElementById('dni');
+const legajo=document.getElementById('legajo');
 const result=document.getElementById('result');
 const menuBtn=document.getElementById('menuBtn');
 const navLinks=document.getElementById('navLinks');
@@ -130,8 +129,8 @@ document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',
 
 const PADRON_API_URL = 'https://franjacsmedicas-padron.vercel.app/api/consulta';
 
-async function consultarDni(dniValue){
- const response = await fetch(PADRON_API_URL + '?dni=' + encodeURIComponent(dniValue), {
+async function consultarLegajo(legajoValue){
+ const response = await fetch(PADRON_API_URL + '?legajo=' + encodeURIComponent(legajoValue), {
    method:'GET',
    cache:'no-store',
    mode:'cors',
@@ -172,15 +171,15 @@ function mostrarResultado(data){
 
 form.addEventListener('submit',async e=>{
  e.preventDefault();
- const value=dni.value.replace(/\D/g,'');
+ const value=legajo.value.trim();
  result.classList.add('show');
- if(value.length<7){
-   result.innerHTML='<h3>DNI inválido</h3><p>Ingresá un número de documento válido para realizar la consulta.</p>';
+ if(value.length<3){
+   result.innerHTML='<h3>Legajo inválido</h3><p>Ingresá un número de legajo válido para realizar la consulta.</p>';
    return;
  }
  result.innerHTML='<h3>Consultando…</h3><p>Estamos buscando tu registro en el padrón.</p>';
  try{
-   const data=await consultarDni(value);
+   const data=await consultarLegajo(value);
    mostrarResultado(data);
  }catch(error){
    result.innerHTML='<h3>No se pudo cargar el padrón</h3><p>Probá nuevamente en unos instantes. Si el problema continúa, revisá la conexión.</p>';
