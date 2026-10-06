@@ -305,11 +305,23 @@ function localizarColumnaCondicion(filas, pageWidth){
       const u=normalizarTextoPDF(it.texto);
       return u.includes('CONDICION') || u.includes('OTRAS') || u.includes('DEPENDENCIAS');
     });
-
     if(!relevantes.length) continue;
 
-    const x1=Math.max(0,Math.min(...relevantes.map(x=>x.x))-8);
-    const x2=pageWidth || Math.max(...fila.items.map(x=>x.x+x.width))+30;
+    const x1=Math.max(0,Math.min(...relevantes.map(x=>x.x))-6);
+    const inicio=x1;
+
+    // La columna termina antes de la siguiente cabecera de la tabla.
+    // NO usamos toda la página: eso era lo que mezclaba datos de otras columnas.
+    const otrosInicios=[];
+    for(const item of fila.items){
+      if(item.x<=inicio+2) continue;
+      const u=normalizarTextoPDF(item.texto);
+      if(/^(APELLIDO|NOMBRE|LEGAJO|DNI|DEPENDENCIA|CARRERA|CONDICION|CONDICIONES|ESTADO|SITUACION)/.test(u)){
+        otrosInicios.push(item.x);
+      }
+    }
+    const siguiente=otrosInicios.length ? Math.min(...otrosInicios) : pageWidth;
+    const x2=Math.max(x1+40,siguiente-6);
 
     return {x1,x2,headerY:fila.y};
   }
@@ -343,25 +355,19 @@ function extraerNombreDesdeFilaDoble(fila, consulta){
   return s || consulta;
 }
 
-function extraerCondicionPorCoordenadas(filas, filaMatch, columna, pageWidth){
+function extraerCondicionPorCoordenadas(filas, filaMatch, columna){
   if(!columna) return '';
 
-  // Localizamos el inicio real del registro por el legajo más cercano.
+  // El registro comienza en la fila que contiene el legajo asociado.
   let inicio=filaMatch;
-  let distanciaMin=999;
-  for(let i=0;i<filas.length;i++){
-    if(!filaTieneLegajo(filas[i])) continue;
-    const d=Math.abs(i-filaMatch);
-    if(d<=3 && d<distanciaMin){
-      distanciaMin=d;
+  for(let i=Math.max(0,filaMatch-3);i<=Math.min(filas.length-1,filaMatch+3);i++){
+    if(filaTieneLegajo(filas[i])){
       inicio=i;
+      break;
     }
   }
 
-  // Si no encontramos un legajo cercano, usamos la fila del nombre.
-  if(distanciaMin===999) inicio=filaMatch;
-
-  // El siguiente legajo marca el comienzo del siguiente registro.
+  // El siguiente legajo delimita el siguiente registro.
   let fin=filas.length;
   for(let i=inicio+1;i<filas.length;i++){
     if(filaTieneLegajo(filas[i])){
@@ -373,23 +379,36 @@ function extraerCondicionPorCoordenadas(filas, filaMatch, columna, pageWidth){
   const partes=[];
   for(let i=inicio;i<fin;i++){
     for(const item of filas[i].items){
-      const x1=item.x;
-      const x2=item.x+item.width;
-      const solapa=x2>=columna.x1 && x1<=columna.x2;
-      if(solapa && normalizarTextoPDF(item.texto)!=='CONDICION' && normalizarTextoPDF(item.texto)!=='EN' && normalizarTextoPDF(item.texto)!=='OTRAS' && normalizarTextoPDF(item.texto)!=='DEPENDENCIAS'){
-        partes.push({y:filas[i].y,x:item.x,texto:item.texto});
+      const ix1=item.x;
+      const ix2=item.x+item.width;
+      if(ix2<columna.x1 || ix1>columna.x2) continue;
+
+      const u=normalizarTextoPDF(item.texto);
+      if(/^(CONDICION|EN|OTRAS|DEPENDENCIAS)$/.test(u)) continue;
+
+      // La columna debe devolver únicamente sus códigos/estados.
+      const bloques=extraerBloquesCondicion(item.texto);
+      for(const bloque of bloques){
+        partes.push({y:filas[i].y,x:item.x,texto:bloque});
       }
     }
   }
 
-  // Orden visual: primero por fila (de arriba hacia abajo), luego por X.
   partes.sort((a,b)=>{
     if(Math.abs(a.y-b.y)>1) return b.y-a.y;
     return a.x-b.x;
   });
 
-  const resultado=partes.map(p=>p.texto).join(' ').replace(/\s+/g,' ').trim();
-  return resultado;
+  const vistos=new Set();
+  const resultado=[];
+  for(const p of partes){
+    if(!vistos.has(p.texto)){
+      vistos.add(p.texto);
+      resultado.push(p.texto);
+    }
+  }
+
+  return resultado.join(' ').replace(/\s+/g,' ').trim();
 }
 
 async function buscarDobleEnPagina(page, content, consulta, pageNo){
