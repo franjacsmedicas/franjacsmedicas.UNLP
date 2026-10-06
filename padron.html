@@ -257,6 +257,32 @@ function extraerBloquesCondicion(texto){
   return bloques;
 }
 
+function extraerLegajoDobleDesdeLineas(lineas, indice, consulta=''){
+  const buscado=normalizarNombre(consulta);
+  const candidatos=[];
+  const inicio=Math.max(0,indice-8);
+  const fin=Math.min(lineas.length,indice+9);
+  for(let j=inicio;j<fin;j++){
+    const linea=String(lineas[j]||'');
+    const matches=[...linea.matchAll(/\b\d{4,9}\s*\/\s*\d+\b/g)];
+    for(const m of matches){
+      const valor=m[0].replace(/\s+/g,'');
+      const normal=normalizarNombre(linea);
+      candidatos.push({
+        valor,
+        distancia:Math.abs(j-indice),
+        coincideNombre:!!(buscado && normal.includes(buscado)),
+        indice:j
+      });
+    }
+  }
+  candidatos.sort((a,b)=>{
+    if(a.coincideNombre!==b.coincideNombre) return a.coincideNombre ? -1 : 1;
+    return a.distancia-b.distancia;
+  });
+  return candidatos[0]?.valor || '';
+}
+
 function extraerCondicionesDobleDesdeLineas(lineas, indice, legajo){
   // En este PDF la columna puede ser extraída por PDF.js en una línea
   // diferente de la del nombre. Por eso no dependemos de una única línea.
