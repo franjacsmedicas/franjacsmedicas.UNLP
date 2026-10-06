@@ -152,7 +152,7 @@ function legajoRegex(legajo){
 
 function extraerEstado(linea){
   const u=linea.toUpperCase();
-  const estados=['INGRESANTE CUMPLE','CUMPLE CONDICION','NO CUMPLE','EGRESADO','INGRESANTE'];
+  const estados=['NO CUMPLE','INGRESANTE CUMPLE','CUMPLE CONDICION','EGRESADO','INGRESANTE'];
   return estados.find(e=>u.includes(e))||'No especificado';
 }
 
