@@ -128,34 +128,22 @@ const navLinks=document.getElementById('navLinks');
 menuBtn.addEventListener('click',()=>navLinks.classList.toggle('active'));
 document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('active')));
 
-const PADRON_DATA_URLS = [
- 'https://cdn.jsdelivr.net/gh/franjacsmedicasUNLP/consulta-padron-fcm-unlp-api@aa6b3c1fbb03f48494885157bc745c976b703b36/api/_data.json',
- 'https://raw.githubusercontent.com/franjacsmedicasUNLP/consulta-padron-fcm-unlp-api/aa6b3c1fbb03f48494885157bc745c976b703b36/api/_data.json'
-];
-let padronData = null;
-let padronLoadPromise = null;
+const PADRON_API_URL = 'https://franjacsmedicas-padron.vercel.app/api/consulta';
 
-async function cargarPadron(){
- if(padronData) return padronData;
- if(!padronLoadPromise){
-   padronLoadPromise = (async()=>{
-     let ultimoError = null;
-     for(const url of PADRON_DATA_URLS){
-       try{
-         const response = await fetch(url,{cache:'default',mode:'cors'});
-         if(!response.ok) throw new Error('HTTP '+response.status);
-         const data = await response.json();
-         if(!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Formato inválido');
-         padronData = data;
-         return data;
-       }catch(error){
-         ultimoError = error;
-       }
-     }
-     throw ultimoError || new Error('No se pudo cargar el padrón');
-   })();
+async function consultarDni(dniValue){
+ const response = await fetch(PADRON_API_URL + '?dni=' + encodeURIComponent(dniValue), {
+   method:'GET',
+   cache:'no-store',
+   mode:'cors',
+   headers:{Accept:'application/json'}
+ });
+ let data = null;
+ try{ data = await response.json(); }catch(_){ data = null; }
+ if(!response.ok){
+   if(data && data.mensaje) return data;
+   throw new Error('HTTP '+response.status);
  }
- return padronLoadPromise;
+ return data;
 }
 
 function escapeHtml(value){
@@ -192,13 +180,8 @@ form.addEventListener('submit',async e=>{
  }
  result.innerHTML='<h3>Consultando…</h3><p>Estamos buscando tu registro en el padrón.</p>';
  try{
-   const data=await cargarPadron();
-   const registro=data[value];
-   if(!registro){
-     mostrarResultado({encontrado:false,mensaje:'No se encontró el DNI en el padrón.'});
-     return;
-   }
-   mostrarResultado({encontrado:true,resultado:registro});
+   const data=await consultarDni(value);
+   mostrarResultado(data);
  }catch(error){
    result.innerHTML='<h3>No se pudo cargar el padrón</h3><p>Probá nuevamente en unos instantes. Si el problema continúa, revisá la conexión.</p>';
  }
