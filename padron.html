@@ -246,73 +246,59 @@ function extraerCarrera(linea){
 }
 
 function extraerBloquesCondicion(texto){
-  const bloques=[...String(texto||'').matchAll(/\b(\d{2})\s+((?:ING\.\s*CUM\.)|(?:NO\s+CUMPLE)|(?:CUMPLE(?:\s+CONDICION)?)|(?:INGRESANTE))\b/gi)]
-    .map(m=>m[1]+' '+m[2].replace(/\s+/g,' ').trim());
+  const t=String(texto||'')
+    .replace(/\s+/g,' ')
+    .replace(/\bING\s*\.??\s*CUM\s*\.??/gi,'ING. CUM.')
+    .trim();
+
+  const bloques=[...t.matchAll(/\b(\d{1,2})\s+((?:ING\.\s*CUM\.)|(?:NO\s+CUMPLE)|(?:CUMPLE(?:\s+CONDICION)?)|(?:INGRESANTE))\b/gi)]
+    .map(m=>String(m[1]).padStart(2,'0')+' '+m[2].replace(/\s+/g,' ').trim());
+
   return bloques;
 }
 
-function extraerLegajoDobleDesdeLineas(lineas, indice, consulta=''){
-  const buscado=normalizarNombre(consulta);
-  const candidatos=[];
-  const inicio=Math.max(0,indice-6);
-  const fin=Math.min(lineas.length,indice+7);
-
-  for(let j=inicio;j<fin;j++){
-    const linea=String(lineas[j]||'');
-    const matches=[...linea.matchAll(/\b\d{4,9}\s*\/\s*\d+\b/g)];
-    for(const m of matches){
-      const valor=m[0].replace(/\s+/g,'');
-      const normal=normalizarNombre(linea);
-      candidatos.push({
-        valor,
-        distancia:Math.abs(j-indice),
-        coincideNombre:buscado && normal.includes(buscado),
-        indice:j
-      });
-    }
-  }
-
-  candidatos.sort((a,b)=>{
-    if(a.coincideNombre!==b.coincideNombre) return a.coincideNombre ? -1 : 1;
-    return a.distancia-b.distancia;
-  });
-  return candidatos[0]?.valor || '';
-}
-
 function extraerCondicionesDobleDesdeLineas(lineas, indice, legajo){
-  if(!legajo) return 'No especificadas';
-
-  const rx=legajoRegex(legajo);
-  let filaLegajo=-1;
-  let mejorDist=Infinity;
+  // En este PDF la columna puede ser extraída por PDF.js en una línea
+  // diferente de la del nombre. Por eso no dependemos de una única línea.
+  // Aislamos el registro entre el legajo anterior y el siguiente legajo.
+  const legajos=[];
+  const legajoRx=/\b\d{4,9}\s*\/\s*\d+\b/;
 
   for(let j=0;j<lineas.length;j++){
-    if(!rx.test(lineas[j])) continue;
-    const d=Math.abs(j-indice);
-    if(d<mejorDist){
-      mejorDist=d;
-      filaLegajo=j;
-    }
+    const m=String(lineas[j]||'').match(legajoRx);
+    if(m) legajos.push({indice:j,valor:m[0].replace(/\s+/g,'')});
   }
 
-  if(filaLegajo<0) return 'No especificadas';
+  let filaLegajo=-1;
+  if(legajo){
+    const buscado=normalizarLegajo(legajo);
+    const exact=legajos.find(x=>normalizarLegajo(x.valor)===buscado);
+    if(exact) filaLegajo=exact.indice;
+  }
+  if(filaLegajo<0) filaLegajo=indice;
 
-  // La columna puede ocupar más de una línea de extracción. Tomamos
-  // únicamente el bloque inmediatamente asociado al mismo legajo.
-  const inicio=Math.max(0,filaLegajo-4);
-  const fin=Math.min(lineas.length,filaLegajo+5);
+  // Límites del registro actual.
+  let inicio=0;
+  let fin=lineas.length;
+  for(const item of legajos){
+    if(item.indice<filaLegajo) inicio=item.indice+1;
+    if(item.indice>filaLegajo){ fin=item.indice; break; }
+  }
+
+  // Si PDF.js ubicó nombre/legajo y condición con una separación mayor,
+  // permitimos una ventana adicional, pero nunca atravesamos dos registros.
+  if(fin-inicio>30){
+    inicio=Math.max(inicio,filaLegajo-15);
+    fin=Math.min(fin,filaLegajo+16);
+  }
+
   const encontrados=[];
-
   for(let j=inicio;j<fin;j++){
-    const bloques=extraerBloquesCondicion(lineas[j]);
-    for(const bloque of bloques){
-      encontrados.push({bloque,distancia:Math.abs(j-filaLegajo),indice:j});
+    for(const bloque of extraerBloquesCondicion(lineas[j])){
+      encontrados.push({bloque,indice:j});
     }
   }
 
-  // Dedupe manteniendo el orden de aparición y priorizando las condiciones
-  // más cercanas al legajo. Nunca se repite una condición.
-  encontrados.sort((a,b)=>a.indice-b.indice);
   const unicos=[];
   const vistos=new Set();
   for(const item of encontrados){
@@ -324,7 +310,6 @@ function extraerCondicionesDobleDesdeLineas(lineas, indice, legajo){
 
   return unicos.length ? unicos.join(' ') : 'No especificadas';
 }
-
 function construirLineas(items){
   const grupos=[];
   items.filter(x=>String(x.str||'').trim()).forEach(item=>{
