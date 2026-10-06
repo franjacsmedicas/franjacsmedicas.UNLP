@@ -331,10 +331,17 @@ function localizarColumnaCondicion(filas, pageWidth){
 function filaCoincideConsulta(fila, consulta, esLegajo){
   const texto=textoFilaPDF(fila);
   if(esLegajo) return legajoRegex(normalizarLegajo(consulta)).test(texto);
-  return normalizarTextoPDF(texto).includes(normalizarTextoPDF(consulta));
+  const tokens=normalizarTextoPDF(consulta).split(' ').filter(t=>t.length>=2);
+  const normal=normalizarTextoPDF(texto);
+  return tokens.length>0 && tokens.every(t=>normal.split(' ').includes(t));
 }
 
 function extraerNombreDesdeFilaDoble(fila, consulta){
+  const texto=textoFilaPDF(fila).replace(/\s+/g,' ').trim();
+  const tokens=normalizarTextoPDF(consulta).split(' ').filter(Boolean);
+  if(!tokens.length) return consulta;
+
+  const rx=new RegExp(tokens.map(t=>t.replace(/[.*+?^{}()|[\\]\\\\]/g,'\\\\function extraerNombreDesdeFilaDoble(fila, consulta){
   const texto=textoFilaPDF(fila);
   const buscado=normalizarTextoPDF(consulta);
 
@@ -353,73 +360,49 @@ function extraerNombreDesdeFilaDoble(fila, consulta){
 
   s=s.replace(/\b\d{4,9}\s*\/\s*\d+\b.*$/,'').trim();
   return s || consulta;
+}')).join('\\\\s+'),'i');
+  const m=texto.match(rx);
+  if(m){
+    let desde=texto.slice(m.index||0);
+    const corte=desde.search(/\b\d{4,9}\s*\/\s*\d+\b|\b\d{1,2}\s+(?:ING\.?\s*CUM\.?|NO\s+CUMPLE|CUMPLE(?:\s+CONDICION)?|INGRESANTE)\b/i);
+    return (corte>=0?desde.slice(0,corte):m[0]).trim();
+  }
+  const leg=texto.match(/^(.*?)\s+\d{4,9}\s*\/\s*\d+/);
+  return leg ? leg[1].trim() : consulta;
 }
 
 function extraerCondicionPorCoordenadas(filas, filaMatch, columna){
   if(!columna) return '';
 
-  // Delimitamos EXCLUSIVAMENTE el registro buscado:
-  // empieza en el legajo asociado y termina justo antes del siguiente legajo.
-  let inicio=filaMatch;
-  for(let i=Math.max(0,filaMatch-4);i<=Math.min(filas.length-1,filaMatch+4);i++){
-    if(filaTieneLegajo(filas[i])){
-      inicio=i;
-      break;
-    }
-  }
+  // El resultado debe salir SOLO de la fila exacta que coincidió.
+  // Esto evita mezclar condiciones de registros vecinos.
+  const fila=filas[filaMatch];
+  if(!fila) return '';
 
-  let fin=filas.length;
-  for(let i=inicio+1;i<filas.length;i++){
-    if(filaTieneLegajo(filas[i])){
-      fin=i;
-      break;
-    }
-  }
+  const textoColumna=fila.items
+    .filter(item=>{
+      const ix1=item.x, ix2=item.x+item.width;
+      return ix2>=columna.x1 && ix1<=columna.x2;
+    })
+    .filter(item=>{
+      const u=normalizarTextoPDF(item.texto);
+      return !/^(CONDICION|CONDICIONES|EN|OTRAS|DEPENDENCIAS)$/.test(u);
+    })
+    .sort((a,b)=>a.x-b.x)
+    .map(item=>String(item.texto||'').trim())
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\s+/g,' ')
+    .trim();
 
-  const textosFila=[];
-
-  // IMPORTANTE:
-  // PDF.js suele separar una celda en muchos objetos: por ejemplo
-  // "04" + "ING." + "CUM." + "05" + "CUMPLE".
-  // Primero reconstruimos TODA la celda por coordenadas y recién después
-  // buscamos los bloques de condición. Nunca intentamos interpretar cada
-  // objeto por separado.
-  for(let i=inicio;i<fin;i++){
-    const dentro=filas[i].items
-      .filter(item=>{
-        const ix1=item.x;
-        const ix2=item.x+item.width;
-        return ix2>=columna.x1 && ix1<=columna.x2;
-      })
-      .filter(item=>{
-        const u=normalizarTextoPDF(item.texto);
-        return !/^(CONDICION|CONDICIONES|EN|OTRAS|DEPENDENCIAS)$/.test(u);
-      })
-      .sort((a,b)=>a.x-b.x)
-      .map(item=>String(item.texto||'').trim())
-      .filter(Boolean);
-
-    if(dentro.length) textosFila.push(dentro.join(' '));
-  }
-
-  const textoColumna=textosFila.join(' ').replace(/\s+/g,' ').trim();
-  if(!textoColumna) return '';
-
-  // Reconstruimos los bloques completos, incluyendo los casos donde
-  // PDF.js haya separado "04", "ING.", "CUM.", etc.
   const bloques=extraerBloquesCondicion(textoColumna);
-
-  const resultado=[];
   const vistos=new Set();
-  for(const bloque of bloques){
-    const limpio=bloque.replace(/\s+/g,' ').trim();
-    if(limpio && !vistos.has(limpio)){
-      vistos.add(limpio);
-      resultado.push(limpio);
-    }
-  }
-
-  return resultado.join(' ').trim();
+  return bloques.filter(b=>{
+    const v=b.replace(/\s+/g,' ').trim();
+    if(!v || vistos.has(v)) return false;
+    vistos.add(v);
+    return true;
+  }).join(' ').trim();
 }
 async function buscarDobleEnPagina(page, content, consulta, pageNo){
   const viewport=page.getViewport({scale:1});
