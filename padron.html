@@ -190,6 +190,16 @@ function extraerCarrera(linea){
   return 'No especificada';
 }
 
+function extraerCondicionesDoble(linea, legajo){
+  let s=String(linea||'').replace(/\s+/g,' ').trim();
+  const pos=s.toUpperCase().indexOf(String(legajo||'').toUpperCase());
+  if(pos>=0) s=s.slice(pos + String(legajo||'').length);
+  s=s.replace(/\bDNI\s*[-:]?\s*\d+\b/gi,'');
+  s=s.replace(/\d{7,9}/g,'');
+  s=s.replace(/^\s*[-:|]+\s*/,'').trim();
+  return s || extraerEstado(linea);
+}
+
 function construirLineas(items){
   const grupos=[];
   items.filter(x=>String(x.str||'').trim()).forEach(item=>{
@@ -231,7 +241,10 @@ async function buscarEnPdf(url, consulta, etiqueta){
         nombre:extraerNombre(lineas[i],legajoEncontrado),
         legajo:legajoEncontrado,
         carrera:extraerCarrera(contexto),
-        estado:extraerEstado(lineas[i])
+        estado:extraerEstado(lineas[i]),
+        condicionesOtrasDependencias:etiqueta==='Doble empadronados'
+          ? extraerCondicionesDoble(lineas[i],legajoEncontrado)
+          : ''
       };
     }
 
@@ -287,17 +300,19 @@ form.addEventListener('submit',async e=>{
 
     const alerta='';
 
-    const dobleInfo=r.doble
-      ? '<p><strong>Tipo:</strong> Doble empadronado</p><p><strong>Fuente:</strong> PDF de doble empadronados</p>'
-      : '';
-
-    result.innerHTML=
-      '<h3>Resultado de la consulta</h3>'+
-      '<p><strong>Nombre:</strong> '+escapeHtml(r.nombre)+'</p>'+
-      '<p><strong>Legajo:</strong> '+escapeHtml(r.legajo || legajo)+'</p>'+
-      '<p><strong>Condición:</strong> '+escapeHtml(r.estado)+'</p>'+
-      dobleInfo+
-      alerta;
+    if(r.doble){
+      result.innerHTML=
+        '<h3>Resultado de la consulta</h3>'+
+        '<p><strong>Apellido y nombre:</strong> '+escapeHtml(r.nombre)+'</p>'+
+        '<p><strong>Condiciones en otras dependencias:</strong> '+escapeHtml(r.condicionesOtrasDependencias || r.estado)+'</p>';
+    }else{
+      result.innerHTML=
+        '<h3>Resultado de la consulta</h3>'+
+        '<p><strong>Nombre:</strong> '+escapeHtml(r.nombre)+'</p>'+
+        '<p><strong>Legajo:</strong> '+escapeHtml(r.legajo || legajo)+'</p>'+
+        '<p><strong>Condición:</strong> '+escapeHtml(r.estado)+'</p>'+
+        alerta;
+    }
   }catch(error){
     console.error(error);
     progress.classList.remove('show');
