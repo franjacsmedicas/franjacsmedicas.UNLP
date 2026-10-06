@@ -358,16 +358,16 @@ function extraerNombreDesdeFilaDoble(fila, consulta){
 function extraerCondicionPorCoordenadas(filas, filaMatch, columna){
   if(!columna) return '';
 
-  // El registro comienza en la fila que contiene el legajo asociado.
+  // Delimitamos EXCLUSIVAMENTE el registro buscado:
+  // empieza en el legajo asociado y termina justo antes del siguiente legajo.
   let inicio=filaMatch;
-  for(let i=Math.max(0,filaMatch-3);i<=Math.min(filas.length-1,filaMatch+3);i++){
+  for(let i=Math.max(0,filaMatch-4);i<=Math.min(filas.length-1,filaMatch+4);i++){
     if(filaTieneLegajo(filas[i])){
       inicio=i;
       break;
     }
   }
 
-  // El siguiente legajo delimita el siguiente registro.
   let fin=filas.length;
   for(let i=inicio+1;i<filas.length;i++){
     if(filaTieneLegajo(filas[i])){
@@ -376,41 +376,51 @@ function extraerCondicionPorCoordenadas(filas, filaMatch, columna){
     }
   }
 
-  const partes=[];
+  const textosFila=[];
+
+  // IMPORTANTE:
+  // PDF.js suele separar una celda en muchos objetos: por ejemplo
+  // "04" + "ING." + "CUM." + "05" + "CUMPLE".
+  // Primero reconstruimos TODA la celda por coordenadas y recién después
+  // buscamos los bloques de condición. Nunca intentamos interpretar cada
+  // objeto por separado.
   for(let i=inicio;i<fin;i++){
-    for(const item of filas[i].items){
-      const ix1=item.x;
-      const ix2=item.x+item.width;
-      if(ix2<columna.x1 || ix1>columna.x2) continue;
+    const dentro=filas[i].items
+      .filter(item=>{
+        const ix1=item.x;
+        const ix2=item.x+item.width;
+        return ix2>=columna.x1 && ix1<=columna.x2;
+      })
+      .filter(item=>{
+        const u=normalizarTextoPDF(item.texto);
+        return !/^(CONDICION|CONDICIONES|EN|OTRAS|DEPENDENCIAS)$/.test(u);
+      })
+      .sort((a,b)=>a.x-b.x)
+      .map(item=>String(item.texto||'').trim())
+      .filter(Boolean);
 
-      const u=normalizarTextoPDF(item.texto);
-      if(/^(CONDICION|EN|OTRAS|DEPENDENCIAS)$/.test(u)) continue;
-
-      // La columna debe devolver únicamente sus códigos/estados.
-      const bloques=extraerBloquesCondicion(item.texto);
-      for(const bloque of bloques){
-        partes.push({y:filas[i].y,x:item.x,texto:bloque});
-      }
-    }
+    if(dentro.length) textosFila.push(dentro.join(' '));
   }
 
-  partes.sort((a,b)=>{
-    if(Math.abs(a.y-b.y)>1) return b.y-a.y;
-    return a.x-b.x;
-  });
+  const textoColumna=textosFila.join(' ').replace(/\s+/g,' ').trim();
+  if(!textoColumna) return '';
 
-  const vistos=new Set();
+  // Reconstruimos los bloques completos, incluyendo los casos donde
+  // PDF.js haya separado "04", "ING.", "CUM.", etc.
+  const bloques=extraerBloquesCondicion(textoColumna);
+
   const resultado=[];
-  for(const p of partes){
-    if(!vistos.has(p.texto)){
-      vistos.add(p.texto);
-      resultado.push(p.texto);
+  const vistos=new Set();
+  for(const bloque of bloques){
+    const limpio=bloque.replace(/\s+/g,' ').trim();
+    if(limpio && !vistos.has(limpio)){
+      vistos.add(limpio);
+      resultado.push(limpio);
     }
   }
 
-  return resultado.join(' ').replace(/\s+/g,' ').trim();
+  return resultado.join(' ').trim();
 }
-
 async function buscarDobleEnPagina(page, content, consulta, pageNo){
   const viewport=page.getViewport({scale:1});
   const filas=agruparFilasPDF(content.items);
