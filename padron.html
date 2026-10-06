@@ -168,18 +168,18 @@ function extraerNombre(linea, legajo, esDoble=false){
   let s=String(linea||'').replace(/\s+/g,' ').trim();
 
   if(esDoble){
-    // En el PDF de doble empadronados el nombre aparece antes de los
-    // identificadores y de las condiciones por dependencia. Tomamos
-    // únicamente el bloque nominal, evitando devolver "No especificado".
-    const estadoPos=s.search(/\b\d{2}\s+(?:ING\.\s*CUM\.|CUMPLE|NO\s+CUMPLE|INGRESANTE)\b/i);
-    const legajoPos=legajo ? s.toUpperCase().indexOf(String(legajo).toUpperCase()) : -1;
-    let corte=estadoPos>=0 ? estadoPos : (legajoPos>=0 ? legajoPos : s.length);
-    let nombre=s.slice(0,corte);
-    nombre=nombre.replace(/^\s*\d+\s+/,'');
-    nombre=nombre.replace(/\bDNI\s*[-:]?\s*\d+\b/gi,'');
-    nombre=nombre.replace(/\d{7,9}/g,'');
-    nombre=nombre.replace(/\s+/g,' ').trim();
-    return nombre || 'No especificado';
+    // SEPARACIÓN: el nombre/apellido se toma únicamente del bloque nominal
+    // y se corta antes de DNI, legajo o condiciones.
+    s=s.replace(/^\s*\d+\s+/,'');
+    const condicionesPos=s.search(/\b\d{2}\s+(?:ING\.\s*CUM\.|NO\s+CUMPLE|CUMPLE(?:\s+CONDICION)?|INGRESANTE)\b/i);
+    if(condicionesPos>=0) s=s.slice(0,condicionesPos);
+    s=s.replace(/\bDNI\s*[-:]?\s*\d+\b.*$/i,'');
+    s=s.replace(/\b\d{4,9}\s*\/\s*\d+\b.*$/,'');
+    s=s.replace(/\b\d{7,9}\b.*$/,'');
+    s=s.replace(/[|;:]+.*$/,'');
+    s=s.replace(/\s+/g,' ').trim();
+    s=s.replace(/^[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/,'').trim();
+    return s || 'No especificado';
   }
 
   const estado=extraerEstado(linea);
@@ -194,6 +194,28 @@ function extraerNombre(linea, legajo, esDoble=false){
     if(ep>=0) s=s.slice(0,ep).trim();
   }
   return s || 'No especificado';
+}
+
+function extraerNombreDobleDesdeLineas(lineas, indice, legajo){
+  const candidatos=[];
+  const inicio=Math.max(0,indice-3);
+  const fin=Math.min(lineas.length,indice+4);
+
+  for(let j=inicio;j<fin;j++){
+    const linea=String(lineas[j]||'').replace(/\s+/g,' ').trim();
+    if(!linea) continue;
+    const tieneLegajo=!!(legajo && legajoRegex(legajo).test(linea));
+    const nombre=extraerNombre(linea,legajo,true);
+    if(nombre && nombre!=='No especificado'){
+      candidatos.push({nombre,tieneLegajo,longitud:nombre.length});
+    }
+  }
+
+  candidatos.sort((a,b)=>{
+    if(a.tieneLegajo!==b.tieneLegajo) return a.tieneLegajo ? -1 : 1;
+    return b.longitud-a.longitud;
+  });
+  return candidatos[0]?.nombre || 'No especificado';
 }
 
 function extraerCarrera(linea){
@@ -255,11 +277,9 @@ async function buscarEnPdf(url, consulta, etiqueta){
 
       const contexto=lineas.slice(Math.max(0,i-2),Math.min(lineas.length,i+3)).join(' ');
       const legajoEncontrado=esLegajo ? legajo : (lineas[i].match(/\b\d{4,9}\/\d+\b/)||[''])[0];
-      const nombreDesdeFila=extraerNombre(lineas[i],legajoEncontrado,etiqueta==='Doble empadronados');
-      const nombreDesdeContexto=extraerNombre(contexto,legajoEncontrado,etiqueta==='Doble empadronados');
-      const nombreFinal=(nombreDesdeFila && nombreDesdeFila!=='No especificado')
-        ? nombreDesdeFila
-        : (nombreDesdeContexto || 'No especificado');
+      const nombreFinal=etiqueta==='Doble empadronados'
+        ? extraerNombreDobleDesdeLineas(lineas,i,legajoEncontrado)
+        : extraerNombre(lineas[i],legajoEncontrado,false);
       return {
         encontrado:true,
         doble:etiqueta==='Doble empadronados',
@@ -270,7 +290,10 @@ async function buscarEnPdf(url, consulta, etiqueta){
         carrera:extraerCarrera(contexto),
         estado:extraerEstado(lineas[i]),
         condicionesOtrasDependencias:etiqueta==='Doble empadronados'
-          ? extraerCondicionesDoble(lineas[i],legajoEncontrado)
+          ? extraerCondicionesDoble(
+            lineas[i]+' '+lineas.slice(Math.max(0,i-1),Math.min(lineas.length,i+2)).join(' '),
+            legajoEncontrado
+          )
           : ''
       };
     }
@@ -335,7 +358,7 @@ form.addEventListener('submit',async e=>{
     }else{
       result.innerHTML=
         '<h3>Resultado de la consulta</h3>'+
-        '<p><strong>Nombre:</strong> '+escapeHtml(r.nombre)+'</p>'+
+        '<p><strong>Nombre y apellido:</strong> '+escapeHtml(r.nombre)+'</p>'+
         '<p><strong>Legajo:</strong> '+escapeHtml(r.legajo || legajo)+'</p>'+
         '<p><strong>Condición:</strong> '+escapeHtml(r.estado)+'</p>'+
         alerta;
