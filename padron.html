@@ -245,20 +245,84 @@ function extraerCarrera(linea){
   return 'No especificada';
 }
 
-function extraerCondicionesDoble(linea, legajo){
-  let s=String(linea||'').replace(/\s+/g,' ').trim();
-  const pos=s.toUpperCase().indexOf(String(legajo||'').toUpperCase());
-  if(pos>=0) s=s.slice(pos + String(legajo||'').length);
-  s=s.replace(/\bDNI\s*[-:]?\s*\d+\b/gi,'');
-  s=s.replace(/\d{7,9}/g,'');
-  s=s.replace(/^\s*[-:|]+\s*/,'').trim();
+function extraerBloquesCondicion(texto){
+  const bloques=[...String(texto||'').matchAll(/\b(\d{2})\s+((?:ING\.\s*CUM\.)|(?:NO\s+CUMPLE)|(?:CUMPLE(?:\s+CONDICION)?)|(?:INGRESANTE))\b/gi)]
+    .map(m=>m[1]+' '+m[2].replace(/\s+/g,' ').trim());
+  return bloques;
+}
 
-  // El PDF de doble empadronados contiene las condiciones por dependencia
-  // como bloques del tipo "04 ING. CUM. 05 CUMPLE". Conservamos únicamente
-  // esos bloques y su texto, sin mezclar otros datos de la fila.
-  const bloques=[...s.matchAll(/\b(\d{2})\s+((?:ING\.\s*CUM\.)|(?:NO\s+CUMPLE)|(?:CUMPLE(?:\s+CONDICION)?)|(?:INGRESANTE))\b/gi)]
-    .map(m=>m[1]+' '+m[2]);
-  return bloques.length ? [...new Set(bloques)].join(' ') : 'No especificadas';
+function extraerLegajoDobleDesdeLineas(lineas, indice, consulta=''){
+  const buscado=normalizarNombre(consulta);
+  const candidatos=[];
+  const inicio=Math.max(0,indice-6);
+  const fin=Math.min(lineas.length,indice+7);
+
+  for(let j=inicio;j<fin;j++){
+    const linea=String(lineas[j]||'');
+    const matches=[...linea.matchAll(/\b\d{4,9}\s*\/\s*\d+\b/g)];
+    for(const m of matches){
+      const valor=m[0].replace(/\s+/g,'');
+      const normal=normalizarNombre(linea);
+      candidatos.push({
+        valor,
+        distancia:Math.abs(j-indice),
+        coincideNombre:buscado && normal.includes(buscado),
+        indice:j
+      });
+    }
+  }
+
+  candidatos.sort((a,b)=>{
+    if(a.coincideNombre!==b.coincideNombre) return a.coincideNombre ? -1 : 1;
+    return a.distancia-b.distancia;
+  });
+  return candidatos[0]?.valor || '';
+}
+
+function extraerCondicionesDobleDesdeLineas(lineas, indice, legajo){
+  if(!legajo) return 'No especificadas';
+
+  const rx=legajoRegex(legajo);
+  let filaLegajo=-1;
+  let mejorDist=Infinity;
+
+  for(let j=0;j<lineas.length;j++){
+    if(!rx.test(lineas[j])) continue;
+    const d=Math.abs(j-indice);
+    if(d<mejorDist){
+      mejorDist=d;
+      filaLegajo=j;
+    }
+  }
+
+  if(filaLegajo<0) return 'No especificadas';
+
+  // La columna puede ocupar más de una línea de extracción. Tomamos
+  // únicamente el bloque inmediatamente asociado al mismo legajo.
+  const inicio=Math.max(0,filaLegajo-4);
+  const fin=Math.min(lineas.length,filaLegajo+5);
+  const encontrados=[];
+
+  for(let j=inicio;j<fin;j++){
+    const bloques=extraerBloquesCondicion(lineas[j]);
+    for(const bloque of bloques){
+      encontrados.push({bloque,distancia:Math.abs(j-filaLegajo),indice:j});
+    }
+  }
+
+  // Dedupe manteniendo el orden de aparición y priorizando las condiciones
+  // más cercanas al legajo. Nunca se repite una condición.
+  encontrados.sort((a,b)=>a.indice-b.indice);
+  const unicos=[];
+  const vistos=new Set();
+  for(const item of encontrados){
+    if(!vistos.has(item.bloque)){
+      vistos.add(item.bloque);
+      unicos.push(item.bloque);
+    }
+  }
+
+  return unicos.length ? unicos.join(' ') : 'No especificadas';
 }
 
 function construirLineas(items){
@@ -292,8 +356,12 @@ async function buscarEnPdf(url, consulta, etiqueta){
       const coincide=esLegajo ? rx.test(lineas[i]) : lineaNormalizada.includes(nombreBuscado);
       if(!coincide) continue;
 
-      const contexto=lineas.slice(Math.max(0,i-2),Math.min(lineas.length,i+3)).join(' ');
-      const legajoEncontrado=esLegajo ? legajo : (lineas[i].match(/\b\d{4,9}\/\d+\b/)||[''])[0];
+      const contexto=lineas.slice(Math.max(0,i-3),Math.min(lineas.length,i+4)).join(' ');
+      const legajoEncontrado=esLegajo
+        ? legajo
+        : etiqueta==='Doble empadronados'
+          ? extraerLegajoDobleDesdeLineas(lineas,i,consulta)
+          : (lineas[i].match(/\b\d{4,9}\/\d+\b/)||[''])[0];
       const nombreFinal=etiqueta==='Doble empadronados'
         ? extraerNombreDobleDesdeLineas(lineas,i,legajoEncontrado,consulta)
         : extraerNombre(lineas[i],legajoEncontrado,false);
@@ -307,10 +375,7 @@ async function buscarEnPdf(url, consulta, etiqueta){
         carrera:extraerCarrera(contexto),
         estado:extraerEstado(lineas[i]),
         condicionesOtrasDependencias:etiqueta==='Doble empadronados'
-          ? extraerCondicionesDoble(
-            lineas[i]+' '+lineas.slice(Math.max(0,i-1),Math.min(lineas.length,i+2)).join(' '),
-            legajoEncontrado
-          )
+          ? extraerCondicionesDobleDesdeLineas(lineas,i,legajoEncontrado)
           : ''
       };
     }
