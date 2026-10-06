@@ -97,14 +97,14 @@ footer p{color:#aaa!important;font-size:13px}
 </form>
 
 <div class="notice">
-<strong>Información importante:</strong> el padrón provisorio 2026 utilizado como fuente contiene registros de alumnos de Medicina y fue emitido por CeSPI-UNLP. La consulta automática se conectará a una base segura antes de habilitar datos personales.
+<strong>Información importante:</strong> el padrón provisorio 2026 utilizado como fuente contiene registros de alumnos de Medicina y fue emitido por CeSPI-UNLP. La consulta funciona directamente desde GitHub Pages utilizando el padrón publicado como fuente.
 </div>
 
 <div class="result" id="result" aria-live="polite"></div>
 
 <div class="security">
 <strong>Privacidad</strong>
-<p>Esta página está preparada para consultar el padrón sin publicar en GitHub los DNI, nombres ni legajos de los estudiantes. La base completa no forma parte de los archivos públicos del sitio.</p>
+<p>La consulta utiliza el padrón público 2026 como fuente y facilita la búsqueda por DNI. Las mesas electorales todavía no fueron asignadas, por lo que ese dato se incorporará cuando esté disponible.</p>
 </div>
 </section>
 
@@ -128,7 +128,22 @@ const navLinks=document.getElementById('navLinks');
 menuBtn.addEventListener('click',()=>navLinks.classList.toggle('active'));
 document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('active')));
 
-const API_ENDPOINT = 'https://franjacsmedicas-padron.vercel.app/api/consulta';
+const PADRON_DATA_URL = 'https://raw.githubusercontent.com/franjacsmedicasUNLP/consulta-padron-fcm-unlp-api/main/api/_data.json';
+let padronData = null;
+let padronLoadPromise = null;
+
+async function cargarPadron(){
+ if(padronData) return padronData;
+ if(!padronLoadPromise){
+   padronLoadPromise = fetch(PADRON_DATA_URL,{cache:'no-store',headers:{Accept:'application/json'}})
+     .then(response=>{
+       if(!response.ok) throw new Error('No se pudo cargar el padrón');
+       return response.json();
+     })
+     .then(data=>{ padronData=data; return data; });
+ }
+ return padronLoadPromise;
+}
 
 function escapeHtml(value){
  return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
@@ -142,9 +157,9 @@ function mostrarResultado(data){
  }
  const r=data.resultado || {};
  const carrera=escapeHtml(r.carrera || 'No disponible');
- const categoria=escapeHtml(r.categoria || 'No asignada');
+ const categoria=escapeHtml(r.categoria || 'Pendiente de asignación');
  const estado=escapeHtml(r.estadoPadron || 'No disponible');
- const mesa=escapeHtml(r.mesa || 'No asignada');
+ const mesa=escapeHtml(r.mesa || 'Pendiente de asignación');
  result.innerHTML=
    '<h3>Resultado de la consulta</h3>'+
    '<p><strong>Carrera:</strong> '+carrera+'</p>'+
@@ -164,11 +179,15 @@ form.addEventListener('submit',async e=>{
  }
  result.innerHTML='<h3>Consultando…</h3><p>Estamos buscando tu registro en el padrón.</p>';
  try{
-   const response=await fetch(API_ENDPOINT+'?dni='+encodeURIComponent(value),{method:'GET',headers:{Accept:'application/json'}});
-   const data=await response.json().catch(()=>({encontrado:false,mensaje:'La respuesta del servidor no es válida.'}));
-   mostrarResultado(data);
+   const data=await cargarPadron();
+   const registro=data[value];
+   if(!registro){
+     mostrarResultado({encontrado:false,mensaje:'No se encontró el DNI en el padrón.'});
+     return;
+   }
+   mostrarResultado({encontrado:true,resultado:registro});
  }catch(error){
-   result.innerHTML='<h3>No se pudo realizar la consulta</h3><p>El servicio no está disponible en este momento. Probá nuevamente en unos instantes.</p>';
+   result.innerHTML='<h3>No se pudo cargar el padrón</h3><p>Probá nuevamente en unos instantes. Si el problema continúa, revisá la conexión.</p>';
  }
 });
 </script>
