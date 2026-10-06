@@ -255,12 +255,17 @@ async function buscarEnPdf(url, consulta, etiqueta){
 
       const contexto=lineas.slice(Math.max(0,i-2),Math.min(lineas.length,i+3)).join(' ');
       const legajoEncontrado=esLegajo ? legajo : (lineas[i].match(/\b\d{4,9}\/\d+\b/)||[''])[0];
+      const nombreDesdeFila=extraerNombre(lineas[i],legajoEncontrado,etiqueta==='Doble empadronados');
+      const nombreDesdeContexto=extraerNombre(contexto,legajoEncontrado,etiqueta==='Doble empadronados');
+      const nombreFinal=(nombreDesdeFila && nombreDesdeFila!=='No especificado')
+        ? nombreDesdeFila
+        : (nombreDesdeContexto || 'No especificado');
       return {
         encontrado:true,
         doble:etiqueta==='Doble empadronados',
         fuente:etiqueta,
         pagina:pageNo,
-        nombre:extraerNombre(lineas[i],legajoEncontrado,etiqueta==='Doble empadronados'),
+        nombre:nombreFinal,
         legajo:legajoEncontrado,
         carrera:extraerCarrera(contexto),
         estado:extraerEstado(lineas[i]),
