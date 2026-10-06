@@ -103,7 +103,7 @@ footer p{color:#aaa!important;font-size:13px}
 </form>
 
 <div class="notice">
-<strong>Fuente:</strong> la consulta lee directamente los dos PDFs 2026 publicados en este repositorio: padrón provisorio y doble empadronados. No utiliza Vercel ni una API externa.
+<strong>Resultado:</strong> se muestra únicamente nombre, legajo y condición según los padrones 2026 publicados.
 </div>
 
 <div class="progress" id="progress">
@@ -113,17 +113,10 @@ footer p{color:#aaa!important;font-size:13px}
 
 <div class="result" id="result" aria-live="polite"></div>
 
-<div class="security">
-<strong>Información electoral</strong>
-<p>La mesa se mostrará únicamente cuando figure en una fuente oficial de asignación. El sistema no inventa ni estima mesas.</p>
-</div>
+
 </section>
 
-<div class="info-grid">
-<article class="info"><div class="num">01</div><h3>Ingresá tu legajo</h3><p>Podés escribirlo con barra o guion, por ejemplo 109686/6 o 109686-6.</p></article>
-<article class="info"><div class="num">02</div><h3>Consultá</h3><p>El navegador busca directamente dentro de los PDFs del repositorio.</p></article>
-<article class="info"><div class="num">03</div><h3>Revisá tu situación</h3><p>Se informa carrera, estado, categoría y, cuando exista, mesa.</p></article>
-</div>
+
 </div>
 </main>
 
@@ -167,6 +160,22 @@ function extraerEstado(linea){
   return estados.find(e=>u.includes(e))||'No especificado';
 }
 
+function extraerNombre(linea, legajo){
+  const estado=extraerEstado(linea);
+  let s=String(linea||'').replace(/\s+/g,' ').trim();
+  const pos=s.toUpperCase().indexOf(legajo.toUpperCase());
+  if(pos>=0) s=s.slice(0,pos);
+  s=s.replace(/^\s*\d+\s+/, '');
+  s=s.replace(/\bDNI\s*[-:]?\s*\d+\b/gi,'');
+  s=s.replace(/\d{7,9}/g,'');
+  s=s.trim();
+  if(estado && estado!=='No especificado'){
+    const ep=s.toUpperCase().indexOf(estado.toUpperCase());
+    if(ep>=0) s=s.slice(0,ep).trim();
+  }
+  return s || 'No especificado';
+}
+
 function extraerCarrera(linea){
   const u=linea.toUpperCase();
   if(u.includes('MEDICINA')) return 'Medicina';
@@ -195,6 +204,7 @@ async function buscarEnPdf(url, legajo, etiqueta){
         doble:etiqueta==='Doble empadronados',
         fuente:etiqueta,
         pagina:pageNo,
+        nombre:extraerNombre(lineas[i],legajo),
         carrera:extraerCarrera(contexto),
         estado:extraerEstado(contexto)
       };
@@ -255,13 +265,10 @@ form.addEventListener('submit',async e=>{
 
     result.innerHTML=
       '<h3>Resultado de la consulta</h3>'+
+      '<p><strong>Nombre:</strong> '+escapeHtml(r.nombre)+'</p>'+
       '<p><strong>Legajo:</strong> '+escapeHtml(legajo)+'</p>'+
-      '<p><strong>Carrera:</strong> '+escapeHtml(r.carrera)+'</p>'+
-      '<p><strong>Estado en el padrón:</strong> '+escapeHtml(r.estado)+'</p>'+
-      '<p><strong>Fuente:</strong> '+escapeHtml(r.fuente)+'</p>'+
-      '<p><strong>Página del PDF:</strong> '+escapeHtml(r.pagina)+'</p>'+
-      alerta+
-      '<p><strong>Mesa:</strong> Pendiente de asignación oficial</p>';
+      '<p><strong>Condición:</strong> '+escapeHtml(r.estado)+'</p>'+
+      alerta;
   }catch(error){
     console.error(error);
     progress.classList.remove('show');
