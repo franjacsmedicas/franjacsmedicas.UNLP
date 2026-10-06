@@ -186,6 +186,20 @@ function extraerCarrera(linea){
   return 'No especificada';
 }
 
+function construirLineas(items){
+  const grupos=[];
+  items.filter(x=>String(x.str||'').trim()).forEach(item=>{
+    const y=Number(item.transform?.[5]||0);
+    let grupo=grupos.find(g=>Math.abs(g.y-y)<3);
+    if(!grupo){grupo={y,items:[]};grupos.push(grupo);}
+    grupo.items.push(item);
+  });
+  return grupos.sort((a,b)=>b.y-a.y).map(g=>
+    g.items.sort((a,b)=>(a.transform?.[4]||0)-(b.transform?.[4]||0))
+      .map(x=>String(x.str||'').trim()).filter(Boolean).join(' ')
+  ).filter(Boolean);
+}
+
 async function buscarEnPdf(url, legajo, etiqueta){
   const pdf=await pdfjsLib.getDocument({url}).promise;
   const rx=legajoRegex(legajo);
@@ -193,7 +207,7 @@ async function buscarEnPdf(url, legajo, etiqueta){
   for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){
     const page=await pdf.getPage(pageNo);
     const content=await page.getTextContent();
-    const lineas=content.items.map(x=>String(x.str||'').trim()).filter(Boolean);
+    const lineas=construirLineas(content.items);
 
     for(let i=0;i<lineas.length;i++){
       if(!rx.test(lineas[i])) continue;
