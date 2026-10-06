@@ -196,26 +196,43 @@ function extraerNombre(linea, legajo, esDoble=false){
   return s || 'No especificado';
 }
 
-function extraerNombreDobleDesdeLineas(lineas, indice, legajo){
+function extraerNombreDobleDesdeLineas(lineas, indice, legajo, consulta=''){
   const candidatos=[];
-  const inicio=Math.max(0,indice-3);
-  const fin=Math.min(lineas.length,indice+4);
+  const inicio=Math.max(0,indice-4);
+  const fin=Math.min(lineas.length,indice+5);
+  const buscado=normalizarNombre(consulta);
 
   for(let j=inicio;j<fin;j++){
     const linea=String(lineas[j]||'').replace(/\s+/g,' ').trim();
     if(!linea) continue;
+
+    const normal=normalizarNombre(linea);
     const tieneLegajo=!!(legajo && legajoRegex(legajo).test(linea));
+    const coincideNombre=!!(buscado && normal.includes(buscado));
     const nombre=extraerNombre(linea,legajo,true);
+
+    // Una línea que contiene el nombre buscado tiene prioridad absoluta.
+    // Esto evita que una línea vecina con solamente legajo/condiciones
+    // reemplace el nombre real por "No especificado".
     if(nombre && nombre!=='No especificado'){
-      candidatos.push({nombre,tieneLegajo,longitud:nombre.length});
+      candidatos.push({
+        nombre,
+        tieneLegajo,
+        coincideNombre,
+        longitud:nombre.length,
+        letras:(nombre.match(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/g)||[]).length
+      });
     }
   }
 
   candidatos.sort((a,b)=>{
+    if(a.coincideNombre!==b.coincideNombre) return a.coincideNombre ? -1 : 1;
+    if(a.letras!==b.letras) return b.letras-a.letras;
     if(a.tieneLegajo!==b.tieneLegajo) return a.tieneLegajo ? -1 : 1;
     return b.longitud-a.longitud;
   });
-  return candidatos[0]?.nombre || 'No especificado';
+
+  return candidatos[0]?.nombre || (buscado && !pareceLegajo(consulta) ? consulta : 'No especificado');
 }
 
 function extraerCarrera(linea){
@@ -241,7 +258,7 @@ function extraerCondicionesDoble(linea, legajo){
   // esos bloques y su texto, sin mezclar otros datos de la fila.
   const bloques=[...s.matchAll(/\b(\d{2})\s+((?:ING\.\s*CUM\.)|(?:NO\s+CUMPLE)|(?:CUMPLE(?:\s+CONDICION)?)|(?:INGRESANTE))\b/gi)]
     .map(m=>m[1]+' '+m[2]);
-  return bloques.length ? bloques.join(' ') : 'No especificadas';
+  return bloques.length ? [...new Set(bloques)].join(' ') : 'No especificadas';
 }
 
 function construirLineas(items){
@@ -278,7 +295,7 @@ async function buscarEnPdf(url, consulta, etiqueta){
       const contexto=lineas.slice(Math.max(0,i-2),Math.min(lineas.length,i+3)).join(' ');
       const legajoEncontrado=esLegajo ? legajo : (lineas[i].match(/\b\d{4,9}\/\d+\b/)||[''])[0];
       const nombreFinal=etiqueta==='Doble empadronados'
-        ? extraerNombreDobleDesdeLineas(lineas,i,legajoEncontrado)
+        ? extraerNombreDobleDesdeLineas(lineas,i,legajoEncontrado,consulta)
         : extraerNombre(lineas[i],legajoEncontrado,false);
       return {
         encontrado:true,
