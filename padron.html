@@ -98,7 +98,7 @@ footer p{color:#aaa!important;font-size:13px}
 <h2>Consultá tu padrón</h2>
 <p class="lead">Ingresá tu número de legajo para realizar la consulta.</p>
 <form class="form" id="padronForm">
-<input id="legajo" inputmode="text" autocomplete="off" maxlength="20" placeholder="Ej.: 109686/6" aria-label="Número de legajo">
+<input id="legajo" inputmode="text" autocomplete="off" maxlength="20" placeholder="Ej.: 109686/6 o APELLIDO NOMBRE" aria-label="Número de legajo">
 <button class="consultar" id="consultarBtn" type="submit">CONSULTAR</button>
 </form>
 
@@ -139,6 +139,14 @@ document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',
 
 function normalizarLegajo(v){
   return String(v||'').trim().replace(/\s+/g,'').replace(/-/g,'/').toUpperCase();
+}
+
+function normalizarNombre(v){
+  return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim().toUpperCase();
+}
+
+function pareceLegajo(v){
+  return /^\d+\/\d+$/.test(normalizarLegajo(v));
 }
 
 function escapeHtml(v){
@@ -196,9 +204,12 @@ function construirLineas(items){
   ).filter(Boolean);
 }
 
-async function buscarEnPdf(url, legajo, etiqueta){
+async function buscarEnPdf(url, consulta, etiqueta){
   const pdf=await pdfjsLib.getDocument({url}).promise;
-  const rx=legajoRegex(legajo);
+  const esLegajo=pareceLegajo(consulta);
+  const legajo=esLegajo ? normalizarLegajo(consulta) : '';
+  const nombreBuscado=normalizarNombre(consulta);
+  const rx=esLegajo ? legajoRegex(legajo) : null;
 
   for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){
     const page=await pdf.getPage(pageNo);
@@ -206,15 +217,19 @@ async function buscarEnPdf(url, legajo, etiqueta){
     const lineas=construirLineas(content.items);
 
     for(let i=0;i<lineas.length;i++){
-      if(!rx.test(lineas[i])) continue;
+      const lineaNormalizada=normalizarNombre(lineas[i]);
+      const coincide=esLegajo ? rx.test(lineas[i]) : lineaNormalizada.includes(nombreBuscado);
+      if(!coincide) continue;
 
       const contexto=lineas.slice(Math.max(0,i-2),Math.min(lineas.length,i+3)).join(' ');
+      const legajoEncontrado=esLegajo ? legajo : (lineas[i].match(/\b\d{4,9}\/\d+\b/)||[''])[0];
       return {
         encontrado:true,
         doble:etiqueta==='Doble empadronados',
         fuente:etiqueta,
         pagina:pageNo,
-        nombre:extraerNombre(lineas[i],legajo),
+        nombre:extraerNombre(lineas[i],legajoEncontrado),
+        legajo:legajoEncontrado,
         carrera:extraerCarrera(contexto),
         estado:extraerEstado(lineas[i])
       };
@@ -230,14 +245,14 @@ async function buscarEnPdf(url, legajo, etiqueta){
   return {encontrado:false,fuente:etiqueta};
 }
 
-async function consultar(legajo){
+async function consultar(consulta){
   progress.classList.add('show');
   progressBar.style.width='0%';
   progressText.textContent='Buscando en los dos padrones…';
 
   const [doble,principal]=await Promise.all([
-    buscarEnPdf(DOUBLE_PDF,legajo,'Doble empadronados'),
-    buscarEnPdf(MAIN_PDF,legajo,'Padrón provisorio')
+    buscarEnPdf(DOUBLE_PDF,consulta,'Doble empadronados'),
+    buscarEnPdf(MAIN_PDF,consulta,'Padrón provisorio')
   ]);
 
   return {principal,doble};
@@ -245,11 +260,12 @@ async function consultar(legajo){
 
 form.addEventListener('submit',async e=>{
   e.preventDefault();
-  const legajo=normalizarLegajo(legajoInput.value);
+  const consulta=String(legajoInput.value||'').trim();
+  const legajo=normalizarLegajo(consulta);
   result.classList.remove('show');
 
-  if(!legajo || !/^\d+\/\d+$/.test(legajo)){
-    result.innerHTML='<h3>Legajo inválido</h3><p>Ingresá el legajo en un formato como <strong>109686/6</strong>.</p>';
+  if(!consulta){
+    result.innerHTML='<h3>Consulta inválida</h3><p>Ingresá un número de legajo o nombre completo.</p>';
     result.classList.add('show');
     return;
   }
@@ -259,13 +275,13 @@ form.addEventListener('submit',async e=>{
   result.classList.add('show');
 
   try{
-    const data=await consultar(legajo);
+    const data=await consultar(consulta);
     progress.classList.remove('show');
 
     const r=data.doble.encontrado ? data.doble : data.principal.encontrado ? data.principal : null;
 
     if(!r){
-      result.innerHTML='<h3>Legajo no encontrado</h3><p>No encontramos <strong>'+escapeHtml(legajo)+'</strong> en ninguno de los dos archivos 2026.</p>';
+      result.innerHTML='<h3>No encontrado</h3><p>No encontramos <strong>'+escapeHtml(consulta)+'</strong> en ninguno de los dos archivos 2026.</p>';
       return;
     }
 
@@ -278,7 +294,7 @@ form.addEventListener('submit',async e=>{
     result.innerHTML=
       '<h3>Resultado de la consulta</h3>'+
       '<p><strong>Nombre:</strong> '+escapeHtml(r.nombre)+'</p>'+
-      '<p><strong>Legajo:</strong> '+escapeHtml(legajo)+'</p>'+
+      '<p><strong>Legajo:</strong> '+escapeHtml(r.legajo || legajo)+'</p>'+
       '<p><strong>Condición:</strong> '+escapeHtml(r.estado)+'</p>'+
       dobleInfo+
       alerta;
