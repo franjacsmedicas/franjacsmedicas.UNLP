@@ -216,7 +216,7 @@ async function buscarEnPdf(url, legajo, etiqueta){
         pagina:pageNo,
         nombre:extraerNombre(lineas[i],legajo),
         carrera:extraerCarrera(contexto),
-        estado:extraerEstado(contexto)
+        estado:extraerEstado(lineas[i])
       };
     }
 
