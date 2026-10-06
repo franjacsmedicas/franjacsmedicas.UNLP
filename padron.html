@@ -128,15 +128,48 @@ const navLinks=document.getElementById('navLinks');
 menuBtn.addEventListener('click',()=>navLinks.classList.toggle('active'));
 document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('active')));
 
-form.addEventListener('submit',e=>{
+const API_ENDPOINT = 'https://franjacsmedicas-padron.vercel.app/api/consulta';
+
+function escapeHtml(value){
+ return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+}
+
+function mostrarResultado(data){
+ if(!data || !data.encontrado){
+   result.innerHTML='<h3>No encontrado</h3><p>'+escapeHtml(data?.mensaje || 'No se encontró el DNI en el padrón.')+'</p>';
+   result.classList.add('show');
+   return;
+ }
+ const r=data.resultado || {};
+ const carrera=escapeHtml(r.carrera || 'No disponible');
+ const categoria=escapeHtml(r.categoria || 'No asignada');
+ const estado=escapeHtml(r.estadoPadron || 'No disponible');
+ const mesa=escapeHtml(r.mesa || 'No asignada');
+ result.innerHTML=
+   '<h3>Resultado de la consulta</h3>'+
+   '<p><strong>Carrera:</strong> '+carrera+'</p>'+
+   '<p><strong>Categoría:</strong> '+categoria+'</p>'+
+   '<p><strong>Estado en el padrón:</strong> '+estado+'</p>'+
+   '<p><strong>Mesa:</strong> '+mesa+'</p>';
+ result.classList.add('show');
+}
+
+form.addEventListener('submit',async e=>{
  e.preventDefault();
  const value=dni.value.replace(/\D/g,'');
+ result.classList.add('show');
  if(value.length<7){
    result.innerHTML='<h3>DNI inválido</h3><p>Ingresá un número de documento válido para realizar la consulta.</p>';
- }else{
-   result.innerHTML='<h3>Consulta preparada</h3><p>La interfaz está lista. Falta conectar este formulario con la base segura del padrón para devolver el resultado real.</p>';
+   return;
  }
- result.classList.add('show');
+ result.innerHTML='<h3>Consultando…</h3><p>Estamos buscando tu registro en el padrón.</p>';
+ try{
+   const response=await fetch(API_ENDPOINT+'?dni='+encodeURIComponent(value),{method:'GET',headers:{Accept:'application/json'}});
+   const data=await response.json().catch(()=>({encontrado:false,mensaje:'La respuesta del servidor no es válida.'}));
+   mostrarResultado(data);
+ }catch(error){
+   result.innerHTML='<h3>No se pudo realizar la consulta</h3><p>El servicio no está disponible en este momento. Probá nuevamente en unos instantes.</p>';
+ }
 });
 </script>
 </body>
