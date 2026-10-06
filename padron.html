@@ -337,26 +337,24 @@ function filaCoincideConsulta(fila, consulta, esLegajo){
 }
 
 function extraerNombreDesdeFilaDoble(fila, consulta){
-  const texto=textoFilaPDF(fila).replace(/\\s+/g,' ').trim();
+  const texto=textoFilaPDF(fila).replace(/\s+/g,' ').trim();
   const buscado=normalizarTextoPDF(consulta);
   if(!buscado) return consulta;
 
-  // Primero usamos el texto exacto de la fila que coincidió.
-  // No buscamos nombres en filas vecinas.
+  // Usamos exclusivamente la fila que coincidió.
   const normal=normalizarTextoPDF(texto);
   const pos=normal.indexOf(buscado);
 
   if(pos>=0){
     let desde=texto.slice(pos);
-    const corte=desde.search(/\\b\\d{4,9}\\s*\\/\\s*\\d+\\b|\\b\\d{1,2}\\s+(?:ING\\.?\\s*CUM\\.?|NO\\s+CUMPLE|CUMPLE(?:\\s+CONDICION)?|INGRESANTE)\\b/i);
+    const corte=desde.search(/\b\d{4,9}\s*\/\s*\d+\b|\b\d{1,2}\s+(?:ING\.?\s*CUM\.?|NO\s+CUMPLE|CUMPLE(?:\s+CONDICION)?|INGRESANTE)\b/i);
     if(corte>=0) desde=desde.slice(0,corte);
-    return desde.replace(/\\s+/g,' ').trim() || consulta;
+    return desde.replace(/\s+/g,' ').trim() || consulta;
   }
 
-  // Si se consulta por legajo, el nombre está antes del legajo en la misma fila.
   if(pareceLegajo(consulta)){
-    const m=texto.match(/^(.*?)\\s+\\b\\d{4,9}\\s*\\/\\s*\\d+\\b/);
-    if(m) return m[1].replace(/^\\d+\\s+/,'').trim() || consulta;
+    const m=texto.match(/^(.*?)\s+\b\d{4,9}\s*\/\s*\d+\b/);
+    if(m) return m[1].replace(/^\d+\s+/,'').trim() || consulta;
   }
 
   return consulta;
