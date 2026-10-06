@@ -42,7 +42,7 @@ button.consultar:disabled{opacity:.65;cursor:wait}
 .result{display:none;margin-top:22px;padding:22px;border-radius:15px;background:#f7f7f7;border-left:5px solid var(--b)}
 .result.show{display:block}
 .result h3{font-size:22px;margin:0 0 10px}
-.result p{margin:7px 0;color:#444!important;line-height:1.45}
+.result p{margin:7px 0;color:var(--b)!important;line-height:1.45}.result p strong{color:var(--b)!important}
 .progress{display:none;margin-top:18px;padding:15px 17px;border-radius:12px;background:#f4f4f4}
 .progress.show{display:block}
 .progress-bar{height:8px;background:#ddd;border-radius:99px;overflow:hidden;margin-top:10px}
@@ -259,9 +259,7 @@ form.addEventListener('submit',async e=>{
       return;
     }
 
-    const alerta=r.doble
-      ? '<p><strong>⚠️ Doble empadronamiento:</strong> este legajo figura en el archivo de doble empadronados.</p>'
-      : '';
+    const alerta='';
 
     result.innerHTML=
       '<h3>Resultado de la consulta</h3>'+
