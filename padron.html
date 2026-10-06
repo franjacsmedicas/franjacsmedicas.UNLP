@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="global.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 :root{--b:#68152b;--bo:#430d1c;--bc:#8d2945;--n:#111;--w:#fff;--g:#f4f4f4}
 *{box-sizing:border-box}
@@ -36,11 +37,16 @@ header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.97);border-
 input{width:100%;padding:17px 18px;border:2px solid #ddd;border-radius:12px;font:600 16px Inter,sans-serif;outline:none}
 input:focus{border-color:var(--b)}
 button.consultar{border:0;border-radius:12px;padding:0 25px;background:var(--b);color:#fff!important;font:800 15px Inter,sans-serif;cursor:pointer}
+button.consultar:disabled{opacity:.65;cursor:wait}
 .notice{margin-top:18px;padding:15px 17px;border-radius:12px;background:#f5eef1;color:#68152b!important;font-size:13px}
 .result{display:none;margin-top:22px;padding:22px;border-radius:15px;background:#f7f7f7;border-left:5px solid var(--b)}
 .result.show{display:block}
-.result h3{font-size:22px;margin:0 0 6px}
-.result p{margin:4px 0;color:#444!important}
+.result h3{font-size:22px;margin:0 0 10px}
+.result p{margin:7px 0;color:#444!important;line-height:1.45}
+.progress{display:none;margin-top:18px;padding:15px 17px;border-radius:12px;background:#f4f4f4}
+.progress.show{display:block}
+.progress-bar{height:8px;background:#ddd;border-radius:99px;overflow:hidden;margin-top:10px}
+.progress-bar span{display:block;height:100%;width:0;background:var(--b);transition:width .15s}
 .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:24px}
 .info{background:#fff;border:1px solid #eee;border-radius:16px;padding:22px;box-shadow:0 8px 25px #0001}
 .info .num{font-family:Anton,sans-serif;color:var(--b)!important;font-size:30px}
@@ -92,25 +98,31 @@ footer p{color:#aaa!important;font-size:13px}
 <h2>Consultá tu padrón</h2>
 <p class="lead">Ingresá tu número de legajo para realizar la consulta.</p>
 <form class="form" id="padronForm">
-<input id="legajo" inputmode="text" autocomplete="off" maxlength="20" placeholder="Ingresá tu número de legajo" aria-label="Número de legajo">
-<button class="consultar" type="submit">CONSULTAR</button>
+<input id="legajo" inputmode="text" autocomplete="off" maxlength="20" placeholder="Ej.: 109686/6" aria-label="Número de legajo">
+<button class="consultar" id="consultarBtn" type="submit">CONSULTAR</button>
 </form>
 
 <div class="notice">
-<strong>Información importante:</strong> el padrón provisorio 2026 utilizado como fuente contiene registros de alumnos de Medicina y fue emitido por CeSPI-UNLP. La consulta funciona directamente desde GitHub Pages utilizando el padrón publicado como fuente.
+<strong>Fuente:</strong> la consulta lee directamente los dos PDFs 2026 publicados en este repositorio: padrón provisorio y doble empadronados. No utiliza Vercel ni una API externa.
+</div>
+
+<div class="progress" id="progress">
+<strong id="progressText">Preparando el padrón…</strong>
+<div class="progress-bar"><span id="progressBar"></span></div>
 </div>
 
 <div class="result" id="result" aria-live="polite"></div>
 
 <div class="security">
-<strong>Privacidad</strong>\n<p>La consulta utiliza el padrón público 2026 como fuente y facilita la búsqueda por número de legajo. Las mesas electorales todavía no fueron asignadas, por lo que ese dato se incorporará cuando esté disponible.</p>
+<strong>Información electoral</strong>
+<p>La mesa se mostrará únicamente cuando figure en una fuente oficial de asignación. El sistema no inventa ni estima mesas.</p>
 </div>
 </section>
 
 <div class="info-grid">
-<article class="info"><div class="num">01</div><h3>Ingresá tu legajo</h3><p>Escribí tu número de legajo tal como figura en el padrón.</p></article>
-<article class="info"><div class="num">02</div><h3>Consultá</h3><p>El sistema buscará tu registro en el padrón.</p></article>
-<article class="info"><div class="num">03</div><h3>Revisá la información</h3><p>La versión final mostrará únicamente la información necesaria para la consulta electoral.</p></article>
+<article class="info"><div class="num">01</div><h3>Ingresá tu legajo</h3><p>Podés escribirlo con barra o guion, por ejemplo 109686/6 o 109686-6.</p></article>
+<article class="info"><div class="num">02</div><h3>Consultá</h3><p>El navegador busca directamente dentro de los PDFs del repositorio.</p></article>
+<article class="info"><div class="num">03</div><h3>Revisá tu situación</h3><p>Se informa carrera, estado, categoría y, cuando exista, mesa.</p></article>
 </div>
 </div>
 </main>
@@ -118,72 +130,145 @@ footer p{color:#aaa!important;font-size:13px}
 <footer><p>Franja Morada · Ciencias Médicas UNLP · Padrón 2026</p></footer>
 
 <script>
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const MAIN_PDF='Padrón provisorio de Alumnos Facultad de Ciencias Médicas 2026.pdf';
+const DOUBLE_PDF='Doble Empadronados Facultad de Ciencias Médicas 2026.pdf';
+
 const form=document.getElementById('padronForm');
-const legajo=document.getElementById('legajo');
+const legajoInput=document.getElementById('legajo');
 const result=document.getElementById('result');
+const progress=document.getElementById('progress');
+const progressText=document.getElementById('progressText');
+const progressBar=document.getElementById('progressBar');
+const consultarBtn=document.getElementById('consultarBtn');
 const menuBtn=document.getElementById('menuBtn');
 const navLinks=document.getElementById('navLinks');
 
 menuBtn.addEventListener('click',()=>navLinks.classList.toggle('active'));
 document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>navLinks.classList.remove('active')));
 
-const PADRON_API_URL = 'https://franjacsmedicas-padron.vercel.app/api/consulta';
-
-async function consultarLegajo(legajoValue){
- const response = await fetch(PADRON_API_URL + '?legajo=' + encodeURIComponent(legajoValue), {
-   method:'GET',
-   cache:'no-store',
-   mode:'cors',
-   headers:{Accept:'application/json'}
- });
- let data = null;
- try{ data = await response.json(); }catch(_){ data = null; }
- if(!response.ok){
-   if(data && data.mensaje) return data;
-   throw new Error('HTTP '+response.status);
- }
- return data;
+function normalizarLegajo(v){
+  return String(v||'').trim().replace(/\s+/g,'').replace(/-/g,'/').toUpperCase();
 }
 
-function escapeHtml(value){
- return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+function escapeHtml(v){
+  return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 }
 
-function mostrarResultado(data){
- if(!data || !data.encontrado){
-   result.innerHTML='<h3>No encontrado</h3><p>'+escapeHtml(data?.mensaje || 'No se encontró el DNI en el padrón.')+'</p>';
-   result.classList.add('show');
-   return;
- }
- const r=data.resultado || {};
- const carrera=escapeHtml(r.carrera || 'No disponible');
- const categoria=escapeHtml(r.categoria || 'Pendiente de asignación');
- const estado=escapeHtml(r.estadoPadron || 'No disponible');
- const mesa=escapeHtml(r.mesa || 'Pendiente de asignación');
- result.innerHTML=
-   '<h3>Resultado de la consulta</h3>'+
-   '<p><strong>Carrera:</strong> '+carrera+'</p>'+
-   '<p><strong>Categoría:</strong> '+categoria+'</p>'+
-   '<p><strong>Estado en el padrón:</strong> '+estado+'</p>'+
-   '<p><strong>Mesa:</strong> '+mesa+'</p>';
- result.classList.add('show');
+function legajoRegex(legajo){
+  const [a,b]=legajo.split('/');
+  return new RegExp('\\b'+a+'\\s*\\/\\s*'+b+'\\b','i');
+}
+
+function extraerEstado(linea){
+  const u=linea.toUpperCase();
+  const estados=['INGRESANTE CUMPLE','CUMPLE CONDICION','NO CUMPLE','EGRESADO','INGRESANTE'];
+  return estados.find(e=>u.includes(e))||'No especificado';
+}
+
+function extraerCarrera(linea){
+  const u=linea.toUpperCase();
+  if(u.includes('MEDICINA')) return 'Medicina';
+  if(u.includes('NUTRIC')) return 'Licenciatura en Nutrición';
+  if(u.includes('OBSTET')) return 'Licenciatura en Obstetricia';
+  if(u.includes('ENFERMER')) return 'Enfermería Universitaria';
+  if(u.includes('CARDIO')) return 'Tecnicatura en Prácticas Cardiológicas';
+  return 'No especificada';
+}
+
+async function buscarEnPdf(url, legajo, etiqueta){
+  const pdf=await pdfjsLib.getDocument({url}).promise;
+  const rx=legajoRegex(legajo);
+
+  for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){
+    const page=await pdf.getPage(pageNo);
+    const content=await page.getTextContent();
+    const lineas=content.items.map(x=>String(x.str||'').trim()).filter(Boolean);
+
+    for(let i=0;i<lineas.length;i++){
+      if(!rx.test(lineas[i])) continue;
+
+      const contexto=lineas.slice(Math.max(0,i-2),Math.min(lineas.length,i+3)).join(' ');
+      return {
+        encontrado:true,
+        doble:etiqueta==='Doble empadronados',
+        fuente:etiqueta,
+        pagina:pageNo,
+        carrera:extraerCarrera(contexto),
+        estado:extraerEstado(contexto)
+      };
+    }
+
+    if(pageNo%5===0 || pageNo===pdf.numPages){
+      const pct=Math.round(pageNo/pdf.numPages*100);
+      progressBar.style.width=pct+'%';
+      progressText.textContent=etiqueta+': revisando página '+pageNo+' de '+pdf.numPages+'…';
+    }
+  }
+
+  return {encontrado:false,fuente:etiqueta};
+}
+
+async function consultar(legajo){
+  progress.classList.add('show');
+  progressBar.style.width='0%';
+  progressText.textContent='Buscando en los dos padrones…';
+
+  const [principal,doble]=await Promise.all([
+    buscarEnPdf(MAIN_PDF,legajo,'Padrón provisorio'),
+    buscarEnPdf(DOUBLE_PDF,legajo,'Doble empadronados')
+  ]);
+
+  return {principal,doble};
 }
 
 form.addEventListener('submit',async e=>{
- e.preventDefault();
- const value=legajo.value.trim();
- result.classList.add('show');
- if(value.length<3){
-   result.innerHTML='<h3>Legajo inválido</h3><p>Ingresá un número de legajo válido para realizar la consulta.</p>';
-   return;
- }
- result.innerHTML='<h3>Consultando…</h3><p>Estamos buscando tu registro en el padrón.</p>';
- try{
-   const data=await consultarLegajo(value);
-   mostrarResultado(data);
- }catch(error){
-   result.innerHTML='<h3>No se pudo cargar el padrón</h3><p>Probá nuevamente en unos instantes. Si el problema continúa, revisá la conexión.</p>';
- }
+  e.preventDefault();
+  const legajo=normalizarLegajo(legajoInput.value);
+  result.classList.remove('show');
+
+  if(!legajo || !/^\d+\/\d+$/.test(legajo)){
+    result.innerHTML='<h3>Legajo inválido</h3><p>Ingresá el legajo en un formato como <strong>109686/6</strong>.</p>';
+    result.classList.add('show');
+    return;
+  }
+
+  consultarBtn.disabled=true;
+  result.innerHTML='<h3>Consultando…</h3><p>El navegador está leyendo los PDFs publicados en GitHub. La primera consulta puede tardar unos segundos.</p>';
+  result.classList.add('show');
+
+  try{
+    const data=await consultar(legajo);
+    progress.classList.remove('show');
+
+    const r=data.principal.encontrado ? data.principal : data.doble.encontrado ? data.doble : null;
+
+    if(!r){
+      result.innerHTML='<h3>Legajo no encontrado</h3><p>No encontramos <strong>'+escapeHtml(legajo)+'</strong> en ninguno de los dos archivos 2026.</p>';
+      return;
+    }
+
+    const alerta=r.doble
+      ? '<p><strong>⚠️ Doble empadronamiento:</strong> este legajo figura en el archivo de doble empadronados.</p>'
+      : '';
+
+    result.innerHTML=
+      '<h3>Resultado de la consulta</h3>'+
+      '<p><strong>Legajo:</strong> '+escapeHtml(legajo)+'</p>'+
+      '<p><strong>Carrera:</strong> '+escapeHtml(r.carrera)+'</p>'+
+      '<p><strong>Estado en el padrón:</strong> '+escapeHtml(r.estado)+'</p>'+
+      '<p><strong>Fuente:</strong> '+escapeHtml(r.fuente)+'</p>'+
+      '<p><strong>Página del PDF:</strong> '+escapeHtml(r.pagina)+'</p>'+
+      alerta+
+      '<p><strong>Mesa:</strong> Pendiente de asignación oficial</p>';
+  }catch(error){
+    console.error(error);
+    progress.classList.remove('show');
+    result.innerHTML='<h3>No se pudo leer el padrón</h3><p>El PDF no pudo ser procesado por el navegador. Actualizá la página e intentá nuevamente.</p>';
+  }finally{
+    consultarBtn.disabled=false;
+  }
 });
 </script>
 </body>
