@@ -798,6 +798,42 @@
 
     </style>
   <link rel="stylesheet" href="global.css">
+<style id="fix-menu-layer">
+/* Mantener la navegación por encima de la portada y de las imágenes */
+header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 10000 !important;
+  overflow: visible !important;
+}
+header .nav {
+  position: relative !important;
+  z-index: 10001 !important;
+  overflow: visible !important;
+}
+header .nav-links {
+  position: absolute !important;
+  z-index: 10002 !important;
+  top: calc(100% - 2px) !important;
+  right: 20px;
+  left: auto;
+  background: #fff !important;
+  color: #111 !important;
+}
+header .nav-links a,
+header .nav-links a:visited {
+  color: #111 !important;
+}
+header .nav-links a:hover {
+  color: #68152b !important;
+}
+@media (max-width: 550px) {
+  header .nav-links { right: 12px; }
+}
+</style>
 
 <style id="contrast-buttons">
 /* Contraste específico de los botones de la portada */
