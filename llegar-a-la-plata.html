@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Guía para estudiantes que llegan a La Plata: mapa de facultades UNLP, comedores, salud y transporte.">
+<title>Recién llegás a La Plata | Franja Morada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+:root{--bordo:#68152b;--oscuro:#430d1c;--claro:#8d2945;--texto:#222;--gris:#f5f3f4;--borde:#e6dfe2}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,sans-serif;color:var(--texto);line-height:1.6;background:#fff}a{color:var(--bordo);font-weight:700}header{background:var(--oscuro);color:#fff;padding:15px 22px}header .nav{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:16px}header a{color:#fff;text-decoration:none}.brand{font-weight:800;letter-spacing:.02em}.back{border:1px solid #ffffff80;border-radius:8px;padding:9px 13px;font-size:.88rem}.hero{background:radial-gradient(circle at 80% 15%,#8d2945 0,transparent 36%),linear-gradient(130deg,#360916,#68152b);color:white;padding:62px 22px 54px}.hero-inner{max-width:1200px;margin:auto}.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-weight:800;font-size:.75rem;color:#f1cbd5}.hero h1{font:clamp(2.7rem,7vw,5.2rem)/1.04 Anton,sans-serif;margin:12px 0 18px;max-width:900px}.hero p{font-size:1.05rem;max-width:720px;color:#fff;margin:0}.wrap{max-width:1200px;margin:auto;padding:34px 22px 70px}.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:-12px}.quick{background:white;border:1px solid var(--borde);border-top:4px solid var(--bordo);border-radius:12px;padding:18px;box-shadow:0 8px 24px #2507120d}.quick strong{display:block;font-size:1.02rem;color:var(--bordo)}.quick span{font-size:.86rem;color:#555}.section-head{margin:42px 0 16px}.section-head h2{font:clamp(1.8rem,4vw,2.6rem)/1.1 Anton,sans-serif;color:var(--bordo);margin:0 0 8px}.section-head p{margin:0;color:#555;max-width:850px}.map-layout{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:stretch}.map-panel{border:1px solid var(--borde);border-radius:14px;padding:18px;background:#fff}.map-panel h3{margin:0 0 10px;color:var(--bordo)}.filter{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #eee;font-size:.92rem}.filter input{accent-color:var(--bordo);margin-top:5px}.filter small{display:block;color:#666}.legend-dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px}#map{height:650px;border:1px solid var(--borde);border-radius:14px;z-index:1;background:#eee}.map-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--bordo);color:white!important;text-decoration:none;padding:10px 13px;border-radius:8px;font-size:.88rem;font-weight:800}.btn.light{background:white;color:var(--bordo)!important;border:1px solid var(--bordo)}.note{margin-top:12px;padding:12px 14px;border-left:4px solid var(--claro);background:#faf4f6;font-size:.88rem;color:#4b343a}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.info-card{border:1px solid var(--borde);border-radius:12px;padding:18px}.info-card h3{margin:0 0 7px;color:var(--bordo);font-size:1.05rem}.info-card p{margin:0 0 10px;font-size:.92rem;color:#444}.info-card a{font-size:.9rem}.small{font-size:.84rem;color:#666}footer{background:#240811;color:#fff;padding:24px;text-align:center;font-size:.85rem}footer a{color:#fff}
+@media(max-width:850px){.quick-grid{grid-template-columns:repeat(2,1fr)}.map-layout{grid-template-columns:1fr}#map{height:560px}.cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){header .nav{align-items:flex-start;flex-direction:column}.hero{padding:45px 20px}.wrap{padding:26px 15px 50px}.quick-grid,.cards{grid-template-columns:1fr}.map-panel{padding:14px}#map{height:500px}.section-head{margin-top:32px}}
+</style>
+</head>
+<body>
+<header><div class="nav"><a class="brand" href="index.html">FRANJA MORADA · CIENCIAS MÉDICAS UNLP</a><a class="back" href="index.html">← Volver a la web</a></div></header>
+<main>
+<section class="hero"><div class="hero-inner"><div class="eyebrow">Guía para estudiantes · La Plata</div><h1>¿RECIÉN LLEGÁS A LA PLATA?</h1><p>Una guía práctica para ubicarte, conocer los espacios de la UNLP, encontrar opciones de salud y moverte por la ciudad sin perderte en el intento.</p></div></section>
+<div class="wrap">
+<div class="quick-grid">
+<div class="quick"><strong>Ubicá tu facultad</strong><span>Buscá sedes y dependencias universitarias en el mapa.</span></div>
+<div class="quick"><strong>Comé rico y accesible</strong><span>Encontrá las cuatro sedes del Comedor Universitario.</span></div>
+<div class="quick"><strong>Movete por la ciudad</strong><span>Visualizá estación, terminal y conexiones universitarias.</span></div>
+<div class="quick"><strong>Cuidá tu salud</strong><span>Localizá hospitales y centros de atención pública.</span></div>
+</div>
+<section id="mapa">
+<div class="section-head"><h2>Mapa interactivo de La Plata</h2><p>Activá o desactivá categorías para encontrar lo que necesitás. Tocá un punto para ver la dirección y abrir indicaciones en el mapa de tu teléfono.</p></div>
+<div class="map-layout">
+<aside class="map-panel"><h3>Mostrar en el mapa</h3>
+<label class="filter"><input type="checkbox" data-layer="facultades" checked><span><span class="legend-dot" style="background:#68152b"></span><b>Facultades UNLP</b><small>Unidades académicas y sedes principales</small></span></label>
+<label class="filter"><input type="checkbox" data-layer="dependencias" checked><span><span class="legend-dot" style="background:#3d648c"></span><b>Dependencias y servicios UNLP</b><small>Presidencia y servicios universitarios</small></span></label>
+<label class="filter"><input type="checkbox" data-layer="comedores" checked><span><span class="legend-dot" style="background:#24805a"></span><b>Comedores universitarios</b><small>Las cuatro sedes oficiales</small></span></label>
+<label class="filter"><input type="checkbox" data-layer="salud" checked><span><span class="legend-dot" style="background:#c13c45"></span><b>Salud pública</b><small>Hospitales y centros de salud</small></span></label>
+<label class="filter"><input type="checkbox" data-layer="transporte" checked><span><span class="legend-dot" style="background:#e58a24"></span><b>Estaciones y terminales</b><small>Tren Roca y micros de larga distancia</small></span></label>
+<label class="filter"><input type="checkbox" data-layer="recorridos" checked><span><span class="legend-dot" style="background:#7a51a1"></span><b>Conexiones universitarias</b><small>Tren Universitario y Línea Universitaria (esquema orientativo)</small></span></label>
+<div class="map-actions"><a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=Facultad+de+Ciencias+Medicas+UNLP" target="_blank" rel="noopener noreferrer">Cómo llegar a Medicina</a><a class="btn light" href="https://unlp.edu.ar/gestion/estudiantes/bienestar-accesible/comedor/" target="_blank" rel="noopener noreferrer">Info oficial de comedores</a></div>
+<div class="note">Los recorridos dibujados son orientativos, no un GPS en tiempo real ni un plano oficial de paradas. Para conocer la combinación exacta desde tu ubicación, abrí las indicaciones del punto y elegí transporte público.</div>
+<p class="small">El mapa necesita conexión a internet para cargar el plano base.</p>
+</aside>
+<div id="map" aria-label="Mapa interactivo de facultades, comedores, salud y transporte en La Plata"></div>
+</div>
+</section>
+<section id="salud">
+<div class="section-head"><h2>Salud pública: ¿dónde consultar?</h2><p>Si acabás de mudarte, estos puntos pueden ayudarte a encontrar atención. Antes de viajar, verificá servicios, horarios y guardias con el establecimiento.</p></div>
+<div class="cards">
+<article class="info-card"><h3>Hospital San Martín</h3><p>Hospital público provincial en la zona de 1 y 70, con múltiples especialidades y servicios de guardia.</p><a href="https://www.google.com/maps/search/?api=1&query=Hospital+San+Martin+La+Plata" target="_blank" rel="noopener noreferrer">Ver ubicación ↗</a></article>
+<article class="info-card"><h3>Hospital Rossi</h3><p>Hospital público provincial, ubicado en calle 37 entre อก y 117. Confirmá la ubicación y el servicio que necesitás antes de ir.</p><a href="https://www.google.com/maps/search/?api=1&query=Hospital+Rossi+La+Plata" target="_blank" rel="noopener noreferrer">Ver ubicación ↗</a></article>
+<article class="info-card"><h3>Centros de Atención Primaria (CAPS)</h3><p>Los CAPS ofrecen atención primaria en distintos barrios de La Plata; el más conveniente depende de dónde vivas.</p><a href="https://www.google.com/maps/search/?api=1&query=CAPS+centro+de+salud+municipal+La+Plata" target="_blank" rel="noopener noreferrer">Buscar CAPS cercanos ↗</a></article>
+<article class="info-card"><h3>Hospital Gutiérrez</h3><p>Hospital público provincial ubicado en diagonal 114 entre 39 y 40.</p><a href="https://www.google.com/maps/search/?api=1&query=Hospital+Ricardo+Gutierrez+La+Plata" target="_blank" rel="noopener noreferrer">Ver ubicación ↗</a></article>
+<article class="info-card"><h3>Emergencias</h3><p>Ante una emergencia médica, llamá al servicio de emergencias de tu cobertura o al sistema público local. En Argentina, el 107 corresponde al SAME donde está disponible.</p><a href="https://www.argentina.gob.ar/salud" target="_blank" rel="noopener noreferrer">Información oficial de salud ↗</a></article>
+<article class="info-card"><h3>¿No sabés por dónde empezar?</h3><p>Consultá en el centro de salud público de tu barrio por atención primaria, vacunación y derivaciones.</p><a href="https://www.google.com/maps/search/?api=1&query=centro+de+salud+La+Plata" target="_blank" rel="noopener noreferrer">Encontrar un centro ↗</a></article>
+</div>
+</section>
+<section id="transporte">
+<div class="section-head"><h2>Cómo moverte</h2><p>La ciudad combina colectivos urbanos, tren Roca, Tren Universitario y la Línea Universitaria. Consultá siempre el recorrido y los horarios vigentes.</p></div>
+<div class="cards">
+<article class="info-card"><h3>Tren Universitario</h3><p>Conecta la estación ferroviaria de La Plata con paradas cercanas a distintas facultades y zonas de la UNLP, llegando hacia el área de avenida 72 y 25.</p><a href="https://www.google.com/search?q=horarios+Tren+Universitario+La+Plata+UNLP" target="_blank" rel="noopener noreferrer">Consultar horarios vigentes ↗</a></article>
+<article class="info-card"><h3>Línea Universitaria</h3><p>Servicio orientado a conectar facultades, colegios y dependencias de la UNLP. Confirmá recorridos, horarios y condiciones de acceso en los canales universitarios.</p><a href="https://unlp.edu.ar/" target="_blank" rel="noopener noreferrer">Consultar novedades UNLP ↗</a></article>
+<article class="info-card"><h3>Colectivos urbanos</h3><p>Las líneas y ramales cambian según destino. Buscá tu facultad como destino para ver opciones desde la estación, la terminal o tu alojamiento.</p><a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Abrir Google Maps ↗</a></article>
+<article class="info-card"><h3>Estación de tren La Plata</h3><p>Cabecera del ramal Constitución–La Plata de la Línea Roca y punto de partida del Tren Universitario.</p><a href="https://www.google.com/maps/search/?api=1&query=Estacion+de+tren+La+Plata" target="_blank" rel="noopener noreferrer">Ver ubicación ↗</a></article>
+<article class="info-card"><h3>Terminal de ómnibus</h3><p>Para servicios de media y larga distancia. Revisá el andén y la empresa en tu pasaje antes de viajar.</p><a href="https://www.google.com/maps/search/?api=1&query=Terminal+de+Omnibus+La+Plata" target="_blank" rel="noopener noreferrer">Ver ubicación ↗</a></article>
+<article class="info-card"><h3>Boleto estudiantil</h3><p>Consultá requisitos, inscripción y vigencia del beneficio de transporte para estudiantes.</p><a href="https://www.gba.gob.ar/transporte/boleto" target="_blank" rel="noopener noreferrer">Información de transporte PBA ↗</a></article>
+</div>
+</section>
+<section id="comedores">
+<div class="section-head"><h2>Comedores universitarios</h2><p>La UNLP cuenta con cuatro sedes con menú subsidiado para su comunidad. Los precios, turnos y requisitos pueden cambiar cada ciclo lectivo.</p></div>
+<div class="cards">
+<article class="info-card"><h3>Sede Malvinas Argentinas</h3><p>Calle 50 entre 116 y 117.</p><a href="https://www.google.com/maps/search/?api=1&query=Comedor+Universitario+UNLP+calle+50+116+117" target="_blank" rel="noopener noreferrer">Cómo llegar ↗</a></article>
+<article class="info-card"><h3>Sede Reforma Universitaria</h3><p>Boulevard 120 entre 61 y 62, n.º 1439.</p><a href="https://www.google.com/maps/search/?api=1&query=Comedor+Universitario+UNLP+120+1439" target="_blank" rel="noopener noreferrer">Cómo llegar ↗</a></article>
+<article class="info-card"><h3>Sede ATULP</h3><p>Avenida 44 n.º 733, entre 9 y 10.</p><a href="https://www.google.com/maps/search/?api=1&query=Comedor+UNLP+ATULP+avenida+44+733" target="_blank" rel="noopener noreferrer">Cómo llegar ↗</a></article>
+<article class="info-card"><h3>Sede Club Everton</h3><p>Calle 14 entre 63 y 64, salón de planta baja.</p><a href="https://www.google.com/maps/search/?api=1&query=Comedor+Universitario+Club+Everton+La+Plata" target="_blank" rel="noopener noreferrer">Cómo llegar ↗</a></article>
+</div>
+<p class="note">La UNLP informa requisitos de acreditación y venta de tickets; consultá la web oficial antes de acercarte.</p>
+</section>
+</div>
+</main>
+<footer>Franja Morada · Ciencias Médicas · UNLP · <a href="index.html">Volver al inicio</a></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+(function(){
+if(!window.L){document.getElementById('map').innerHTML='<p style="padding:24px">No se pudo cargar el mapa. Revisá tu conexión a internet y recargá la página.</p>';return;}
+const map=L.map('map').setView([-34.915,-57.944],13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(map);
+const colors={facultades:'#68152b',dependencias:'#3d648c',comedores:'#24805a',salud:'#c13c45',transporte:'#e58a24'};
+const layers={facultades:L.layerGroup().addTo(map),dependencias:L.layerGroup().addTo(map),comedores:L.layerGroup().addTo(map),salud:L.layerGroup().addTo(map),transporte:L.layerGroup().addTo(map),recorridos:L.layerGroup().addTo(map)};
+function pin(category,name,address,lat,lng,details){
+const color=colors[category]||'#7a51a1';
+const icon=L.divIcon({className:'custom-pin',html:'<div style="width:18px;height:18px;border:3px solid white;border-radius:50%;background:'+color+';box-shadow:0 1px 5px #2229"></div>',iconSize:[18,18],iconAnchor:[9,9]});
+const link='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(lat+','+lng);
+L.marker([lat,lng],{icon}).bindPopup('<strong>'+name+'</strong><br>'+address+(details?'<br><small>'+details+'</small>':'')+'<br><a target="_blank" rel="noopener" href="'+link+'">Cómo llegar ↗</a>').addTo(layers[category]);
+}
+[
+['Facultad de Ciencias Médicas','Av. 60 y 120',-34.9144,-57.9347],
+['Facultad de Ciencias Naturales y Museo','Av. 122 y 60',-34.9118,-57.9364],
+['Facultad de Informática','Calle 50 y 120',-34.9065,-57.9368],
+['Facultad de Ingeniería','Av. 1 y 47',-34.9061,-57.9349],
+['Facultad de Arquitectura y Urbanismo','Calle 47 n.º 162',-34.9058,-57.9315],
+['Facultad de Ciencias Agrarias y Forestales','Av. 60 y 119',-34.9102,-57.9381],
+['Facultad de Ciencias Astronómicas y Geofísicas','Paseo del Bosque',-34.9084,-57.9316],
+['Facultad de Ciencias Exactas','Calle 115 y 47',-34.9057,-57.9388],
+['Facultad de Odontología','Calle 1 y 50',-34.9085,-57.9345],
+['Facultad de Humanidades y Ciencias de la Educación','Calle 51 y 122',-34.9075,-57.9378],
+['Facultad de Psicología','Calle 122 y 50',-34.9055,-57.9370],
+['Facultad de Artes · sede central','Diagonal 78 n.º 680',-34.9190,-57.9511],
+['Facultad de Ciencias Económicas','Calle 6 n.º 777',-34.9110,-57.9494],
+['Facultad de Ciencias Jurídicas y Sociales','Calle 48 n.º 582',-34.9095,-57.9513],
+['Facultad de Trabajo Social','Calle 9 y 63',-34.9172,-57.9474],
+['Facultad de Periodismo y Comunicación Social','Diagonal 113 y 63',-34.9164,-57.9368],
+['Facultad de Ciencias Veterinarias','Av. 60 y 118',-34.9100,-57.9403],
+['Facultad de Ciencias Médicas · Hospital Universitario Integrado','Zona de avenida 60 y 120',-34.9140,-57.9354]
+].forEach(x=>pin('facultades',x[0],x[1],x[2],x[3]));
+pin('dependencias','Presidencia de la UNLP','Av. 7 n.º 776',-34.9114,-57.9490,'Sede central de dependencias universitarias');
+pin('dependencias','Biblioteca Pública de la UNLP','Plaza Rocha, calle 7 y 60',-34.9200,-57.9476);
+pin('dependencias','Prosecretaría de Bienestar Universitario','Área central UNLP',-34.9121,-57.9485);
+pin('comedores','Comedor Universitario · Sede Malvinas','Calle 50 entre 116 y 117',-34.9067,-57.9368);
+pin('comedores','Comedor Universitario · Sede Reforma Universitaria','Boulevard 120 n.º 1439',-34.9131,-57.9368);
+pin('comedores','Comedor Universitario · Sede ATULP','Av. 44 n.º 733 entre 9 y 10',-34.9152,-57.9518);
+pin('comedores','Comedor Universitario · Sede Club Everton','Calle 14 entre 63 y 64',-34.9230,-57.9430);
+pin('salud','Hospital San Martín','Av. 1 y calle 70',-34.9224,-57.9318);
+pin('salud','Hospital Rossi','Calle 37 entre 116 y 117',-34.8965,-57.9385);
+pin('salud','Hospital Ricardo Gutiérrez','Diagonal 114 entre 39 y 40',-34.8956,-57.9398);
+pin('salud','Hospital San Juan de Dios','Av. 25 y 70',-34.9367,-57.9704);
+pin('salud','CAPS 13','Calle 41 entre 10 y 11',-34.9009,-57.9492);
+pin('salud','CAPS 7','Av. 7 y 82',-34.9417,-57.9353);
+pin('transporte','Estación de tren La Plata','Av. 1 y 44 · Línea Roca y Tren Universitario',-34.9067,-57.9563);
+pin('transporte','Terminal de Ómnibus','Calle 42 n.º 453',-34.9032,-57.9472);
+pin('transporte','Parada de referencia · Facultad de Medicina','Avenida 60 y 120',-34.9146,-57.9340,'Consultá líneas y ramales vigentes desde tu ubicación.');
+const train=[[-34.9067,-57.9563],[-34.9057,-57.9482],[-34.9065,-57.9385],[-34.9088,-57.9320],[-34.9144,-57.9347],[-34.9170,-57.9384],[-34.9190,-57.9450],[-34.9275,-57.9560],[-34.9367,-57.9704]];
+L.polyline(train,{color:'#7a51a1',weight:5,opacity:.85,dashArray:'9 7'}).bindPopup('<strong>Tren Universitario</strong><br>Esquema visual aproximado. Confirmá paradas y horarios vigentes.').addTo(layers.recorridos);
+const bus=[[-34.9100,-57.9490],[-34.9080,-57.9490],[-34.9060,-57.9490],[-34.9060,-57.9368],[-34.9130,-57.9368],[-34.9144,-57.9347],[-34.9152,-57.9518],[-34.9100,-57.9490]];
+L.polyline(bus,{color:'#e58a24',weight:5,opacity:.9,dashArray:'3 7'}).bindPopup('<strong>Línea Universitaria</strong><br>Esquema orientativo, no representa la traza oficial calle por calle. Consultá recorrido y horarios con la UNLP.').addTo(layers.recorridos);
+document.querySelectorAll('[data-layer]').forEach(input=>input.addEventListener('change',function(){const layer=layers[this.dataset.layer];if(this.checked)map.addLayer(layer);else map.removeLayer(layer);}));
+setTimeout(()=>map.invalidateSize(),250);
+})();
+</script>
+</body>
+</html>
