@@ -131,8 +131,6 @@ function checkQ(){
  const fb=document.querySelector('.feedback');fb.hidden=false;fb.className='feedback '+(correct?'good':'bad');
  const h=document.createElement('h3');h.textContent=correct?'¡Correcto!':'Respuesta incorrecta';fb.append(h);
  const p=document.createElement('p');p.textContent=q.e;fb.append(p);
- const src=document.createElement('p');src.className='source';src.textContent='Fundamento curricular: '+q.r;fb.append(src);
- const bib=document.createElement('p');bib.className='source';bib.textContent='Bibliografía general de consulta: los programas de las cátedras pueden recomendar bibliografías y ediciones diferentes. Verificá las indicaciones de tu cátedra y utilizá esta explicación como orientación para repasar el tema.';fb.append(bib);
  document.getElementById('check').hidden=true;document.getElementById('next').hidden=false;
 }
 function nextQ(){
