@@ -154,7 +154,7 @@ const trainLine=[
  [-34.9067,-57.9563],[-34.9062,-57.9500],[-34.9058,-57.9440],[-34.9058,-57.9390],
  [-34.9067,-57.9365],[-34.9100,-57.9365],[-34.9144,-57.9365],[-34.9165,-57.9375],
  [-34.9190,-57.9378],[-34.9210,-57.9380],[-34.9226,-57.9420],[-34.9226,-57.9495],
- [-34.9226,-57.9563],[-34.9238,-57.9495],[-34.9238,-57.9420],[-34.9238,-57.9360],[-34.9238,-57.9265]
+ [-34.9226,-57.9563],[-34.9238,-57.9563],[-34.9238,-57.9495],[-34.9238,-57.9420],[-34.9238,-57.9360],[-34.9238,-57.9265]
 ];
 const trainGoogle='https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent('Estación La Plata, 1 y 44')+'&destination='+encodeURIComponent('Hospital San Juan de Dios, La Plata')+'&travelmode=transit';
 L.polyline(trainLine,{color:'#7a51a1',weight:5,opacity:.9}).bindPopup('<strong>Tren Universitario</strong><br><a target="_blank" rel="noopener noreferrer" href="'+trainGoogle+'">Consultar trayecto en Google Maps ↗</a>').addTo(layers.tren);
