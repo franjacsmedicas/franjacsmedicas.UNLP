@@ -88,13 +88,11 @@ footer{text-align:center;color:#f0dce2;font-size:12px;padding:10px 20px 30px}
 </section>
 
 <section class="section" id="investigacion">
-<div class="section-head"><span class="label">Publicaciones científicas</span><h2>Investigación médica actual</h2><p class="muted">Consultá publicaciones recientes indexadas en Europe PMC. Cada resultado enlaza a su ficha original para revisar autores, revista, resumen y referencias.</p></div>
-<div class="research-controls" aria-label="Filtrar por especialidad">
+<div class="section-head"><span class="label">Publicaciones científicas</span><h2>Investigación médica actual</h2><p class="muted">Novedades sanitarias y científicas de organismos oficiales de Argentina y del mundo. Cada tarjeta enlaza directamente con la nota original de la fuente.</p></div>
+<div class="research-controls" aria-label="Filtrar novedades oficiales">
 <button class="chip active" data-topic="all" type="button">Todas</button>
-<button class="chip" data-topic="genetics" type="button">Genética</button>
-<button class="chip" data-topic="neuro" type="button">Neurociencias</button>
-<button class="chip" data-topic="cardio" type="button">Cardiología</button>
-<button class="chip" data-topic="public" type="button">Salud pública</button>
+<button class="chip" data-topic="argentina" type="button">Argentina</button>
+<button class="chip" data-topic="mundial" type="button">Impacto mundial</button>
 </div>
 <form class="search-row" id="researchForm"><input id="researchSearch" type="search" placeholder="Buscar tema, enfermedad o tratamiento..." aria-label="Buscar investigaciones"><button type="submit">Buscar</button></form>
 <div id="researchStatus" class="status" role="status">Cargando publicaciones recientes…</div>
@@ -108,70 +106,45 @@ footer{text-align:center;color:#f0dce2;font-size:12px;padding:10px 20px 30px}
 <footer>Franja Morada · Ciencias Médicas · Universidad Nacional de La Plata</footer>
 <script>
 (function(){
-const status=document.getElementById('researchStatus');
 const results=document.getElementById('researchResults');
-const searchInput=document.getElementById('researchSearch');
+const status=document.getElementById('researchStatus');
 const chips=[...document.querySelectorAll('[data-topic]')];
-let topic='all';
-const topics={
- all:'(TITLE_ABS:medicine OR TITLE_ABS:clinical OR TITLE_ABS:health)',
- genetics:'(TITLE_ABS:genetics OR TITLE_ABS:genomic OR TITLE_ABS:gene)',
- neuro:'(TITLE_ABS:neuroscience OR TITLE_ABS:neurology OR TITLE_ABS:brain)',
- cardio:'(TITLE_ABS:cardiology OR TITLE_ABS:cardiovascular OR TITLE_ABS:heart)',
- public:'(TITLE_ABS:"public health" OR TITLE_ABS:epidemiology OR TITLE_ABS:health policy)'
-};
-function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function dateToday(){return new Date().toISOString().slice(0,10);}
-async function translateToSpanish(value){
- if(!value)return '';
- try{
-  const endpoint='https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=es&dt=t&q='+encodeURIComponent(value);
-  const response=await fetch(endpoint);
-  if(!response.ok)throw new Error('translation unavailable');
-  const data=await response.json();
-  return (data[0]||[]).map(part=>part[0]||'').join('')||value;
- }catch(error){return value;}
+const news=[
+{date:'14 de octubre de 2026',source:'Ministerio de Salud de la Nación · Argentina',region:'argentina',title:'Actualización del Boletín Epidemiológico Nacional: semana 39',summary:'Información oficial sobre virus respiratorios, arbovirosis y fiebre hemorrágica argentina, con datos epidemiológicos nacionales.',url:'https://www.argentina.gob.ar/noticias/actualizacion-del-boletin-epidemiologico-nacional-de-la-semana-ndeg-39'},
+{date:'13 de octubre de 2026',source:'ANMAT · Argentina',region:'argentina',title:'Argentina alcanza un récord en estudios de investigación clínica',summary:'La ANMAT informó la aprobación de 291 estudios de farmacología clínica entre enero y septiembre de 2026, con una red federal de más de 700 centros de salud.',url:'https://www.argentina.gob.ar/noticias/argentina-alcanza-un-record-en-estudios-de-investigacion-clinica-0'},
+{date:'12 de octubre de 2026',source:'Organización Mundial de la Salud (OMS)',region:'mundial',title:'La OMS celebra la declaración de la ONU para prevenir y responder a futuras pandemias',summary:'La declaración promueve cooperación internacional, vigilancia, preparación y capacidad de respuesta ante amenazas pandémicas.',url:'https://www.who.int/news/item/12-10-2026-who-welcomes-adoption-of-united-nations-political-declaration-on-pandemic-prevention-preparedness-and-response'},
+{date:'12 de octubre de 2026',source:'Organización Mundial de la Salud (OMS)',region:'mundial',title:'La OMS busca que los países detecten nuevos brotes en 24 horas',summary:'Una nueva estrategia del centro de inteligencia sobre pandemias apunta a mejorar la detección temprana de amenazas sanitarias para 2030.',url:'https://www.who.int/news/item/12-10-2026-who-pandemic-hub-sets-ambitious-goal-to-detect-new-outbreaks-within-24-hours'},
+{date:'8 de octubre de 2026',source:'Organización Mundial de la Salud (OMS)',region:'mundial',title:'Nueva hoja de ruta mundial frente a la hipertensión durante el embarazo',summary:'La iniciativa busca mejorar la investigación, el diagnóstico y el acceso a tratamientos para reducir complicaciones graves y muertes maternas y neonatales.',url:'https://www.who.int/news/item/08-10-2026-new-global-roadmap-launched-to-tackle-hypertension-in-pregnancy-a-leading-cause-of-maternal-and-newborn-deaths'},
+{date:'9 de octubre de 2026',source:'Organización Panamericana de la Salud (OPS/OMS)',region:'mundial',title:'La OPS advierte un riesgo muy alto de propagación del sarampión en las Américas',summary:'La organización insta a reforzar vacunación, vigilancia y respuesta rápida ante brechas de cobertura y mayor movilidad entre países.',url:'https://www.paho.org/en/news/9-10-2026-paho-assesses-risk-measles-spread-very-high-ahead-religious-mass-gatherings-americas'}
+];
+function render(region){
+ results.replaceChildren();
+ const items=news.filter(item=>region==='all'||item.region===region);
+ status.textContent=items.length+' novedades de fuentes oficiales.';
+ items.forEach(item=>{
+  const article=document.createElement('article');article.className='paper';
+  const meta=document.createElement('div');meta.className='meta';meta.textContent=item.date+' · '+item.source;
+  const title=document.createElement('h3');title.textContent=item.title;
+  const summary=document.createElement('p');summary.textContent=item.summary;
+  const link=document.createElement('a');link.href=item.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Leer nota original ↗';
+  article.append(meta,title,summary,link);results.append(article);
+ });
 }
-async function loadResearch(){
- const typed=searchInput.value.trim();
- const safeTerms=typed.replace(/[^\\p{L}\\p{N} -]/gu,' ').trim().split(/\\s+/).filter(Boolean);
- const query='FIRST_PDATE:[2025-01-01 TO '+dateToday()+'] AND '+topics[topic]+(safeTerms.length?' AND (TITLE_ABS:'+safeTerms.map(w=>'"'+w+'"').join(' AND ')+')':'');
- status.textContent='Buscando publicaciones…';results.replaceChildren();
- const url='https://www.ebi.ac.uk/europepmc/webservices/rest/search?query='+encodeURIComponent(query)+'&format=json&pageSize=8&sort_date=y';
- try{
-  const response=await fetch(url);
-  if(!response.ok)throw new Error('No se pudo consultar la base');
-  const data=await response.json();
-  const items=(data.resultList&&data.resultList.result)||[];
-  if(!items.length){status.textContent='No encontramos resultados con ese filtro. Probá otro término.';return;}
-  status.textContent=items.length+' publicaciones encontradas.';
-  for(const item of items){
-   const article=document.createElement('article');article.className='paper';
-   const title=document.createElement('h3');title.textContent=await translateToSpanish(item.title||'Título no disponible');
-   const meta=document.createElement('div');meta.className='meta';meta.textContent=[item.firstPublicationDate,item.journalTitle,item.authorString].filter(Boolean).join(' · ');
-   article.append(title,meta);
-   if(item.abstractText){
-    const abstract=document.createElement('p');
-    abstract.textContent=await translateToSpanish(item.abstractText.slice(0,1800));
-    article.append(abstract);
-   }
-   const link=document.createElement('a');link.target='_blank';link.rel='noopener noreferrer';link.textContent='Leer publicación original ↗';link.href=item.doi?'https://doi.org/'+item.doi:item.pmid?'https://pubmed.ncbi.nlm.nih.gov/'+item.pmid+'/':'https://europepmc.org/article/MED/'+encodeURIComponent(item.id||'');
-   article.append(link);results.append(article);
-  }
- }catch(error){
-  status.textContent='No pudimos cargar las publicaciones en este momento.';
-  const a=document.createElement('a');a.href='https://europepmc.org/';a.target='_blank';a.rel='noopener noreferrer';a.textContent='Abrir Europe PMC ↗';a.style.color='#68152b';a.style.fontWeight='800';results.append(a);
- }
-}
-chips.forEach(chip=>chip.addEventListener('click',()=>{topic=chip.dataset.topic;chips.forEach(c=>c.classList.toggle('active',c===chip));loadResearch();}));
-document.getElementById('researchForm').addEventListener('submit',e=>{e.preventDefault();loadResearch();});
+chips.forEach(chip=>chip.addEventListener('click',()=>{
+ chips.forEach(c=>c.classList.toggle('active',c===chip));
+ render(chip.dataset.topic);
+}));
+const form=document.getElementById('researchForm');
+if(form)form.remove();
+const search=document.getElementById('researchSearch');
+if(search){const row=search.closest('.search-row');if(row)row.remove();}
+render('all');
 document.getElementById('copyPrompt').addEventListener('click',async()=>{
  const text=document.getElementById('promptText').textContent;
  const out=document.getElementById('copyStatus');
  try{await navigator.clipboard.writeText(text);out.textContent='Copiado.';}
  catch(e){out.textContent='Seleccioná y copiá el texto manualmente.';}
 });
-loadResearch();
 })();
 </script>
 </body>
