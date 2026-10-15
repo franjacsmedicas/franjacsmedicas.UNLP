@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrenador de parciales | Franja Morada Ciencias Médicas UNLP</title>
+<meta name="description" content="Práctica académica organizada por carrera, año y materia, con referencia a los planes y programas oficiales de la Facultad de Ciencias Médicas UNLP.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bordo:#68152b;--oscuro:#430d1c;--claro:#8d2945;--negro:#111;--gris:#f4f4f4;--texto:#242124;--blanco:#fff;--verde:#246749}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,sans-serif;color:var(--texto);background:#f7f5f6;line-height:1.6}
+a{color:var(--bordo);font-weight:700}
+header{background:linear-gradient(130deg,var(--oscuro),var(--bordo));color:white;padding:24px 20px 54px}
+.top{max-width:1080px;margin:auto}
+.brand{font-size:.78rem;letter-spacing:.13em;font-weight:800;text-transform:uppercase;opacity:.9}
+h1{font-family:Anton,sans-serif;font-size:clamp(2.5rem,7vw,4.6rem);line-height:1.12;font-weight:400;margin:24px 0 14px;max-width:800px}
+header p{max-width:720px;font-size:1.04rem}
+main{max-width:1000px;margin:-28px auto 50px;padding:0 16px}
+.panel{background:white;border-radius:18px;padding:clamp(20px,4vw,34px);box-shadow:0 12px 40px #23081312;margin-bottom:20px}
+.eyebrow{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--bordo);margin-bottom:8px}
+h2{font-size:1.45rem;line-height:1.25;color:var(--oscuro);margin-bottom:10px}
+.intro{color:#5c5558;margin-bottom:22px}
+.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+label{display:block;font-size:.88rem;font-weight:800;margin-bottom:7px}
+select{width:100%;padding:14px 12px;border:1px solid #d9cfd3;border-radius:10px;background:white;font:inherit;color:#211b1e;min-height:50px}
+select:focus{outline:3px solid #68152b2c;border-color:var(--bordo)}
+.result{margin-top:20px;padding:20px;border-radius:14px;background:#faf7f8;border:1px solid #eadfe3}
+.result h3{font-size:1.16rem;margin-bottom:6px;color:var(--oscuro)}
+.meta{font-size:.88rem;color:#62585d;margin:8px 0 16px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;border-radius:9px;padding:12px 16px;font-size:.9rem;font-weight:800;border:1px solid var(--bordo);cursor:pointer}
+.btn.primary{background:var(--bordo);color:white}
+.btn.secondary{background:white;color:var(--bordo)}
+.notice{border-left:4px solid var(--bordo);padding:13px 15px;background:#fbf6f8;border-radius:0 10px 10px 0;font-size:.91rem;margin-top:15px}
+.status{font-weight:800;color:var(--bordo);margin-top:12px}
+.pill{display:inline-block;background:#f0e4e8;color:var(--bordo);border-radius:999px;padding:5px 10px;font-size:.75rem;font-weight:800}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.step{border:1px solid #eee3e7;border-radius:12px;padding:16px}
+.step b{display:block;color:var(--oscuro);margin-bottom:5px}
+small{color:#6c6267}
+footer{text-align:center;padding:20px;color:#756b70;font-size:.82rem}
+@media(max-width:680px){.fields,.steps{grid-template-columns:1fr}header{padding-bottom:45px}.panel{border-radius:14px}}
+</style>
+</head>
+<body>
+<header><div class="top">
+<div class="brand">Franja Morada · Ciencias Médicas UNLP</div>
+<h1>ENTRENADOR DE PARCIALES</h1>
+<p>Elegí tu carrera, el año que cursás y la materia. La práctica se organizará a partir de los programas oficiales, la bibliografía indicada por cada cátedra y parciales anteriores que podamos verificar.</p>
+</div></header>
+<main>
+<section class="panel">
+<div class="eyebrow">Tu espacio de estudio</div>
+<h2>¿Qué materia querés practicar?</h2>
+<p class="intro">La selección académica se basa en los planes publicados por la Facultad. Las preguntas se habilitarán materia por materia cuando sus fuentes hayan sido revisadas.</p>
+<div class="fields">
+<div><label for="career">1. Carrera</label><select id="career"><option value="">Seleccioná tu carrera</option><option value="medicina">Medicina</option><option value="enfermeria">Enfermería Universitaria</option><option value="nutricion">Licenciatura en Nutrición</option><option value="obstetricia">Licenciatura en Obstetricia</option><option value="tpc">Tecnicatura en Prácticas Cardiológicas</option></select></div>
+<div><label for="year">2. Año que cursás</label><select id="year" disabled><option value="">Primero elegí carrera</option></select></div>
+<div><label for="subject">3. Materia</label><select id="subject" disabled><option value="">Primero elegí año</option></select></div>
+</div>
+<div id="result" class="result" aria-live="polite"><h3>Tu cuestionario aparecerá acá</h3><p>Elegí carrera, año y materia para consultar el estado de los recursos disponibles.</p></div>
+<div class="notice"><strong>Compromiso de rigor académico:</strong> no publicaremos respuestas como correctas si no pueden contrastarse con el programa y la bibliografía de referencia. Los parciales históricos se identificarán como tales y no se asumirán infalibles.</div>
+</section>
+<section class="panel">
+<div class="eyebrow">Cómo validamos el contenido</div>
+<h2>Primero la fuente. Después la pregunta.</h2>
+<div class="steps">
+<div class="step"><b>01 · Programa</b><p>Identificamos unidades, contenidos y bibliografía del programa de la materia.</p></div>
+<div class="step"><b>02 · Parciales anteriores</b><p>Se registra año y procedencia. Si no se puede verificar una respuesta, queda pendiente.</p></div>
+<div class="step"><b>03 · Revisión</b><p>Solo las preguntas revisadas y respaldadas se habilitan para practicar.</p></div>
+</div>
+<p style="margin-top:18px">Consultá también las fuentes académicas de tu carrera:</p>
+<div class="actions" id="officialLinks">
+<a class="btn secondary" href="https://www.med.unlp.edu.ar/index.php?Itemid=161" target="_blank" rel="noopener">Plan de Medicina</a>
+<a class="btn secondary" href="https://www.med.unlp.edu.ar/index.php?Itemid=158" target="_blank" rel="noopener">Plan de Enfermería</a>
+<a class="btn secondary" href="https://www.med.unlp.edu.ar/index.php?Itemid=159" target="_blank" rel="noopener">Plan de Nutrición</a>
+<a class="btn secondary" href="https://www.med.unlp.edu.ar/index.php/carreras/lic-en-obstetricia/plan-de-estudio?id=248&view=category" target="_blank" rel="noopener">Plan de Obstetricia</a>
+<a class="btn secondary" href="https://www.med.unlp.edu.ar/index.php/carreras/tec-en-practicas-cardiologicas/plan-de-estudio" target="_blank" rel="noopener">Plan de Prácticas Cardiológicas</a>
+</div>
+<p style="margin-top:12px"><small>Los planes ordenan las materias por año; el programa analítico y la bibliografía específica deben verificarse en la página de cada cátedra. La disponibilidad de cuestionarios se irá anunciando de forma transparente.</small></p>
+</section>
+</main>
+<footer>Franja Morada · Ciencias Médicas UNLP · Herramienta de apoyo al estudio</footer>
+<script>
+const plans={
+ medicina:{
+  official:'https://www.med.unlp.edu.ar/index.php?Itemid=161',
+  years:{
+   '1':['Anatomía','Biología','Ciencias Sociales y Medicina','Citología, Histología y Embriología','Informática Básica','Ciencias Exactas (optativa)','Seminario en Investigación Científica (optativa)'],
+   '2':['Bioquímica y Biología Molecular','Epidemiología','Fisiología y Física Biológica','Psicología Médica','Ecología Humana y Promoción de la Salud (optativa)','Historia de la Medicina (optativa)'],
+   '3':['Farmacología Básica','Informática Médica','Microbiología y Parasitología','Patología','Salud y Medicina Comunitaria','Semiología','Inglés Médico','Genética (optativa)','Inmunología (optativa)','Salud Ambiental (optativa)','Estadística Aplicada a Ciencias de la Salud (optativa)','Neuroanatomía Semiológica (optativa)'],
+   '4':['Cirugía I','Dermatología','Diagnóstico y Terapéutica por Imágenes Módulo 1','Farmacología Aplicada','Infectología','Medicina Interna I','Neurología','Oftalmología','Ortopedia y Traumatología','Otorrinolaringología','Psiquiatría Módulo 1','Salud Pública Módulo 1','Urología'],
+   '5':['Cirugía II','Deontología Médica y Medicina Legal','Diagnóstico y Terapéutica por Imágenes Módulo 2','Ginecología','Medicina Interna II','Obstetricia','Pediatría','Psiquiatría Módulo 2','Salud Pública Módulo 2','Terapia Intensiva','Toxicología'],
+   '6':['Práctica Final Obligatoria']
+  }
+ },
+ enfermeria:{
+  official:'https://www.med.unlp.edu.ar/index.php?Itemid=158',
+  years:{'1':['Cultura, Estado y Salud','Fundamentos, Prácticas y Tendencias en Enfermería','Bases de Biofísica y Bioquímica','Estructura y Función del Cuerpo Humano','Introducción a la Microbiología y Parasitología','Fundamentos de Farmacología y Toxicología','Atención de Enfermería en Salud Materno Infantil I']}
+ },
+ nutricion:{
+  official:'https://www.med.unlp.edu.ar/index.php?Itemid=159',
+  years:{'1':['Bioquímica','Anatomía','Biología e introducción a la biología molecular','Elementos de física y matemática','Introducción al proceso intelectual','Fisiología','Educación para la salud','Estadística','Informática'],'2':['Bromatología','Fisiopatología','Nutrición normal del adulto','Técnica dietética']}
+ },
+ obstetricia:{
+  official:'https://www.med.unlp.edu.ar/index.php/carreras/lic-en-obstetricia/plan-de-estudio?id=248&view=category',
+  years:{'1':['Obstetricia Normal','Anatomía, Histología y Embriología','Biología Celular y Genética','Ciencias Sociales y Obstetricia','Psicología'],'2':['Obstetricia Patológica','La Salud Materno Infantil','Microbiología, Parasitología','Farmacología General','Epidemiología','Educación para la Salud Reproductiva','Fisiología Humana'],'3':['Clínica Obstétrica Normal y Patológica','Salud Pública','Neonatología Normal y Patológica','Investigación en Salud','Terapéutica: Bases Farmacológicas'],'4':['Taller de Tesis – Tesina Final','Enfermedades Infecciosas','Ética, Deontología y Obstetricia Legal','Informática Aplicada a las Ciencias de la Salud','Inglés Técnico','Práctica Final Obligatoria']}
+ },
+ tpc:{
+  official:'https://www.med.unlp.edu.ar/index.php/carreras/tec-en-practicas-cardiologicas/plan-de-estudio',
+  years:{'1':['Prácticas Cardiológicas y Salud','Anatomía y Fisiología Cardiovascular','Microbiología y Parasitología','Fundamentos de la Práctica Cardiológica'],'2':['Cardiología Clínica','Electrocardiografía','Ultrasonido en Cardiología','Psicología Social e Institucional','Inglés Técnico I','Inglés Técnico II'],'3':['Cardiología Nuclear','Hemodinamia y Cardiología Intervencionista','Rehabilitación Cardíaca','Ética y Marco Legal Profesional','Informática I','Informática II']}
+ }
+};
+const career=document.getElementById('career'), year=document.getElementById('year'), subject=document.getElementById('subject'), result=document.getElementById('result');
+function fill(select,placeholder,items){select.innerHTML='';const first=document.createElement('option');first.value='';first.textContent=placeholder;select.appendChild(first);items.forEach(item=>{const o=document.createElement('option');o.value=item;o.textContent=item;select.appendChild(o)});select.disabled=!items.length}
+function renderResult(){
+ const p=plans[career.value], y=year.value, s=subject.value;
+ if(!p||!y||!s){result.innerHTML='<h3>Tu cuestionario aparecerá acá</h3><p>Seleccioná carrera, año y materia.</p>';return}
+ result.innerHTML='<span class="pill">Materia seleccionada</span><h3 style="margin-top:12px"></h3><p class="meta"></p><p>Estamos preparando la base de práctica para esta materia. Para proteger la calidad académica, el cuestionario se habilitará cuando las preguntas, el programa y la bibliografía hayan sido revisados.</p><div class="actions"><a class="btn primary" target="_blank" rel="noopener">Consultar plan oficial</a></div>';
+ result.querySelector('h3').textContent=s;
+ result.querySelector('.meta').textContent='Carrera: '+career.options[career.selectedIndex].text+' · Año: '+y+'°';
+ result.querySelector('a').href=p.official;
+}
+career.addEventListener('change',()=>{const p=plans[career.value];fill(year,'Seleccioná el año',p?Object.keys(p.years).map(x=>x+'°').map(x=>x.replace('°','')):[]);fill(subject,'Primero elegí año',[]);renderResult();if(p){const link=document.querySelector('#officialLinks a[href="'+p.official+'"]');}});
+year.addEventListener('change',()=>{const p=plans[career.value];fill(subject,'Seleccioná la materia',p&&p.years[year.value]?p.years[year.value]:[]);renderResult()});
+subject.addEventListener('change',renderResult);
+</script>
+</body>
+</html>
