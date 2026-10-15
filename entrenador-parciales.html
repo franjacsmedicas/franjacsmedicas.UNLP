@@ -43,7 +43,7 @@ select:focus{outline:3px solid #68152b2c;border-color:var(--bordo)}
 small{color:#6c6267}
 footer{text-align:center;padding:20px;color:#756b70;font-size:.82rem}
 @media(max-width:680px){.fields,.steps{grid-template-columns:1fr}header{padding-bottom:45px}.panel{border-radius:14px}}
-</style>
+.progress{height:7px;background:#eee2e6;border-radius:99px;overflow:hidden;margin:12px 0 20px}.progress span{display:block;height:100%;background:var(--bordo)}.question{font-size:1.15rem;line-height:1.4;margin:12px 0 16px}.options{display:grid;gap:10px}.option{display:flex;gap:12px;align-items:flex-start;border:1px solid #e6dce0;border-radius:10px;padding:13px;cursor:pointer;font-weight:500}.option input{margin-top:5px;accent-color:var(--bordo)}.correct-option{border-color:#268052;background:#f0faf4}.wrong-option{border-color:#b52e3e;background:#fff2f2}.feedback{margin-top:18px;padding:16px;border-radius:12px}.feedback h3{margin-bottom:8px}.feedback p{margin-top:8px}.feedback.good{background:#eff8f2;border:1px solid #cce8d5}.feedback.bad{background:#fff3f3;border:1px solid #f0cdd1}.source{font-size:.85rem;color:#5b5055}.score{font-size:2rem;font-weight:800;color:var(--bordo);margin:10px 0}.availability{margin-top:10px}</style>
 </head>
 <body>
 <header><div class="top">
@@ -116,13 +116,53 @@ const plans={
 };
 const career=document.getElementById('career'), year=document.getElementById('year'), subject=document.getElementById('subject'), result=document.getElementById('result');
 function fill(select,placeholder,items){select.innerHTML='';const first=document.createElement('option');first.value='';first.textContent=placeholder;select.appendChild(first);items.forEach(item=>{const o=document.createElement('option');o.value=item;o.textContent=item;select.appendChild(o)});select.disabled=!items.length}
+
+const quizBank=[
+{t:'Posición anatómica',q:'En la posición anatómica de referencia, ¿hacia dónde miran las palmas?',o:['Hacia atrás','Hacia adelante','Hacia medial','Hacia abajo'],a:1,e:'En la posición anatómica estándar la persona está de pie, mira al frente y mantiene los miembros superiores a los lados con las palmas hacia adelante. Esta referencia permite describir relaciones anatómicas de manera consistente.',r:'Programa Analítico de Anatomía B (2026), unidad temática 1: posición anatómica y planimetría.'},
+{t:'Planos anatómicos',q:'¿Qué plano divide el cuerpo en porciones derecha e izquierda?',o:['Frontal o coronal','Transversal','Sagital','Horizontal'],a:2,e:'El plano sagital separa derecha e izquierda. El plano mediano es el sagital que pasa por la línea media; los parasagitales son paralelos a él.',r:'Programa Analítico de Anatomía B (2026), unidad temática 1: ejes y planos. Bibliografía recomendada: Gray, Anatomía para estudiantes, 4.ª ed. (2023).'},
+{t:'Planos anatómicos',q:'¿Qué plano separa una porción anterior de una posterior?',o:['Sagital','Frontal o coronal','Transversal','Mediano'],a:1,e:'El plano frontal o coronal separa porciones anterior y posterior. El sagital diferencia derecha e izquierda y el transversal, superior e inferior.',r:'Programa Analítico de Anatomía B (2026), unidad temática 1: ejes y planos del estudio anatómico.'},
+{t:'Planos anatómicos',q:'¿Qué plano separa una porción superior de una inferior?',o:['Transversal u horizontal','Sagital mediano','Frontal','Parasagital'],a:0,e:'El plano transversal u horizontal separa porciones superior e inferior. No debe confundirse con el plano frontal (anterior/posterior) ni con el sagital (derecha/izquierda).',r:'Programa Analítico de Anatomía B (2026), unidad temática 1: ejes y planos del estudio anatómico.'},
+{t:'Esqueleto',q:'¿Cuál de estas estructuras pertenece al esqueleto axial?',o:['Húmero','Fémur','Esternón','Hueso coxal'],a:2,e:'El esqueleto axial comprende cráneo, columna vertebral y caja torácica, incluidos esternón y costillas. Húmero y fémur pertenecen al apendicular; los coxales forman parte de la cintura pélvica del esqueleto apendicular.',r:'Programa Analítico de Anatomía B (2026), unidad temática 1: esqueleto axial y apendicular.'},
+{t:'Enfoques anatómicos',q:'¿Qué estudia principalmente la anatomía topográfica?',o:['Un elemento aislado sin relaciones','Las relaciones entre estructuras de una región','Solo la función de los órganos','Solo el desarrollo embrionario'],a:1,e:'La anatomía topográfica relaciona las estructuras según una región determinada. La descriptiva caracteriza un elemento; la sistemática integra elementos similares.',r:'Programa Analítico de Anatomía B (2026), marco disciplinar: anatomía descriptiva, sistemática y topográfica.'},
+{t:'Enfoques anatómicos',q:'¿Qué enfoque estudia las estructuras desde la perspectiva de la función que pueden realizar?',o:['Anatomía funcional','Anatomía topográfica exclusivamente','Anatomía descriptiva exclusivamente','Anatomía histórica'],a:0,e:'La anatomía funcional relaciona la forma con lo que una estructura puede hacer. El programa de la Cátedra B destaca este enfoque para conectar el conocimiento anatómico con la práctica médica.',r:'Programa Analítico de Anatomía B (2026), marco disciplinar: anatomía funcional, de superficie e imágenes normales básicas.'},
+{t:'Enfoques anatómicos',q:'¿Cuál afirmación describe mejor la anatomía sistemática?',o:['Estudia únicamente una región aislada','Integra elementos anatómicos similares en un sistema o aparato','Describe exclusivamente la superficie corporal','Analiza solo alteraciones patológicas'],a:1,e:'La anatomía sistemática integra elementos similares en sistemas o aparatos. La topográfica estudia sus relaciones dentro de una región, y la descriptiva caracteriza un elemento anatómico.',r:'Programa Analítico de Anatomía B (2026), marco disciplinar: anatomía descriptiva, sistemática y topográfica.'}
+];
+let qi=0, score=0, answered=false;
+function renderQuiz(){
+ const host=document.getElementById('quiz');
+ if(!(career.value==='medicina'&&year.value==='1'&&subject.value==='Anatomía')){host.hidden=true;host.innerHTML='';return}
+ host.hidden=false;qi=0;score=0;showQ();
+}
+function showQ(){
+ answered=false;const q=quizBank[qi],host=document.getElementById('quiz');
+ host.innerHTML='<div class="eyebrow">Cuestionario de práctica · Medicina, 1.º año</div><h2>Generalidades de Anatomía</h2><p class="meta">Basado en el Programa Analítico de Anatomía B aprobado en 2026 · Pregunta '+(qi+1)+' de '+quizBank.length+'</p><div class="progress"><span style="width:'+qi/quizBank.length*100+'%"></span></div><span class="pill"></span><h3 class="question"></h3><div class="options"></div><div class="feedback" aria-live="polite" hidden></div><div class="actions"><button class="btn primary" id="check" type="button">Comprobar respuesta</button><button class="btn secondary" id="next" type="button" hidden>'+(qi===quizBank.length-1?'Ver resultado':'Siguiente pregunta')+'</button></div>';
+ host.querySelector('.pill').textContent=q.t;host.querySelector('.question').textContent=q.q;
+ q.o.forEach((v,i)=>{const lab=document.createElement('label');lab.className='option';const inp=document.createElement('input');inp.type='radio';inp.name='ans';inp.value=i;const span=document.createElement('span');span.textContent=v;lab.append(inp,span);host.querySelector('.options').append(lab)});
+ document.getElementById('check').onclick=checkQ;document.getElementById('next').onclick=nextQ;
+}
+function checkQ(){
+ if(answered)return;const selected=document.querySelector('input[name="ans"]:checked');if(!selected){alert('Elegí una respuesta antes de continuar.');return}
+ answered=true;const q=quizBank[qi],correct=Number(selected.value)===q.a;if(correct)score++;
+ document.querySelectorAll('.option').forEach((el,i)=>{if(i===q.a)el.classList.add('correct-option');if(i===Number(selected.value)&&!correct)el.classList.add('wrong-option');el.querySelector('input').disabled=true});
+ const fb=document.querySelector('.feedback');fb.hidden=false;fb.className='feedback '+(correct?'good':'bad');
+ const h=document.createElement('h3');h.textContent=correct?'¡Correcto!':'Respuesta incorrecta';fb.append(h);
+ const p=document.createElement('p');p.textContent=q.e;fb.append(p);
+ const src=document.createElement('p');src.className='source';src.textContent='Fundamento curricular: '+q.r;fb.append(src);
+ const bib=document.createElement('p');bib.className='source';bib.textContent='Bibliografía recomendada en el programa de Anatomía B: Gray, Anatomía para estudiantes, 4.ª ed. (2023); Latarjet, Ruiz Liard y Pró, Anatomía Humana, 5.ª ed. (2019); Moore, Anatomía con orientación clínica, 8.ª ed. (2018). La explicación se vincula al tema del programa; consultá el capítulo correspondiente para profundizar.';fb.append(bib);
+ document.getElementById('check').hidden=true;document.getElementById('next').hidden=false;
+}
+function nextQ(){
+ if(qi<quizBank.length-1){qi++;showQ();return}
+ const host=document.getElementById('quiz');host.innerHTML='<div class="eyebrow">Resultado</div><h2>Terminaste la práctica</h2><p class="score">'+score+' de '+quizBank.length+' respuestas correctas</p><p>Las respuestas incorrectas incluyen una explicación y la referencia al tema del programa. Repasá esos fundamentos y volvé a practicar.</p><div class="actions"><button class="btn primary" id="retry" type="button">Repetir cuestionario</button><a class="btn secondary" href="https://www.med.unlp.edu.ar/images/grado/medicina/programas/anatomina_B_programa_analitico_al_25-3-26.pdf" target="_blank" rel="noopener">Abrir programa oficial</a></div>';document.getElementById('retry').onclick=renderQuiz;
+}
 function renderResult(){
  const p=plans[career.value], y=year.value, s=subject.value;
- if(!p||!y||!s){result.innerHTML='<h3>Tu cuestionario aparecerá acá</h3><p>Seleccioná carrera, año y materia.</p>';return}
- result.innerHTML='<span class="pill">Materia seleccionada</span><h3 style="margin-top:12px"></h3><p class="meta"></p><p>Estamos preparando la base de práctica para esta materia. Para proteger la calidad académica, el cuestionario se habilitará cuando las preguntas, el programa y la bibliografía hayan sido revisados.</p><div class="actions"><a class="btn primary" target="_blank" rel="noopener">Consultar plan oficial</a></div>';
- result.querySelector('h3').textContent=s;
- result.querySelector('.meta').textContent='Carrera: '+career.options[career.selectedIndex].text+' · Año: '+y+'°';
- result.querySelector('a').href=p.official;
+ if(!p||!y||!s){result.innerHTML='<h3>Tu cuestionario aparecerá acá</h3><p>Seleccioná carrera, año y materia.</p>';document.getElementById('quiz').hidden=true;return}
+ result.innerHTML='<span class="pill">Materia seleccionada</span><h3 style="margin-top:12px"></h3><p class="meta"></p><p class="availability"></p><div class="actions"><a class="btn primary" target="_blank" rel="noopener">Consultar plan oficial</a></div>';
+ result.querySelector('h3').textContent=s;result.querySelector('.meta').textContent='Carrera: '+career.options[career.selectedIndex].text+' · Año: '+y+'°';result.querySelector('a').href=p.official;
+ const enabled=career.value==='medicina'&&y==='1'&&s==='Anatomía';
+ result.querySelector('.availability').textContent=enabled?'Cuestionario inicial disponible: generalidades, posición anatómica, planos, esqueleto y enfoques anatómicos. Las preguntas son de práctica y no se presentan como parciales históricos.':'Este cuestionario aún no está habilitado: debemos verificar el programa analítico y la bibliografía de esta materia antes de publicar preguntas.';
+ renderQuiz();
 }
 career.addEventListener('change',()=>{const p=plans[career.value];fill(year,'Seleccioná el año',p?Object.keys(p.years).map(x=>x+'°').map(x=>x.replace('°','')):[]);fill(subject,'Primero elegí año',[]);renderResult();if(p){const link=document.querySelector('#officialLinks a[href="'+p.official+'"]');}});
 year.addEventListener('change',()=>{const p=plans[career.value];fill(subject,'Seleccioná la materia',p&&p.years[year.value]?p.years[year.value]:[]);renderResult()});
