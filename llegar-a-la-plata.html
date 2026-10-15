@@ -35,9 +35,10 @@
 <label class="filter"><input type="checkbox" data-layer="comedores" checked><span><span class="legend-dot" style="background:#24805a"></span><b>Comedores universitarios</b><small>Las cuatro sedes oficiales</small></span></label>
 <label class="filter"><input type="checkbox" data-layer="salud" checked><span><span class="legend-dot" style="background:#c13c45"></span><b>Salud pública</b><small>Hospitales y centros de salud</small></span></label>
 <label class="filter"><input type="checkbox" data-layer="transporte" checked><span><span class="legend-dot" style="background:#e58a24"></span><b>Estaciones y terminales</b><small>Tren Roca y micros de larga distancia</small></span></label>
-<label class="filter"><input type="checkbox" data-layer="recorridos" checked><span><span class="legend-dot" style="background:#7a51a1"></span><b>Conexiones universitarias</b><small>Tren Universitario y Línea Universitaria (esquema orientativo)</small></span></label>
-<div class="map-actions"><a class="btn" href="https://www.google.com/maps/dir/?api=1&destination=Facultad+de+Ciencias+Medicas+UNLP" target="_blank" rel="noopener noreferrer">Cómo llegar a Medicina</a><a class="btn light" href="https://unlp.edu.ar/gestion/estudiantes/bienestar-accesible/comedor/" target="_blank" rel="noopener noreferrer">Info oficial de comedores</a></div>
-<div class="note">Los recorridos dibujados son orientativos, no un GPS en tiempo real ni un plano oficial de paradas. Para conocer la combinación exacta desde tu ubicación, abrí las indicaciones del punto y elegí transporte público.</div>
+<label class="filter"><input type="checkbox" data-layer="tren" checked><span><span class="legend-dot" style="background:#7a51a1"></span><b>Tren Universitario</b><small>Paradas publicadas por la UNLP y corredor hasta el Hospital San Juan de Dios</small></span></label>
+<label class="filter"><input type="checkbox" data-layer="micro" checked><span><span class="legend-dot" style="background:#e58a24"></span><b>Línea Universitaria de micros</b><small>Paradas de referencia y los dos ramales publicados por la UNLP</small></span></label>
+<div class="map-actions"><a class="btn" href="https://www.laplata.gob.ar/transportePublico/#/" target="_blank" rel="noopener noreferrer">Mapa oficial de colectivos</a><a class="btn light" href="https://unlp.edu.ar/institucional/el-tren-universitario-cumple-13-anos-de-servicio-un-motor-que-transformo-la-movilidad-de-la-region-122583/" target="_blank" rel="noopener noreferrer">Paradas oficiales del tren</a><a class="btn light" href="https://www.google.com/maps/dir/?api=1&destination=Facultad+de+Ciencias+Medicas+UNLP&travelmode=transit" target="_blank" rel="noopener noreferrer">Cómo llegar a Medicina</a></div>
+<div class="note">Las paradas y calles de los servicios universitarios se basan en información publicada por la UNLP; la línea dibujada sobre el mapa es una representación cartográfica orientativa. Para colectivos urbanos comunes, consultá el mapa oficial municipal: allí podés elegir línea y recorrido. No se muestran posiciones en vivo ni horarios en tiempo real.</div>
 <p class="small">El mapa necesita conexión a internet para cargar el plano base.</p>
 </aside>
 <div id="map" aria-label="Mapa interactivo de facultades, comedores, salud y transporte en La Plata"></div>
@@ -59,7 +60,7 @@
 <div class="cards">
 <article class="info-card"><h3>Tren Universitario</h3><p>Conecta la estación ferroviaria de La Plata con paradas cercanas a distintas facultades y zonas de la UNLP, llegando hacia el área de avenida 72 y 25.</p><a href="https://www.google.com/search?q=horarios+Tren+Universitario+La+Plata+UNLP" target="_blank" rel="noopener noreferrer">Consultar horarios vigentes ↗</a></article>
 <article class="info-card"><h3>Línea Universitaria</h3><p>Servicio orientado a conectar facultades, colegios y dependencias de la UNLP. Confirmá recorridos, horarios y condiciones de acceso en los canales universitarios.</p><a href="https://unlp.edu.ar/" target="_blank" rel="noopener noreferrer">Consultar novedades UNLP ↗</a></article>
-<article class="info-card"><h3>Colectivos urbanos</h3><p>Las líneas y ramales cambian según destino. Buscá tu facultad como destino para ver opciones desde la estación, la terminal o tu alojamiento.</p><a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Abrir Google Maps ↗</a></article>\n<article class="info-card"><h3>Líneas cercanas a Ciencias Médicas</h3><p>En el entorno de Av. 60 y 120 se publican conexiones de las líneas Norte, Oeste, Este, Sur, 214, 215, 307, 506 y 508. Los ramales y paradas pueden cambiar; verificá el viaje desde tu punto de partida.</p><a href="https://www.google.com/maps/dir/?api=1&destination=Facultad+de+Ciencias+Medicas+UNLP&travelmode=transit" target="_blank" rel="noopener noreferrer">Buscar colectivo hasta Medicina ↗</a></article>
+<article class="info-card"><h3>Colectivos urbanos</h3><p>Las líneas y ramales cambian según destino. Buscá tu facultad como destino para ver opciones desde la estación, la terminal o tu alojamiento.</p><a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Abrir Google Maps ↗</a></article>\n<article class="info-card"><h3>Colectivos y paradas oficiales</h3><p>Consultá el mapa de transporte público de La Plata para seleccionar una línea y ver su recorrido. Los ramales y paradas pueden cambiar, por eso evitamos publicar una lista fija sin verificación.</p><a href="https://www.laplata.gob.ar/transportePublico/#/" target="_blank" rel="noopener noreferrer">Abrir mapa oficial de colectivos ↗</a></article>
 <article class="info-card"><h3>Estación de tren La Plata</h3><p>Cabecera del ramal Constitución–La Plata de la Línea Roca y punto de partida del Tren Universitario.</p><a href="https://www.google.com/maps/search/?api=1&query=Estacion+de+tren+La+Plata" target="_blank" rel="noopener noreferrer">Ver ubicación ↗</a></article>
 <article class="info-card"><h3>Terminal de ómnibus</h3><p>Para servicios de media y larga distancia. Revisá el andén y la empresa en tu pasaje antes de viajar.</p><a href="https://www.google.com/maps/search/?api=1&query=Terminal+de+Omnibus+La+Plata" target="_blank" rel="noopener noreferrer">Ver ubicación ↗</a></article>
 <article class="info-card"><h3>Boleto estudiantil</h3><p>Consultá requisitos, inscripción y vigencia del beneficio de transporte para estudiantes.</p><a href="https://www.gba.gob.ar/transporte/boleto" target="_blank" rel="noopener noreferrer">Información de transporte PBA ↗</a></article>
@@ -85,7 +86,7 @@ if(!window.L){document.getElementById('map').innerHTML='<p style="padding:24px">
 const map=L.map('map').setView([-34.915,-57.944],13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(map);
 const colors={facultades:'#68152b',dependencias:'#3d648c',comedores:'#24805a',salud:'#c13c45',transporte:'#e58a24'};
-const layers={facultades:L.layerGroup().addTo(map),dependencias:L.layerGroup().addTo(map),comedores:L.layerGroup().addTo(map),salud:L.layerGroup().addTo(map),transporte:L.layerGroup().addTo(map),recorridos:L.layerGroup().addTo(map)};
+const layers={facultades:L.layerGroup().addTo(map),dependencias:L.layerGroup().addTo(map),comedores:L.layerGroup().addTo(map),salud:L.layerGroup().addTo(map),transporte:L.layerGroup().addTo(map),tren:L.layerGroup().addTo(map),micro:L.layerGroup().addTo(map)};
 function pin(category,name,address,lat,lng,details){
 const color=colors[category]||'#7a51a1';
 const icon=L.divIcon({className:'custom-pin',html:'<div style="width:18px;height:18px;border:3px solid white;border-radius:50%;background:'+color+';box-shadow:0 1px 5px #2229"></div>',iconSize:[18,18],iconAnchor:[9,9]});
@@ -128,10 +129,58 @@ pin('salud','CAPS 7','Av. 7 y 82',-34.9417,-57.9353);
 pin('transporte','Estación de tren La Plata','Av. 1 y 44 · Línea Roca y Tren Universitario',-34.9067,-57.9563);
 pin('transporte','Terminal de Ómnibus','Calle 42 n.º 453',-34.9032,-57.9472);
 pin('transporte','Parada de referencia · Facultad de Medicina','Avenida 60 y 120',-34.9146,-57.9340,'En la zona se publican conexiones Norte, Oeste, Este, Sur, 214, 215, 307, 506 y 508. Verificá ramal y parada antes de viajar.');
-const train=[[-34.9067,-57.9563],[-34.9057,-57.9482],[-34.9065,-57.9385],[-34.9088,-57.9320],[-34.9144,-57.9347],[-34.9170,-57.9384],[-34.9190,-57.9450],[-34.9275,-57.9560],[-34.9367,-57.9704]];
-L.polyline(train,{color:'#7a51a1',weight:5,opacity:.85,dashArray:'9 7'}).bindPopup('<strong>Tren Universitario</strong><br>Esquema visual aproximado. Confirmá paradas y horarios vigentes.').addTo(layers.recorridos);
-const bus=[[-34.9100,-57.9490],[-34.9080,-57.9490],[-34.9060,-57.9490],[-34.9060,-57.9368],[-34.9130,-57.9368],[-34.9144,-57.9347],[-34.9152,-57.9518],[-34.9100,-57.9490]];
-L.polyline(bus,{color:'#e58a24',weight:5,opacity:.9,dashArray:'3 7'}).bindPopup('<strong>Línea Universitaria</strong><br>Esquema orientativo, no representa la traza oficial calle por calle. Consultá recorrido y horarios con la UNLP.').addTo(layers.recorridos);
+
+// Paradas publicadas del Tren Universitario. La geometría entre paradas es esquemática.
+const trainStops=[
+['Estación La Plata','1 y 44',-34.9067,-57.9563],
+['Arquitectura','47 y 117',-34.9057,-57.9390],
+['Informática','50 y 120',-34.9065,-57.9368],
+['Medicina','60 y 120',-34.9144,-57.9350],
+['Periodismo','63 y 119',-34.9164,-57.9370],
+['Diagonal 73 y 118','Diagonal 73 y 118',-34.9202,-57.9370],
+['Policlínico San Martín','1 y 71',-34.9226,-57.9345],
+['Avenida 7 y 72','7 y 72',-34.9238,-57.9490],
+['Estación Circunvalación','13 y 72',-34.9238,-57.9417],
+['Meridiano V','17 y 72',-34.9238,-57.9345],
+['Hospital San Juan de Dios','25 y 72',-34.9238,-57.9228]
+];
+trainStops.forEach(s=>{
+ L.circleMarker([s[2],s[3]],{radius:5,color:'#fff',weight:2,fillColor:'#7a51a1',fillOpacity:1})
+ .bindPopup('<strong>Tren Universitario · '+s[0]+'</strong><br>'+s[1]+'<br><small>Parada publicada por la UNLP; verificá servicio y horarios vigentes.</small>')
+ .addTo(layers.tren);
+});
+const trainLine=trainStops.map(s=>[s[2],s[3]]);
+L.polyline(trainLine,{color:'#7a51a1',weight:5,opacity:.88}).bindPopup('<strong>Tren Universitario</strong><br>Corredor entre Estación La Plata y Hospital San Juan de Dios. La línea es una representación esquemática entre paradas.').addTo(layers.tren);
+// Línea Universitaria: paradas/corredores de referencia publicados por la UNLP.
+const universityStops=[
+['Centro · calle 49 entre 6 y 7','49 entre 6 y 7',-34.9087,-57.9517],
+['Odontología','1 y 50',-34.9087,-57.9346],
+['Ex BIM III','52 y 122',-34.9065,-57.9366],
+['Medicina','60 y 119/120',-34.9144,-57.9362],
+['Avenida 1 y 60','1 y 60',-34.9144,-57.9345],
+['Plaza Rocha','7 y 60',-34.9199,-57.9485]
+];
+universityStops.forEach(s=>{
+ L.circleMarker([s[2],s[3]],{radius:5,color:'#fff',weight:2,fillColor:'#e58a24',fillOpacity:1})
+ .bindPopup('<strong>Línea Universitaria · '+s[0]+'</strong><br>'+s[1]+'<br><small>Parada de referencia publicada en información universitaria; confirmá recorrido activo.</small>')
+ .addTo(layers.micro);
+});
+// Trazas sobre el entramado de calles, esquemáticas y no aptas para navegación giro a giro.
+const normalRoute=[
+[-34.9087,-57.9517],[-34.9088,-57.9470],[-34.9087,-57.9346],
+[-34.9078,-57.9346],[-34.9065,-57.9366],[-34.9065,-57.9390],
+[-34.9144,-57.9390],[-34.9144,-57.9362],[-34.9144,-57.9345],
+[-34.9144,-57.9310],[-34.9135,-57.9290],[-34.9105,-57.9290],
+[-34.9085,-57.9320],[-34.9087,-57.9390],[-34.9087,-57.9517]
+];
+L.polyline(normalRoute,{color:'#e58a24',weight:5,opacity:.9}).bindPopup('<strong>Línea Universitaria · recorrido tradicional</strong><br>Esquema de las calles principales del circuito publicado por la UNLP. Verificá desvíos y servicio vigente.').addTo(layers.micro);
+const rochaRoute=[
+[-34.9087,-57.9517],[-34.9088,-57.9470],[-34.9087,-57.9346],
+[-34.9065,-57.9366],[-34.9065,-57.9390],[-34.9144,-57.9390],
+[-34.9144,-57.9362],[-34.9199,-57.9485],[-34.9160,-57.9485],
+[-34.9087,-57.9485],[-34.9087,-57.9517]
+];
+L.polyline(rochaRoute,{color:'#bd7620',weight:4,opacity:.85,dashArray:'8 5'}).bindPopup('<strong>Línea Universitaria · ramal Plaza Rocha</strong><br>Esquema de referencia basado en el recorrido publicado por la UNLP.').addTo(layers.micro);
 document.querySelectorAll('[data-layer]').forEach(input=>input.addEventListener('change',function(){const layer=layers[this.dataset.layer];if(this.checked)map.addLayer(layer);else map.removeLayer(layer);}));
 setTimeout(()=>map.invalidateSize(),250);
 })();
