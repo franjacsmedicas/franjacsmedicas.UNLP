@@ -128,6 +128,177 @@ const topics={
 };
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function dateToday(){return new Date().toISOString().slice(0,10);}
+async function translateToSpanish(value){
+ if(!value)return '';
+ try{
+  const endpoint='https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=es&dt=t&q='+encodeURIComponent(value);
+  const response=await fetch(endpoint);
+  if(!response.ok)throw new Error('translation unavailable');
+  const data=await response.json();
+  return (data[0]||[]).map(part=>part[0]||'').join('')||value;
+ }catch(error){return value;}
+}
+function loadResearch(){
+ const typed=searchInput.value.trim();
+ const query='FIRST_PDATE:[2025-01-01 TO '+dateToday()+'] AND '+topics[topic]+(typed?' AND (TITLE_ABS:'+typed.replace(/[^p{L}p{N} -]/gu,' ').trim().split(/\s+/).filter(Boolean).map(w=>'"'+w+'"').join(' AND ')+')':'');
+ status.textContent='Buscando publicaciones…';results.replaceChildren();
+ const url='https://www.ebi.ac.uk/europepmc/webservices/rest/search?query='+encodeURIComponent(query)+'&format=json&pageSize=8&sort_date=y';
+ fetch(url).then(r=>{if(!r.ok)throw new Error('No se pudo consultar la base');return r.json();}).then(data=>{
+ const items=(data.resultList&&data.resultList.result)||[];
+ if(!items.length){status.textContent='No encontramos resultados con ese filtro. Probá otro término.';return;}
+ status.textContent=items.length+' publicaciones recientes encontradas. Los resultados pueden incluir distintos tipos de estudios.';
+ await Promise.all(items.map(async item=>{
+ const article=document.createElement('article');article.className='paper';
+ const title=document.createElement('h3');title.textContent=await translateToSpanish(item.title||'Título no disponible');
+ const meta=document.createElement('div');meta.className='meta';meta.textContent=[item.firstPublicationDate,item.journalTitle,item.authorString].filter(Boolean).join(' · ');
+ article.append(title,meta);
+ if(item.abstractText){
+  const abstract=document.createElement('p');
+  abstract.textContent=await translateToSpanish(item.abstractText.slice(0,1800));
+  article.append(abstract);
+ }
+ const link=document.createElement('a');link.target='_blank';link.rel='noopener noreferrer';link.textContent='Leer publicación original ↗';link.href=item.doi?'https://doi.org/'+item.doi:item.pmid?'https://pubmed.ncbi.nlm.nih.gov/'+item.pmid+'/':'https://europepmc.org/article/MED/'+encodeURIComponent(item.id||'');
+ article.append(link);results.append(article);
+ }));TYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recursos para estudiar | Franja Morada Ciencias Médicas UNLP</title>
+<meta name="description" content="Gemini para estudiar, investigaciones médicas recientes y comunidad para encontrar compañeros de estudio en Ciencias Médicas UNLP.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bordo:#68152b;--oscuro:#430d1c;--claro:#8d2945;--negro:#111;--gris:#f4f4f4;--texto:#242124;--blanco:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:25px}
+body{font-family:Inter,sans-serif;color:var(--texto);background:var(--bordo);line-height:1.6}
+a{text-decoration:none;color:inherit}
+header{padding:22px;background:linear-gradient(120deg,var(--oscuro),var(--bordo));color:#fff}
+.nav{max-width:1160px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{font-weight:800;letter-spacing:.3px;font-size:14px}
+.back{border:1px solid #ffffff80;padding:9px 14px;border-radius:8px;font-size:13px;white-space:nowrap}
+.hero{max-width:1160px;margin:46px auto 30px;padding:0 22px;color:#fff}
+.kicker{text-transform:uppercase;font-size:12px;font-weight:800;letter-spacing:2px;color:#f0dce2}
+h1,h2,h3{font-family:Anton,sans-serif;text-transform:uppercase;line-height:1.08}
+h1{font-size:clamp(43px,7vw,76px);margin:12px 0 16px;max-width:850px}
+.hero p{max-width:720px;color:#f4e9ec}
+.wrap{max-width:1160px;margin:auto;padding:0 22px 80px}
+.section{background:#fff;border-radius:20px;padding:clamp(22px,4vw,42px);margin:22px 0;box-shadow:0 16px 35px #23040d20}
+.section-head{margin-bottom:24px}
+.label{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:var(--claro);font-weight:800}
+h2{font-size:clamp(30px,4vw,44px);color:var(--bordo);margin:6px 0 10px}
+h3{font-size:25px;color:var(--bordo);margin:8px 0}
+.muted{color:#686168;font-size:14px;max-width:760px}
+.ai-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+.ai-main{background:var(--bordo);color:#fff;border-radius:15px;padding:26px;display:flex;flex-direction:column;align-items:flex-start;min-height:230px}
+.ai-main h3{color:#fff;font-size:32px}
+.ai-main p{font-size:14px;color:#f6e9ed;margin:5px 0 22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:#fff;color:var(--bordo);padding:12px 18px;border-radius:8px;font-size:13px;font-weight:800}
+.btn:hover{transform:translateY(-2px)}
+.tips{display:grid;gap:10px}
+.tip{border:1px solid #eee;border-radius:12px;padding:15px}
+.tip strong{display:block;color:var(--bordo);font-size:14px;margin-bottom:4px}
+.tip p{font-size:12px;color:#696269}
+.prompt{margin-top:18px;background:#f8f4f5;border-radius:12px;padding:16px}
+.prompt code{display:block;white-space:normal;font-family:Inter,sans-serif;font-size:13px;color:#44363b}
+.prompt button{margin-top:10px;border:0;border-radius:7px;background:var(--bordo);color:#fff;padding:9px 12px;font-weight:700;cursor:pointer}
+.research-controls{display:flex;gap:9px;flex-wrap:wrap;margin:18px 0}
+.chip{border:1px solid #e2d7db;background:#fff;color:var(--bordo);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:800;cursor:pointer}
+.chip.active,.chip:hover{background:var(--bordo);color:#fff;border-color:var(--bordo)}
+.search-row{display:flex;gap:10px}
+.search-row input{min-width:0;flex:1;padding:12px 14px;border:1px solid #ded6d9;border-radius:9px;font:inherit;font-size:14px}
+.search-row button{background:var(--bordo);color:#fff;border:0;border-radius:9px;padding:0 18px;font-weight:800;cursor:pointer}
+.results{display:grid;gap:13px;margin-top:20px}
+.paper{border:1px solid #ece6e8;border-radius:13px;padding:18px}
+.paper h3{font-family:Inter,sans-serif;text-transform:none;font-size:17px;line-height:1.4;margin:0 0 8px}
+.paper .meta{font-size:11px;font-weight:700;color:var(--claro);margin-bottom:8px}
+.paper p{font-size:13px;color:#5f585d;margin:8px 0}
+.paper a{display:inline-block;color:var(--bordo);font-weight:800;font-size:12px;margin-top:7px;text-decoration:underline}
+.status{font-size:13px;color:#6b6267;padding:14px 0}
+.small-note{font-size:12px;color:#777;margin-top:14px}
+.chat-frame{width:100%;height:510px;border:1px solid #e4d9dd;border-radius:14px;background:#f7f5f6}
+.chat-warning{background:#f8f3f5;border-left:4px solid var(--bordo);border-radius:0 10px 10px 0;padding:14px 16px;font-size:12px;color:#5b5055;margin:16px 0}
+.chat-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.btn-bordo{background:var(--bordo);color:#fff}
+footer{text-align:center;color:#f0dce2;font-size:12px;padding:10px 20px 30px}
+@media(max-width:760px){.ai-grid{grid-template-columns:1fr}.search-row{flex-direction:column}.search-row button{padding:12px}.chat-frame{height:480px}.nav{align-items:flex-start;flex-direction:column}.back{align-self:flex-start}}
+</style>
+</head>
+<body>
+<header><div class="nav"><a class="brand" href="index.html">FRANJA MORADA · CIENCIAS MÉDICAS UNLP</a><a class="back" href="index.html">← Volver al inicio</a></div></header>
+<main>
+<section class="hero">
+<div class="kicker">Herramientas para tu carrera</div>
+<h1>Estudiar mejor, investigar y conectar.</h1>
+<p>Un espacio para aprovechar la inteligencia artificial, explorar publicaciones científicas recientes y encontrar compañeros para preparar parciales y finales.</p>
+</section>
+<div class="wrap">
+<section class="section" id="ia">
+<div class="section-head"><span class="label">Inteligencia artificial</span><h2>IA para estudiar</h2><p class="muted">Acceso directo a Gemini y una selección de instrucciones que podés adaptar a tus materias.</p></div>
+<div class="ai-grid">
+<div class="ai-main"><span class="label" style="color:#f0dce2">Acceso gratuito</span><h3>Google Gemini</h3><p>Usalo para practicar preguntas, organizar temas difíciles y crear repasos. Las funciones disponibles dependen de tu cuenta y de las condiciones de Google.</p><a class="btn" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">Abrir Gemini ↗</a></div>
+<div class="tips">
+<div class="tip"><strong>Preparar un parcial</strong><p>Pedile preguntas de desarrollo sobre un tema y respondelas antes de consultar la corrección.</p></div>
+<div class="tip"><strong>Entender un concepto</strong><p>Solicitá una explicación por pasos, ejemplos y una comparación entre conceptos parecidos.</p></div>
+<div class="tip"><strong>Repaso activo</strong><p>Generá tarjetas de pregunta y respuesta, sin mostrar la respuesta hasta que intentes resolverla.</p></div>
+</div>
+</div>
+<div class="prompt"><strong style="font-size:13px;color:var(--bordo)">Prompt para copiar</strong><code id="promptText">Actuá como tutor universitario de Ciencias Médicas. Tomá el tema que te voy a indicar y prepará 10 preguntas de dificultad progresiva, sin mostrar las respuestas hasta que conteste. Después corregí cada respuesta, explicá los errores y señalá qué conceptos debo repasar. Diferenciá los hechos establecidos de los puntos que requieran verificar bibliografía.</code><button id="copyPrompt" type="button">Copiar prompt</button><span id="copyStatus" class="small-note" aria-live="polite"></span></div>
+</section>
+
+<section class="section" id="investigacion">
+<div class="section-head"><span class="label">Publicaciones científicas</span><h2>Investigación médica actual</h2><p class="muted">Consultá publicaciones recientes indexadas en Europe PMC. Cada resultado enlaza a su ficha original para revisar autores, revista, resumen y referencias.</p></div>
+<div class="research-controls" aria-label="Filtrar por especialidad">
+<button class="chip active" data-topic="all" type="button">Todas</button>
+<button class="chip" data-topic="genetics" type="button">Genética</button>
+<button class="chip" data-topic="neuro" type="button">Neurociencias</button>
+<button class="chip" data-topic="cardio" type="button">Cardiología</button>
+<button class="chip" data-topic="public" type="button">Salud pública</button>
+</div>
+<form class="search-row" id="researchForm"><input id="researchSearch" type="search" placeholder="Buscar tema, enfermedad o tratamiento..." aria-label="Buscar investigaciones"><button type="submit">Buscar</button></form>
+<div id="researchStatus" class="status" role="status">Cargando publicaciones recientes…</div>
+<div id="researchResults" class="results"></div>
+<p class="small-note">La lista se consulta en Europe PMC y puede incluir estudios preliminares o resultados que todavía no modifican las recomendaciones clínicas. La fecha corresponde a la publicación registrada en la base.</p>
+</section>
+
+<section class="section" id="comunidad">
+<div class="section-head"><span class="label">Conectar para aprender</span><h2>Comunidad de estudio</h2><p class="muted">Buscá compañeros que estén preparando la misma materia. Entrá con un apodo, contá qué estás preparando y coordiná un grupo de estudio.</p></div>
+<div class="chat-warning"><strong>Antes de escribir:</strong> esta sala es pública y funciona mediante un servicio externo. No publiques DNI, teléfonos, direcciones, contraseñas, datos de salud ni información privada. Usá el chat con respeto; no es un canal oficial de la Facultad.</div>
+<iframe class="chat-frame" title="Chat abierto de la comunidad de estudio de Ciencias Médicas" src="https://embed.tlk.io/fcm-estudio-unlp" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="clipboard-read; clipboard-write"></iframe>
+<div class="chat-actions"><a class="btn btn-bordo" href="https://tlk.io/fcm-estudio-unlp" target="_blank" rel="noopener noreferrer">Abrir el chat en otra pestaña ↗</a><a class="btn" href="#investigacion">Volver a investigaciones</a></div>
+<p class="small-note">La sala es abierta y cualquier persona que conozca el enlace puede entrar. El servicio de chat es independiente de Franja Morada y sus funciones, disponibilidad y moderación dependen de ese proveedor.</p>
+</section>
+</div>
+</main>
+<footer>Franja Morada · Ciencias Médicas · Universidad Nacional de La Plata</footer>
+<script>
+(function(){
+const status=document.getElementById('researchStatus');
+const results=document.getElementById('researchResults');
+const searchInput=document.getElementById('researchSearch');
+const chips=[...document.querySelectorAll('[data-topic]')];
+let topic='all';
+const topics={
+ all:'(TITLE_ABS:medicine OR TITLE_ABS:clinical OR TITLE_ABS:health)',
+ genetics:'(TITLE_ABS:genetics OR TITLE_ABS:genomic OR TITLE_ABS:gene)',
+ neuro:'(TITLE_ABS:neuroscience OR TITLE_ABS:neurology OR TITLE_ABS:brain)',
+ cardio:'(TITLE_ABS:cardiology OR TITLE_ABS:cardiovascular OR TITLE_ABS:heart)',
+ public:'(TITLE_ABS:"public health" OR TITLE_ABS:epidemiology OR TITLE_ABS:health policy)'
+};
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function dateToday(){return new Date().toISOString().slice(0,10);}
+async function translateToSpanish(value){
+ if(!value)return '';
+ try{
+  const endpoint='https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=es&dt=t&q='+encodeURIComponent(value);
+  const response=await fetch(endpoint);
+  if(!response.ok)throw new Error('translation unavailable');
+  const data=await response.json();
+  return (data[0]||[]).map(part=>part[0]||'').join('')||value;
+ }catch(error){return value;}
+}
 function loadResearch(){
  const typed=searchInput.value.trim();
  const query='FIRST_PDATE:[2025-01-01 TO '+dateToday()+'] AND '+topics[topic]+(typed?' AND (TITLE_ABS:'+typed.replace(/[^p{L}p{N} -]/gu,' ').trim().split(/\s+/).filter(Boolean).map(w=>'"'+w+'"').join(' AND ')+')':'');
