@@ -92,24 +92,23 @@ const link='https://www.google.com/maps/dir/?api=1&destination='+encodeURICompon
 L.marker([lat,lng],{icon}).bindPopup('<strong>'+name+'</strong><br>'+address+(details?'<br><small>'+details+'</small>':'')+'<br><a target="_blank" rel="noopener" href="'+link+'">Cómo llegar ↗</a>').addTo(layers[category]);
 }
 [
-['Facultad de Ciencias Médicas','Av. 60 y 120',-34.9144,-57.9365],
-['Facultad de Ciencias Naturales y Museo','Av. 122 y 60',-34.9144,-57.9563],
-['Facultad de Informática','Calle 50 y 120',-34.9067,-57.9365],
-['Facultad de Ingeniería','Av. 1 y 47',-34.9058,-57.9563],
-['Facultad de Arquitectura y Urbanismo','Calle 47 n.º 162',-34.9058,-57.9390],
-['Facultad de Ciencias Agrarias y Forestales','Av. 60 y 119',-34.9144,-57.9373],
-['Facultad de Ciencias Astronómicas y Geofísicas','Paseo del Bosque',-34.9085,-57.9325],
-['Facultad de Ciencias Exactas','Calle 115 y 47',-34.9058,-57.9410],
-['Facultad de Odontología','Calle 1 y 50',-34.9087,-57.9563],
-['Facultad de Humanidades y Ciencias de la Educación','Calle 51 y 122',-34.9100,-57.9347],
-['Facultad de Psicología','Calle 122 y 50',-34.9087,-57.9347],
+['Facultad de Ciencias Médicas','Av. 60 y 120',-34.90961,-57.92826],
+['Facultad de Ciencias Naturales y Museo','Av. 122 y 60',-34.9092,-57.9325],
+['Facultad de Informática','Calle 50 y 120',-34.90365,-57.93800],
+['Facultad de Ingeniería','Av. 1 y 47',-34.90741,-57.94483],
+['Facultad de Arquitectura y Urbanismo','Calle 47 n.º 162',-34.90494,-57.94234],
+['Facultad de Ciencias Agrarias y Forestales','Av. 60 y 119',-34.91228,-57.93091],
+['Facultad de Ciencias Astronómicas y Geofísicas','Paseo del Bosque',-34.9068,-57.9347],
+['Facultad de Ciencias Exactas','Calle 115 y 47',-34.90737,-57.94345],
+['Facultad de Odontología','Calle 1 y 50',-34.90871,-57.94269],
+['Facultad de Humanidades y Ciencias de la Educación','Calle 51 y 124/125, Ensenada',-34.90033,-57.93157],
+['Facultad de Psicología','Calle 51 y 122/123, Ensenada',-34.9013,-57.9305],
 ['Facultad de Artes · sede central','Diagonal 78 n.º 680',-34.9190,-57.9511],
 ['Facultad de Ciencias Económicas','Calle 6 n.º 777',-34.9110,-57.9494],
-['Facultad de Ciencias Jurídicas y Sociales','Calle 48 n.º 582',-34.9095,-57.9513],
-['Facultad de Trabajo Social','Calle 9 y 63',-34.9172,-57.9474],
-['Facultad de Periodismo y Comunicación Social','Diagonal 113 y 63',-34.9165,-57.9375],
-['Facultad de Ciencias Veterinarias','Av. 60 y 118',-34.9144,-57.9383],
-['Facultad de Ciencias Médicas · Hospital Universitario Integrado','Zona de avenida 60 y 120',-34.9140,-57.9354]
+['Facultad de Ciencias Jurídicas y Sociales','Calle 48 n.º 582, entre 6 y 7',-34.9090,-57.9505],
+['Facultad de Trabajo Social','Calle 9 y 63',-34.92548,-57.94114],
+['Facultad de Periodismo y Comunicación Social','Diagonal 113 y 63',-34.91221,-57.92648],
+['Facultad de Ciencias Veterinarias','Av. 60 y 118',-34.91193,-57.92976]
 ].forEach(x=>pin('facultades',x[0],x[1],x[2],x[3]));
 pin('dependencias','Escuela Universitaria de Oficios UNLP','Calle 60 y 130, Berisso',-34.9205,-57.8890,'Sede de cursada presencial según información oficial de la UNLP');
 pin('dependencias','Planetario Ciudad de La Plata','Av. Iraola y calle 118, Paseo del Bosque',-34.9085,-57.9325,'Sitio oficial: planetario.unlp.edu.ar');
