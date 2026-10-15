@@ -125,7 +125,6 @@ pin('salud','CAPS 13','Calle 41 entre 10 y 11',-34.9009,-57.9492);
 pin('salud','CAPS 7','Av. 7 y 82',-34.9340,-57.9495);
 pin('transporte','Estación de tren La Plata','Diagonal 80 y avenida 1 · Línea Roca',-34.9039,-57.9502);
 pin('transporte','Terminal de Ómnibus de La Plata','Calle 4 entre 41 y 42',-34.9024,-57.9480);
-pin('transporte','Parada de referencia · Facultad de Medicina','Avenida 60 y 120',-34.9146,-57.9340,'En la zona se publican conexiones Norte, Oeste, Este, Sur, 214, 215, 307, 506 y 508. Verificá ramal y parada antes de viajar.');
 
 // Mapa de ubicaciones: solo pines, sin trazados de líneas de transporte.
 document.querySelectorAll('[data-layer]').forEach(input=>input.addEventListener('change',function(){const layer=layers[this.dataset.layer];if(this.checked)map.addLayer(layer);else map.removeLayer(layer);}));
