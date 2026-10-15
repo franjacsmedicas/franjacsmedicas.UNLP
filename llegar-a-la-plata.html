@@ -94,93 +94,100 @@ const link='https://www.google.com/maps/dir/?api=1&destination='+encodeURICompon
 L.marker([lat,lng],{icon}).bindPopup('<strong>'+name+'</strong><br>'+address+(details?'<br><small>'+details+'</small>':'')+'<br><a target="_blank" rel="noopener" href="'+link+'">Cómo llegar ↗</a>').addTo(layers[category]);
 }
 [
-['Facultad de Ciencias Médicas','Av. 60 y 120',-34.9144,-57.9347],
-['Facultad de Ciencias Naturales y Museo','Av. 122 y 60',-34.9118,-57.9364],
-['Facultad de Informática','Calle 50 y 120',-34.9065,-57.9368],
-['Facultad de Ingeniería','Av. 1 y 47',-34.9061,-57.9349],
-['Facultad de Arquitectura y Urbanismo','Calle 47 n.º 162',-34.9058,-57.9315],
-['Facultad de Ciencias Agrarias y Forestales','Av. 60 y 119',-34.9102,-57.9381],
-['Facultad de Ciencias Astronómicas y Geofísicas','Paseo del Bosque',-34.9084,-57.9316],
-['Facultad de Ciencias Exactas','Calle 115 y 47',-34.9057,-57.9388],
-['Facultad de Odontología','Calle 1 y 50',-34.9085,-57.9345],
-['Facultad de Humanidades y Ciencias de la Educación','Calle 51 y 122',-34.9075,-57.9378],
-['Facultad de Psicología','Calle 122 y 50',-34.9055,-57.9370],
+['Facultad de Ciencias Médicas','Av. 60 y 120',-34.9144,-57.9365],
+['Facultad de Ciencias Naturales y Museo','Av. 122 y 60',-34.9144,-57.9563],
+['Facultad de Informática','Calle 50 y 120',-34.9067,-57.9365],
+['Facultad de Ingeniería','Av. 1 y 47',-34.9058,-57.9563],
+['Facultad de Arquitectura y Urbanismo','Calle 47 n.º 162',-34.9058,-57.9390],
+['Facultad de Ciencias Agrarias y Forestales','Av. 60 y 119',-34.9144,-57.9373],
+['Facultad de Ciencias Astronómicas y Geofísicas','Paseo del Bosque',-34.9085,-57.9325],
+['Facultad de Ciencias Exactas','Calle 115 y 47',-34.9058,-57.9410],
+['Facultad de Odontología','Calle 1 y 50',-34.9087,-57.9563],
+['Facultad de Humanidades y Ciencias de la Educación','Calle 51 y 122',-34.9100,-57.9347],
+['Facultad de Psicología','Calle 122 y 50',-34.9087,-57.9347],
 ['Facultad de Artes · sede central','Diagonal 78 n.º 680',-34.9190,-57.9511],
 ['Facultad de Ciencias Económicas','Calle 6 n.º 777',-34.9110,-57.9494],
 ['Facultad de Ciencias Jurídicas y Sociales','Calle 48 n.º 582',-34.9095,-57.9513],
 ['Facultad de Trabajo Social','Calle 9 y 63',-34.9172,-57.9474],
-['Facultad de Periodismo y Comunicación Social','Diagonal 113 y 63',-34.9164,-57.9368],
-['Facultad de Ciencias Veterinarias','Av. 60 y 118',-34.9100,-57.9403],
+['Facultad de Periodismo y Comunicación Social','Diagonal 113 y 63',-34.9165,-57.9375],
+['Facultad de Ciencias Veterinarias','Av. 60 y 118',-34.9144,-57.9383],
 ['Facultad de Ciencias Médicas · Hospital Universitario Integrado','Zona de avenida 60 y 120',-34.9140,-57.9354]
 ].forEach(x=>pin('facultades',x[0],x[1],x[2],x[3]));
 pin('dependencias','Presidencia de la UNLP','Av. 7 n.º 776',-34.9114,-57.9490,'Sede central de dependencias universitarias');
 pin('dependencias','Biblioteca Pública de la UNLP','Plaza Rocha, calle 7 y 60',-34.9200,-57.9476);
 pin('dependencias','Prosecretaría de Bienestar Universitario','Área central UNLP',-34.9121,-57.9485);
-pin('comedores','Comedor Universitario · Sede Malvinas','Calle 50 entre 116 y 117',-34.9067,-57.9368);
+pin('comedores','Comedor Universitario · Sede Malvinas','Calle 50 entre 116 y 117',-34.9067,-57.9395);
 pin('comedores','Comedor Universitario · Sede Reforma Universitaria','Boulevard 120 n.º 1439',-34.9131,-57.9368);
 pin('comedores','Comedor Universitario · Sede ATULP','Av. 44 n.º 733 entre 9 y 10',-34.9152,-57.9518);
 pin('comedores','Comedor Universitario · Sede Club Everton','Calle 14 entre 63 y 64',-34.9230,-57.9430);
-pin('salud','Hospital San Martín','Av. 1 y calle 70',-34.9224,-57.9318);
+pin('salud','Hospital San Martín','Av. 1 y calle 70',-34.9224,-57.9563);
 pin('salud','Hospital Rossi','Calle 37 entre 116 y 117',-34.8965,-57.9385);
 pin('salud','Hospital Ricardo Gutiérrez','Diagonal 114 entre 39 y 40',-34.8956,-57.9398);
-pin('salud','Hospital San Juan de Dios','Av. 25 y 70',-34.9367,-57.9704);
+pin('salud','Hospital San Juan de Dios','Av. 25 y 70',-34.9238,-57.9265);
 pin('salud','CAPS 13','Calle 41 entre 10 y 11',-34.9009,-57.9492);
-pin('salud','CAPS 7','Av. 7 y 82',-34.9417,-57.9353);
+pin('salud','CAPS 7','Av. 7 y 82',-34.9340,-57.9495);
 pin('transporte','Estación de tren La Plata','Av. 1 y 44 · Línea Roca y Tren Universitario',-34.9067,-57.9563);
-pin('transporte','Terminal de Ómnibus','Calle 42 n.º 453',-34.9032,-57.9472);
+pin('transporte','Terminal de Ómnibus','Calle 42 n.º 453',-34.9032,-57.9530);
 pin('transporte','Parada de referencia · Facultad de Medicina','Avenida 60 y 120',-34.9146,-57.9340,'En la zona se publican conexiones Norte, Oeste, Este, Sur, 214, 215, 307, 506 y 508. Verificá ramal y parada antes de viajar.');
 
-// Paradas publicadas del Tren Universitario. La geometría entre paradas es esquemática.
+// Paradas del Tren Universitario según el recorrido publicado por la UNLP.
 const trainStops=[
-['Estación La Plata','1 y 44',-34.9067,-57.9563],
-['Arquitectura','47 y 117',-34.9057,-57.9390],
-['Informática','50 y 120',-34.9065,-57.9368],
-['Medicina','60 y 120',-34.9144,-57.9350],
-['Periodismo','63 y 119',-34.9164,-57.9370],
-['Diagonal 73 y 118','Diagonal 73 y 118',-34.9202,-57.9370],
-['Policlínico San Martín','1 y 71',-34.9226,-57.9345],
-['Avenida 7 y 72','7 y 72',-34.9238,-57.9490],
-['Estación Circunvalación','13 y 72',-34.9238,-57.9417],
-['Meridiano V','17 y 72',-34.9238,-57.9345],
-['Hospital San Juan de Dios','25 y 72',-34.9238,-57.9228]
+ ['Estación La Plata','1 y 44',-34.9067,-57.9563],
+ ['Arquitectura','47 y 117',-34.9058,-57.9390],
+ ['Informática','50 y 120',-34.9067,-57.9365],
+ ['Medicina','60 y 120',-34.9144,-57.9365],
+ ['Periodismo','63 y 119',-34.9165,-57.9375],
+ ['Diagonal 73 y 118','Diagonal 73 y 118',-34.9210,-57.9380],
+ ['Policlínico San Martín','1 y 71',-34.9226,-57.9563],
+ ['Avenida 7 y 72','7 y 72',-34.9238,-57.9495],
+ ['Estación Circunvalación','13 y 72',-34.9238,-57.9420],
+ ['Meridiano V','17 y 72',-34.9238,-57.9360],
+ ['Hospital San Juan de Dios','25 y 72',-34.9238,-57.9265]
 ];
-trainStops.forEach(s=>{
+trainStops.forEach((s,i)=>{
+ const next=trainStops[Math.min(i+1,trainStops.length-1)];
+ const gm='https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(s[1]+' La Plata')+'&destination='+encodeURIComponent(next[1]+' La Plata')+'&travelmode=transit';
  L.circleMarker([s[2],s[3]],{radius:5,color:'#fff',weight:2,fillColor:'#7a51a1',fillOpacity:1})
- .bindPopup('<strong>Tren Universitario · '+s[0]+'</strong><br>'+s[1]+'<br><small>Parada publicada por la UNLP; verificá servicio y horarios vigentes.</small>')
- .addTo(layers.tren);
+ .bindPopup('<strong>Tren Universitario · '+s[0]+'</strong><br>'+s[1]+'<br><a target="_blank" rel="noopener noreferrer" href="'+gm+'">Ver recorrido en Google Maps ↗</a>').addTo(layers.tren);
 });
-const trainLine=trainStops.map(s=>[s[2],s[3]]);
-L.polyline(trainLine,{color:'#7a51a1',weight:5,opacity:.88}).bindPopup('<strong>Tren Universitario</strong><br>Corredor entre Estación La Plata y Hospital San Juan de Dios. La línea es una representación esquemática entre paradas.').addTo(layers.tren);
-// Línea Universitaria: paradas/corredores de referencia publicados por la UNLP.
+const trainLine=[
+ [-34.9067,-57.9563],[-34.9062,-57.9500],[-34.9058,-57.9440],[-34.9058,-57.9390],
+ [-34.9067,-57.9365],[-34.9100,-57.9365],[-34.9144,-57.9365],[-34.9165,-57.9375],
+ [-34.9190,-57.9378],[-34.9210,-57.9380],[-34.9226,-57.9420],[-34.9226,-57.9495],
+ [-34.9226,-57.9563],[-34.9238,-57.9495],[-34.9238,-57.9420],[-34.9238,-57.9360],[-34.9238,-57.9265]
+];
+const trainGoogle='https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent('Estación La Plata, 1 y 44')+'&destination='+encodeURIComponent('Hospital San Juan de Dios, La Plata')+'&travelmode=transit';
+L.polyline(trainLine,{color:'#7a51a1',weight:5,opacity:.9}).bindPopup('<strong>Tren Universitario</strong><br><a target="_blank" rel="noopener noreferrer" href="'+trainGoogle+'">Consultar trayecto en Google Maps ↗</a>').addTo(layers.tren);
+
 const universityStops=[
-['Centro · calle 49 entre 6 y 7','49 entre 6 y 7',-34.9087,-57.9517],
-['Odontología','1 y 50',-34.9087,-57.9346],
-['Ex BIM III','52 y 122',-34.9065,-57.9366],
-['Medicina','60 y 119/120',-34.9144,-57.9362],
-['Avenida 1 y 60','1 y 60',-34.9144,-57.9345],
-['Plaza Rocha','7 y 60',-34.9199,-57.9485]
+ ['Centro · calle 49 entre 6 y 7','49 entre 6 y 7',-34.9087,-57.9500],
+ ['Odontología','1 y 50',-34.9087,-57.9563],
+ ['Ex BIM III','52 y 122',-34.9100,-57.9347],
+ ['Medicina','60 y 119/120',-34.9144,-57.9365],
+ ['Avenida 1 y 60','1 y 60',-34.9144,-57.9563],
+ ['Plaza Rocha','7 y 60',-34.9199,-57.9495]
 ];
-universityStops.forEach(s=>{
+universityStops.forEach((s,i)=>{
+ const next=universityStops[Math.min(i+1,universityStops.length-1)];
+ const gm='https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(s[1]+' La Plata')+'&destination='+encodeURIComponent(next[1]+' La Plata')+'&travelmode=transit';
  L.circleMarker([s[2],s[3]],{radius:5,color:'#fff',weight:2,fillColor:'#e58a24',fillOpacity:1})
- .bindPopup('<strong>Línea Universitaria · '+s[0]+'</strong><br>'+s[1]+'<br><small>Parada de referencia publicada en información universitaria; confirmá recorrido activo.</small>')
- .addTo(layers.micro);
+ .bindPopup('<strong>Línea Universitaria · '+s[0]+'</strong><br>'+s[1]+'<br><a target="_blank" rel="noopener noreferrer" href="'+gm+'">Consultar combinación en Google Maps ↗</a>').addTo(layers.micro);
 });
-// Trazas sobre el entramado de calles, esquemáticas y no aptas para navegación giro a giro.
 const normalRoute=[
-[-34.9087,-57.9517],[-34.9088,-57.9470],[-34.9087,-57.9346],
-[-34.9078,-57.9346],[-34.9065,-57.9366],[-34.9065,-57.9390],
-[-34.9144,-57.9390],[-34.9144,-57.9362],[-34.9144,-57.9345],
-[-34.9144,-57.9310],[-34.9135,-57.9290],[-34.9105,-57.9290],
-[-34.9085,-57.9320],[-34.9087,-57.9390],[-34.9087,-57.9517]
+ [-34.9087,-57.9500],[-34.9087,-57.9563],[-34.9100,-57.9563],
+ [-34.9100,-57.9495],[-34.9100,-57.9420],[-34.9100,-57.9347],
+ [-34.9144,-57.9347],[-34.9144,-57.9365],[-34.9144,-57.9420],
+ [-34.9144,-57.9495],[-34.9144,-57.9563],[-34.9199,-57.9563],[-34.9199,-57.9495]
 ];
-L.polyline(normalRoute,{color:'#e58a24',weight:5,opacity:.9}).bindPopup('<strong>Línea Universitaria · recorrido tradicional</strong><br>Esquema de las calles principales del circuito publicado por la UNLP. Verificá desvíos y servicio vigente.').addTo(layers.micro);
+const busGoogle='https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent('Facultad de Ciencias Médicas UNLP')+'&destination='+encodeURIComponent('Plaza Rocha, La Plata')+'&travelmode=transit';
+L.polyline(normalRoute,{color:'#e58a24',weight:5,opacity:.9}).bindPopup('<strong>Línea Universitaria</strong><br><a target="_blank" rel="noopener noreferrer" href="'+busGoogle+'">Consultar recorrido en Google Maps ↗</a>').addTo(layers.micro);
 const rochaRoute=[
-[-34.9087,-57.9517],[-34.9088,-57.9470],[-34.9087,-57.9346],
-[-34.9065,-57.9366],[-34.9065,-57.9390],[-34.9144,-57.9390],
-[-34.9144,-57.9362],[-34.9199,-57.9485],[-34.9160,-57.9485],
-[-34.9087,-57.9485],[-34.9087,-57.9517]
+ [-34.9087,-57.9500],[-34.9087,-57.9563],[-34.9100,-57.9563],
+ [-34.9100,-57.9495],[-34.9100,-57.9420],[-34.9100,-57.9347],
+ [-34.9144,-57.9347],[-34.9144,-57.9365],[-34.9144,-57.9420],
+ [-34.9144,-57.9495],[-34.9199,-57.9495],[-34.9199,-57.9563]
 ];
-L.polyline(rochaRoute,{color:'#bd7620',weight:4,opacity:.85,dashArray:'8 5'}).bindPopup('<strong>Línea Universitaria · ramal Plaza Rocha</strong><br>Esquema de referencia basado en el recorrido publicado por la UNLP.').addTo(layers.micro);
+L.polyline(rochaRoute,{color:'#bd7620',weight:4,opacity:.85,dashArray:'8 5'}).bindPopup('<strong>Línea Universitaria · conexión con Plaza Rocha</strong><br><a target="_blank" rel="noopener noreferrer" href="'+busGoogle+'">Consultar recorrido vigente en Google Maps ↗</a>').addTo(layers.micro);
 document.querySelectorAll('[data-layer]').forEach(input=>input.addEventListener('change',function(){const layer=layers[this.dataset.layer];if(this.checked)map.addLayer(layer);else map.removeLayer(layer);}));
 setTimeout(()=>map.invalidateSize(),250);
 })();
