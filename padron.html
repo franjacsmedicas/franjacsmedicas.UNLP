@@ -52,6 +52,20 @@ button.consultar:disabled{opacity:.65;cursor:wait}
 .info .num{font-family:Anton,sans-serif;color:var(--b)!important;font-size:30px}
 .info h3{margin:5px 0;font-size:18px}
 .info p{font-size:13px;color:#666!important}
+
+.campaign-callout{position:relative;overflow:hidden;margin:28px 0 0;padding:34px 24px;text-align:center;border-radius:20px;background:linear-gradient(145deg,#68152b,#430d1c);color:#fff;box-shadow:0 14px 35px #0003;border:1px solid #ffffff24}
+.campaign-callout:before,.campaign-callout:after{content:"";position:absolute;width:190px;height:190px;border:1px solid #ffffff18;transform:rotate(45deg);pointer-events:none}
+.campaign-callout:before{top:-125px;left:-80px}.campaign-callout:after{right:-100px;bottom:-130px}
+.campaign-callout .campaign-symbol{width:54px;height:54px;margin:0 auto 10px;color:#fff}
+.campaign-callout .campaign-symbol svg{width:100%;height:100%}
+.campaign-callout .campaign-date{color:#f3dfe5!important;font-size:14px;font-weight:800;letter-spacing:4px;text-transform:uppercase;margin:0 0 10px}
+.campaign-callout h2{font-family:Anton,sans-serif;font-size:clamp(32px,6vw,52px);line-height:1.08;text-transform:uppercase;color:#fff!important;margin:0}
+.campaign-callout h2 span{color:#f3dfe5!important}
+.campaign-callout .campaign-rule{width:64px;height:4px;border-radius:4px;background:#fff;margin:20px auto}
+.campaign-callout .campaign-lista{font-family:Anton,sans-serif;font-size:clamp(26px,5vw,38px);line-height:1.1;color:#fff!important;margin:0}
+.campaign-callout .campaign-franja{font-size:14px;font-weight:800;letter-spacing:2px;color:#f3dfe5!important;margin:8px 0 0}
+.campaign-callout .campaign-symbol-bottom{width:34px;height:34px;margin:18px auto 0;opacity:.85}
+
 .security{margin-top:20px;padding:18px;border-radius:14px;background:#111;color:#fff}
 .security strong,.security p{color:#fff!important}
 footer{background:#111;color:#ddd;padding:35px 7%;margin-top:0}
@@ -108,6 +122,37 @@ footer p{color:#aaa!important;font-size:13px}
 </div>
 
 <div class="result" id="result" aria-live="polite"></div>
+
+
+<div class="campaign-callout" aria-label="Mensaje electoral de Franja Morada">
+  <div class="campaign-symbol" aria-hidden="true">
+    <svg viewBox="0 0 100 100" role="img">
+      <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 75 L66 27 M12 68 L59 21 M18 75 L29 78 L70 37 L59 26 Z"/>
+        <path d="M60 22 L70 12 L82 24 L72 36 Z"/>
+        <path d="M14 84 L33 78"/>
+        <path d="M55 77 L83 49 M62 84 L90 56 M55 77 L62 84"/>
+        <path d="M72 61 L85 74 L73 87 L60 74 Z"/>
+      </g>
+    </svg>
+  </div>
+  <p class="campaign-date">4, 5 y 6</p>
+  <h2>Votá a quienes<br><span>siempre están.</span></h2>
+  <div class="campaign-rule"></div>
+  <p class="campaign-lista">VOTÁ LISTA 3</p>
+  <p class="campaign-franja">VOTÁ FRANJA MORADA</p>
+  <div class="campaign-symbol campaign-symbol-bottom" aria-hidden="true">
+    <svg viewBox="0 0 100 100">
+      <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 75 L66 27 M12 68 L59 21 M18 75 L29 78 L70 37 L59 26 Z"/>
+        <path d="M60 22 L70 12 L82 24 L72 36 Z"/>
+        <path d="M14 84 L33 78"/>
+        <path d="M55 77 L83 49 M62 84 L90 56 M55 77 L62 84"/>
+        <path d="M72 61 L85 74 L73 87 L60 74 Z"/>
+      </g>
+    </svg>
+  </div>
+</div>
 
 
 </section>
