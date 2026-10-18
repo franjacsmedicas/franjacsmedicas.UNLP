@@ -416,42 +416,53 @@ nav a[href*="contacto"] *,
 }
 
 
-/* Cinta electoral global: visible en todas las páginas que cargan global.css */
+/* Bandas electorales globales · identidad granate, blanco y negro */
 body::before,
 body::after{
-  content:"#VOTA LISTA 3   •   VOTA FRANJA MORADA   •   #VOTA LISTA 3   •   VOTA FRANJA MORADA   •   #VOTA LISTA 3   •   VOTA FRANJA MORADA";
+  content:"✦  VOTA LISTA 3  /  VOTA FRANJA MORADA  ✦";
   position:fixed;
   left:0;
   right:0;
   z-index:9999;
-  display:block;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:34px;
+  padding:5px 12px;
+  box-sizing:border-box;
   overflow:hidden;
   white-space:nowrap;
   text-align:center;
   font-family:"Anton", Impact, sans-serif;
-  font-size:clamp(13px,2.1vw,20px);
-  letter-spacing:.08em;
-  line-height:1.35;
-  padding:7px 10px;
-  box-shadow:0 2px 10px rgba(0,0,0,.22);
+  font-size:clamp(13px,1.7vw,18px);
+  font-weight:400;
+  letter-spacing:.075em;
+  line-height:1;
   pointer-events:none;
 }
 body::before{
   top:0;
   color:#fff;
-  background:#68152b;
-  border-bottom:2px solid #fff;
+  background:
+    linear-gradient(115deg,transparent 0 8px,rgba(255,255,255,.12) 8px 10px,transparent 10px 20px),
+    #430d1c;
+  border-bottom:1px solid rgba(255,255,255,.75);
+  box-shadow:0 3px 12px rgba(0,0,0,.16);
 }
 body::after{
   bottom:0;
-  color:#68152b;
-  background:#fff;
-  border-top:2px solid #68152b;
+  color:#fff;
+  background:
+    linear-gradient(115deg,transparent 0 8px,rgba(255,255,255,.10) 8px 10px,transparent 10px 20px),
+    #68152b;
+  border-top:2px solid #fff;
+  box-shadow:0 -3px 12px rgba(0,0,0,.16);
 }
 @media(max-width:600px){
   body::before,body::after{
+    min-height:30px;
+    padding:5px 3px;
     font-size:12px;
     letter-spacing:.035em;
-    padding:6px 4px;
   }
 }
