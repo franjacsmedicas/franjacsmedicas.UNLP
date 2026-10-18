@@ -414,3 +414,30 @@ nav a[href*="contacto"] *,
   color:#fff !important;
   -webkit-text-fill-color:#fff !important;
 }
+
+
+/* Anular cualquier cinta electoral anterior sin alterar el fondo decorativo */
+body::before{
+  content:"" !important;
+  position:fixed !important;
+  inset:0 !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:0 !important;
+  right:0 !important;
+  display:block !important;
+  min-height:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  background:
+    radial-gradient(circle at 8% 12%,rgba(141,41,69,.20),transparent 28%),
+    radial-gradient(circle at 92% 78%,rgba(104,21,43,.28),transparent 32%),
+    linear-gradient(180deg,rgba(0,0,0,.08),transparent 28%,rgba(0,0,0,.10)) !important;
+  pointer-events:none !important;
+}
+body::after{
+  content:none !important;
+  display:none !important;
+}
