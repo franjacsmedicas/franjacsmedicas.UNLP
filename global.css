@@ -414,20 +414,3 @@ nav a[href*="contacto"] *,
   color:#fff !important;
   -webkit-text-fill-color:#fff !important;
 }
-
-
-/* ELIMINAR POR COMPLETO LAS BANDAS ELECTORALES SUPERPUESTAS */
-html body::before,
-html body::after,
-body::before,
-body::after{
-  content:none !important;
-  display:none !important;
-  visibility:hidden !important;
-  background:none !important;
-  box-shadow:none !important;
-  border:0 !important;
-  height:0 !important;
-  padding:0 !important;
-  margin:0 !important;
-}
