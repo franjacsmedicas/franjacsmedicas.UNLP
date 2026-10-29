@@ -26,33 +26,51 @@
 </main>
 <script>
 (function(){
-const $=id=>document.getElementById(id);
-const messages=$('messages'), input=$('userInput'), orb=$('orb'), micBtn=$('micBtn'), voiceState=$('voiceState');
-let recognition=null, listening=false;
-function addMessage(text,who){const el=document.createElement('div');el.className='msg '+who;const label=document.createElement('small');label.textContent=who==='user'?'VOS':'JARVIS · SISTEMA';el.appendChild(label);el.appendChild(document.createTextNode(text));messages.appendChild(el);messages.scrollTop=messages.scrollHeight;}
+const $=id=>document.getElementById(id), messages=$('messages'), input=$('userInput'), orb=$('orb'), micBtn=$('micBtn'), voiceState=$('voiceState');
+const history=[];
+function baseUrl(){
+ const query=new URLSearchParams(location.search).get('api');
+ if(query){localStorage.setItem('jarvis_api_base',query);history.replaceState({},'',location.pathname+location.hash);}
+ const saved=(localStorage.getItem('jarvis_api_base')||'').trim().replace(/\/+$/,'');
+ if(saved)return saved;
+ return location.hostname.endsWith('github.io')?'':location.origin;
+}
+let apiBase=baseUrl();
+function status(text,online){$('statusText').textContent=text;$('statusDot').style.background=online?'#73e5a4':'#f4c46b';}
+status(apiBase?'MOTOR IA CONFIGURADO · LISTO PARA PROBAR':'MODO DEMO · FALTA CONECTAR EL MOTOR IA',false);
+function add(text,who){const el=document.createElement('div');el.className='msg '+who;const label=document.createElement('small');label.textContent=who==='user'?'VOS':'JARVIS · SISTEMA';el.append(label,document.createTextNode(text));messages.appendChild(el);messages.scrollTop=messages.scrollHeight;}
 function speak(text){if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='es-AR';u.rate=1.02;u.pitch=.94;u.onstart=()=>orb.classList.add('speaking');u.onend=()=>orb.classList.remove('speaking');window.speechSynthesis.speak(u);}
-function respond(raw){const q=raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();let answer='';
-if(/que podes hacer|ayuda|comandos|funciones/.test(q)){answer='En esta versión demo puedo: decirte la hora y la fecha, abrir secciones de la web de Franja Morada, y lanzar búsquedas en internet. Próxima etapa: conectar un modelo de IA real, memoria optativa y herramientas seguras.';}
-else if(/hora/.test(q)){answer='La hora local de tu dispositivo es '+new Intl.DateTimeFormat('es-AR',{hour:'2-digit',minute:'2-digit'}).format(new Date())+'.';}
-else if(/fecha|que dia|dia es hoy/.test(q)){answer='Hoy es '+new Intl.DateTimeFormat('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date())+'.';}
-else if(/biblioteca|franjateca/.test(q)){answer='Abriendo la biblioteca virtual.';window.location.href='biblioteca.html';}
-else if(/ingreso/.test(q)){answer='Abriendo la sección Ingreso 2027.';window.location.href='ingreso-2027.html';}
-else if(/mapa|mapas/.test(q)){answer='Abriendo Mapas FCM.';window.location.href='mapas.html';}
-else if(/agenda|calendario/.test(q)){answer='Abriendo la agenda.';window.location.href='agenda.html';}
-else if(/aula|aulas/.test(q)){answer='Abriendo la distribución de aulas.';window.location.href='aulas.html';}
-else if(/plan de estudio|planes de estudio/.test(q)){answer='Abriendo los planes de estudio.';window.location.href='planes-estudio.html';}
-else if(/parcial|entrenador/.test(q)){answer='Abriendo el entrenador de parciales.';window.location.href='entrenador-parciales.html';}
-else if(/buscar|investiga|investigar|busca|busca en internet/.test(q)){const term=raw.replace(/^(jarvis[,: ]*)?(por favor )?(busca(r)?|investiga(r)?|buscar)\s*/i,'').trim()||raw;answer='Abriendo una búsqueda web para: '+term;window.open('https://www.google.com/search?q='+encodeURIComponent(term),'_blank','noopener');}
-else if(/hola|buen dia|buenas|buenas tardes|buenas noches/.test(q)){answer='Hola. JARVIS en línea, en modo demostración. ¿Qué necesitás?';}
-else if(/gracias/.test(q)){answer='A disposición. Seguimos mejorando mis sistemas.';}
-else if(/jarvis/.test(q)){answer='Te escucho. Esta es la primera versión de la interfaz. Todavía falta conectar el motor de inteligencia artificial para mantener una conversación abierta y razonar sobre cualquier tema.';}
-else{answer='Todavía no tengo conectado un modelo de IA para interpretar esa solicitud. En esta demo puedo abrir secciones de la web, decir la hora o la fecha y hacer búsquedas. La próxima etapa es integrar un modelo real mediante un backend seguro.';}
-addMessage(answer,'ai');speak(answer);}
-function submit(text){const value=(text||input.value).trim();if(!value)return;addMessage(value,'user');input.value='';respond(value);}
+function demo(raw){
+ const q=raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+ if(/que podes hacer|ayuda|comandos|funciones/.test(q))return 'En modo demostración puedo decirte la hora y la fecha, abrir secciones de esta web y lanzar búsquedas. Para conversar libremente conectá el motor de IA.';
+ if(/hora/.test(q))return 'La hora local de tu dispositivo es '+new Intl.DateTimeFormat('es-AR',{hour:'2-digit',minute:'2-digit'}).format(new Date())+'.';
+ if(/fecha|que dia|dia es hoy/.test(q))return 'Hoy es '+new Intl.DateTimeFormat('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date())+'.';
+ const routes=[[/biblioteca|franjateca/,'biblioteca.html','la biblioteca virtual'],[/ingreso/,'ingreso-2027.html','Ingreso 2027'],[/mapa|mapas/,'mapas.html','Mapas FCM'],[/agenda|calendario/,'agenda.html','la agenda'],[/aula|aulas/,'aulas.html','la distribución de aulas'],[/plan de estudio|planes de estudio/,'planes-estudio.html','los planes de estudio'],[/parcial|entrenador/,'entrenador-parciales.html','el entrenador de parciales']];
+ for(const [re,url,label] of routes)if(re.test(q)){setTimeout(()=>location.href=url,400);return 'Abriendo '+label+'.';}
+ if(/buscar|investiga|investigar|busca|google/.test(q)){const term=raw.replace(/^(jarvis[,: ]*)?(por favor )?(busca(r)?|investiga(r)?|buscar)\s*/i,'').trim()||raw;window.open('https://www.google.com/search?q='+encodeURIComponent(term),'_blank','noopener');return 'Abriendo una búsqueda web para: '+term;}
+ if(/hola|buen dia|buenas|buenas tardes|buenas noches/.test(q))return 'Hola. JARVIS en línea, en modo demostración. ¿Qué necesitás?';
+ if(/gracias/.test(q))return 'A disposición. Seguimos mejorando mis sistemas.';
+ return 'Todavía estoy en modo demostración y no tengo conectado el modelo de IA. Tocá «Configurar conexión con IA» e ingresá la URL del servidor de JARVIS para activar la conversación inteligente.';
+}
+async function respond(raw){
+ if(!apiBase){const answer=demo(raw);add(answer,'ai');speak(answer);return;}
+ const waiting=document.createElement('div');waiting.className='msg ai';waiting.textContent='Procesando consulta…';messages.appendChild(waiting);messages.scrollTop=messages.scrollHeight;
+ try{
+  const recent=[...history,{role:'user',content:raw}].slice(-12);
+  const response=await fetch(apiBase+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:recent}),signal:AbortSignal.timeout(50000)});
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok)throw new Error(data.error||('El servidor respondió con estado '+response.status+'.'));
+  if(typeof data.answer!=='string'||!data.answer.trim())throw new Error('El servidor no devolvió una respuesta.');
+  waiting.remove();history.push({role:'user',content:raw},{role:'assistant',content:data.answer});while(history.length>12)history.shift();
+  add(data.answer,'ai');status('MOTOR IA CONECTADO · '+(data.model||'EN LÍNEA'),true);speak(data.answer);
+ }catch(err){waiting.remove();add('No pude conectar con el motor de IA. '+(err.message||'Revisá la conexión y la URL del servidor.')+' Si la página sigue alojada en GitHub Pages, configurá la URL base del proyecto desplegado en Vercel.','ai');status('SIN CONEXIÓN CON EL MOTOR IA',false);}
+}
+function submit(text){const value=(text||input.value).trim();if(!value)return;add(value,'user');input.value='';respond(value);}
 $('chatForm').addEventListener('submit',e=>{e.preventDefault();submit();});
 document.querySelectorAll('[data-prompt]').forEach(b=>b.addEventListener('click',()=>submit(b.dataset.prompt)));
+$('apiConfig').addEventListener('click',()=>{const current=localStorage.getItem('jarvis_api_base')||'';const value=prompt('Pegá la URL base del proyecto donde está desplegado el backend de JARVIS en Vercel (por ejemplo, https://tu-proyecto.vercel.app). No pegues claves API acá.',current);if(value===null)return;const clean=value.trim().replace(/\/+$/,'');if(clean&&!/^https:\/\//i.test(clean)){alert('La URL debe comenzar con https://');return;}if(clean)localStorage.setItem('jarvis_api_base',clean);else localStorage.removeItem('jarvis_api_base');apiBase=clean||(location.hostname.endsWith('github.io')?'':location.origin);status(apiBase?'MOTOR IA CONFIGURADO · LISTO PARA PROBAR':'MODO DEMO · FALTA CONECTAR EL MOTOR IA',false);add(apiBase?'URL del motor guardada en este navegador. Mandá un mensaje para comprobar la conexión.':'Conexión externa quitada. Seguís en modo demostración.','ai');});
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-if(SR){recognition=new SR();recognition.lang='es-AR';recognition.interimResults=false;recognition.maxAlternatives=1;recognition.onstart=()=>{listening=true;orb.classList.add('listening');voiceState.textContent='Escuchando… hablá ahora';micBtn.querySelector('span').textContent='Escuchando…';};recognition.onresult=e=>{const said=e.results[0][0].transcript;voiceState.textContent='Interpretando: '+said;submit(said);};recognition.onerror=e=>{voiceState.textContent=e.error==='not-allowed'?'Permiso de micrófono denegado':'No pude captar la voz. Probá de nuevo o escribí tu orden.';};recognition.onend=()=>{listening=false;orb.classList.remove('listening');micBtn.querySelector('span').textContent='Hablar con JARVIS';if(voiceState.textContent==='Escuchando… hablá ahora')voiceState.textContent='Sistemas en espera';};micBtn.addEventListener('click',()=>{if(listening){recognition.stop();return;}try{recognition.start();}catch(e){voiceState.textContent='Esperá un momento y volvé a intentar.';}});}
+if(SR){const recognition=new SR();recognition.lang='es-AR';recognition.interimResults=false;recognition.maxAlternatives=1;let listening=false;recognition.onstart=()=>{listening=true;orb.classList.add('listening');voiceState.textContent='Escuchando… hablá ahora';micBtn.querySelector('span').textContent='Escuchando…';};recognition.onresult=e=>{const said=e.results[0][0].transcript;voiceState.textContent='Interpretando: '+said;submit(said);};recognition.onerror=e=>{voiceState.textContent=e.error==='not-allowed'?'Permiso de micrófono denegado':'No pude captar la voz. Probá de nuevo o escribí tu orden.';};recognition.onend=()=>{listening=false;orb.classList.remove('listening');micBtn.querySelector('span').textContent='Hablar con JARVIS';if(voiceState.textContent==='Escuchando… hablá ahora')voiceState.textContent='Sistemas en espera';};micBtn.addEventListener('click',()=>{if(listening){recognition.stop();return;}try{recognition.start();}catch(e){voiceState.textContent='Esperá un momento y volvé a intentar.';}});}
 else{micBtn.disabled=true;micBtn.querySelector('span').textContent='Voz no compatible';voiceState.textContent='Este navegador no ofrece reconocimiento de voz';$('voiceHelp').textContent='Podés usar el chat escrito. Para probar el micrófono, intentá abrir esta página en Chrome con conexión segura HTTPS.';}
 })();
 </script>
