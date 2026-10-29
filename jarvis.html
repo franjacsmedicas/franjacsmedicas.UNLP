@@ -30,7 +30,7 @@ const $=id=>document.getElementById(id), messages=$('messages'), input=$('userIn
 const history=[];
 function baseUrl(){
  const query=new URLSearchParams(location.search).get('api');
- if(query){localStorage.setItem('jarvis_api_base',query);history.replaceState({},'',location.pathname+location.hash);}
+ if(query){localStorage.setItem('jarvis_api_base',query);window.history.replaceState({},'',location.pathname+location.hash);}
  const saved=(localStorage.getItem('jarvis_api_base')||'').trim().replace(/\/+$/,'');
  if(saved)return saved;
  return location.hostname.endsWith('github.io')?'':location.origin;
