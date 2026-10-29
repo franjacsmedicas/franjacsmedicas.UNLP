@@ -17,8 +17,7 @@ function allowedOrigin(origin) {
   const configured = (process.env.ALLOWED_ORIGIN || "")
     .split(",").map((s) => s.trim()).filter(Boolean);
   const defaults = [
-    "https://franjacsmedicas.github.io",
-    "https://franjacsmedicas.vercel.app"
+    "https://franjacsmedicas.github.io"
   ];
   return [...defaults, ...configured].includes(origin);
 }
