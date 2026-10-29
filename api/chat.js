@@ -70,10 +70,13 @@ module.exports = async function handler(req, res) {
     return send(res, 400, { error: "Enviá entre 1 y 12 mensajes por consulta." });
   }
   const safeMessages = [];
+  let totalChars = 0;
   for (const item of messages) {
     if (!item || !["user", "assistant"].includes(item.role) || typeof item.content !== "string" || !item.content.trim() || item.content.length > 3000) {
       return send(res, 400, { error: "Formato de conversación inválido." });
     }
+    totalChars += item.content.length;
+    if (totalChars > 12000) return send(res, 413, { error: "El historial de conversación es demasiado largo. Iniciá una conversación nueva." });
     safeMessages.push({ role: item.role, content: item.content.trim() });
   }
 
