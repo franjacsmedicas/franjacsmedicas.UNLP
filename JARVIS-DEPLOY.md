@@ -10,7 +10,7 @@
 2. En Vercel → Project → Settings → Environment Variables, agregá:
    - `OPENAI_API_KEY`: una clave de API creada en la plataforma de OpenAI. No la publiques en GitHub ni la pegues en el chat.
    - Opcional `OPENAI_MODEL`: por defecto `gpt-5.5`.
-   - Opcional `ALLOWED_ORIGIN`: orígenes web adicionales separados por comas. El código incluye el dominio GitHub Pages de Franja y `https://franjacsmedicas.vercel.app` como origen por defecto.
+   - `ALLOWED_ORIGIN`: configurá el origen exacto de la página que va a usar el backend. Para GitHub Pages, usá `https://franjacsmedicas.github.io`. Para servir también desde Vercel, agregá el origen exacto de tu proyecto Vercel; si necesitás ambos, separalos por coma.
 3. Hacé un nuevo deploy después de agregar las variables.
 4. Configurá la URL pública de la función como base de API en la página JARVIS si la página sigue alojada en GitHub Pages. Si se sirve desde el mismo proyecto Vercel, la ruta relativa `/api/chat` funciona sin configuración adicional.
 
