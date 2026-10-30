@@ -88,8 +88,9 @@ module.exports = async function handler(req, res) {
     "Respondé en forma práctica y ordenada, con el detalle que requiera la consulta."
   ].join("\n");
 
-  const primaryModel = process.env.GEMINI_MODEL || "gemini-3.8-flash";
-  const models = [...new Set([primaryModel, "gemini-2.5-flash"])];
+  const primaryModel = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+  // Fallbacks estables y habilitados para proyectos nuevos; evitar Gemini 2.5 restringido.
+  const models = [...new Set([primaryModel, "gemini-3.5-flash-lite", "gemini-3.8-flash"])];
   const payload = {
     systemInstruction: { parts: [{ text: instructions }] },
     contents: safeMessages,
@@ -100,7 +101,7 @@ module.exports = async function handler(req, res) {
   let lastMessage = "";
   for (const model of models) {
     // Dos intentos breves para absorber errores transitorios del proveedor.
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; attempt < 1; attempt++) {
       try {
         const response = await fetch(
           "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":generateContent",
@@ -111,7 +112,7 @@ module.exports = async function handler(req, res) {
               "Content-Type": "application/json"
             },
             body: JSON.stringify(payload),
-            signal: AbortSignal.timeout(25000)
+            signal: AbortSignal.timeout(18000)
           }
         );
         const data = await response.json().catch(() => ({}));
