@@ -29,6 +29,7 @@
 (function(){
 const $=id=>document.getElementById(id), messages=$('messages'), input=$('userInput'), orb=$('orb'), micBtn=$('micBtn'), voiceState=$('voiceState');
 const history=[];
+function status(label,online){$('statusText').textContent=label;const dot=$('statusDot');dot.style.background=online?'#64d69b':'#d6a0b1';dot.style.boxShadow=online?'0 0 10px #64d69b88':'0 0 10px #d6a0b166';}
 const apiBase='https://jarvis-fcm-api.vercel.app';
 status('CONECTANDO CON JARVIS…',false);
 fetch(apiBase+'/api/health').then(r=>r.json()).then(data=>{
