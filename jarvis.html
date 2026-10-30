@@ -33,12 +33,35 @@ function status(label,online){$('statusText').textContent=label;const dot=$('sta
 const apiBase='https://jarvis-fcm-api.vercel.app';
 status('CONECTANDO CON JARVIS…',false);
 fetch(apiBase+'/api/health').then(r=>r.json()).then(data=>{
- if(data.status==='online'&&data.aiConfigured)status('MOTOR IA EN LÍNEA',true);
+ if(data.status==='online'&&data.aiConfigured&&data.voiceConfigured)status('MOTOR IA + VOZ JARVIS EN LÍNEA',true);
+ else if(data.status==='online'&&data.aiConfigured)status('MOTOR IA EN LÍNEA · VOZ PENDIENTE',true);
  else if(data.status==='online')status('SERVIDOR EN LÍNEA · FALTA CONFIGURAR IA',false);
  else status('SERVIDOR NO DISPONIBLE',false);
 }).catch(()=>status('NO SE PUDO CONECTAR AL SERVIDOR',false));
 function add(text,who){const el=document.createElement('div');el.className='msg '+who;const label=document.createElement('small');label.textContent=who==='user'?'VOS':'JARVIS · SISTEMA';el.append(label,document.createTextNode(text));messages.appendChild(el);messages.scrollTop=messages.scrollHeight;}
-let jarvisVoice=null;function chooseJarvisVoice(){if(!('speechSynthesis'in window))return;const voices=window.speechSynthesis.getVoices()||[];const spanish=voices.filter(v=>/^es(-|_)/i.test(v.lang));const masculine=spanish.find(v=>/\b(jorge|raul|raúl|pablo|diego|enrique|andres|andrés|daniel|miguel|carlos|male|masculin)\b/i.test(v.name));const argentina=spanish.find(v=>/es[-_]AR/i.test(v.lang));const natural=spanish.find(v=>/google.*español|microsoft.*(pablo|jorge|raul)|neural.*(male|masculin)/i.test(v.name));jarvisVoice=masculine||natural||argentina||spanish.find(v=>/es[-_]MX|es[-_]US/i.test(v.lang))||spanish[0]||null;}if('speechSynthesis'in window){chooseJarvisVoice();window.speechSynthesis.onvoiceschanged=chooseJarvisVoice;}function speak(text){if(!('speechSynthesis'in window))return;window.speechSynthesis.cancel();const spoken=String(text).replace(/\*/g,'').replace(/`/g,'').replace(/_{1,2}/g,'').replace(/\s+/g,' ').trim();if(!spoken)return;const u=new SpeechSynthesisUtterance(spoken);u.lang=jarvisVoice?jarvisVoice.lang:'es-AR';if(jarvisVoice)u.voice=jarvisVoice;u.rate=1.04;u.pitch=.88;u.volume=1;u.onstart=()=>orb.classList.add('speaking');u.onend=()=>orb.classList.remove('speaking');window.speechSynthesis.speak(u);}
+let currentAudio=null,currentAudioUrl=null;
+async function speak(text){
+ const spoken=String(text).replace(/\\*/g,'').replace(/`/g,'').replace(/_{1,2}/g,'').replace(/\\s+/g,' ').trim();
+ if(!spoken)return;
+ if(currentAudio){currentAudio.pause();currentAudio=null;}
+ if(currentAudioUrl){URL.revokeObjectURL(currentAudioUrl);currentAudioUrl=null;}
+ try{
+  voiceState.textContent='Generando voz de JARVIS…';
+  const response=await fetch(apiBase+'/api/speech',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:spoken}),signal:AbortSignal.timeout(50000)});
+  if(!response.ok){const data=await response.json().catch(()=>({}));throw new Error(data.error||'No se pudo generar el audio.');}
+  const audioBlob=await response.blob();
+  if(!audioBlob.size)throw new Error('El motor de voz devolvió un audio vacío.');
+  currentAudioUrl=URL.createObjectURL(audioBlob);
+  currentAudio=new Audio(currentAudioUrl);
+  currentAudio.onplay=()=>{orb.classList.add('speaking');voiceState.textContent='JARVIS está hablando';};
+  currentAudio.onended=()=>{orb.classList.remove('speaking');voiceState.textContent='Sistemas en espera';if(currentAudioUrl){URL.revokeObjectURL(currentAudioUrl);currentAudioUrl=null;}currentAudio=null;};
+  currentAudio.onerror=()=>{orb.classList.remove('speaking');voiceState.textContent='No se pudo reproducir el audio.';};
+  await currentAudio.play();
+ }catch(err){
+  orb.classList.remove('speaking');
+  voiceState.textContent='Voz IA no disponible: '+(err.message||'revisá la configuración');
+ }
+}
 function demo(raw){
  const q=raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
  if(/que podes hacer|ayuda|comandos|funciones/.test(q))return 'En modo demostración puedo decirte la hora y la fecha, abrir secciones de esta web y lanzar búsquedas. Para conversar libremente conectá el motor de IA.';
