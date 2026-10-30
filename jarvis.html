@@ -33,8 +33,7 @@ function status(label,online){$('statusText').textContent=label;const dot=$('sta
 const apiBase='https://jarvis-fcm-api.vercel.app';
 status('CONECTANDO CON JARVIS…',false);
 fetch(apiBase+'/api/health').then(r=>r.json()).then(data=>{
- if(data.status==='online'&&data.aiConfigured&&data.voiceConfigured)status('MOTOR IA + VOZ JARVIS EN LÍNEA',true);
- else if(data.status==='online'&&data.aiConfigured)status('MOTOR IA EN LÍNEA · VOZ PENDIENTE',true);
+ if(data.status==='online'&&data.aiConfigured)status('MOTOR IA EN LÍNEA · VOZ DEL DISPOSITIVO DISPONIBLE',true);
  else if(data.status==='online')status('SERVIDOR EN LÍNEA · FALTA CONFIGURAR IA',false);
  else status('SERVIDOR NO DISPONIBLE',false);
 }).catch(()=>status('NO SE PUDO CONECTAR AL SERVIDOR',false));
@@ -58,8 +57,29 @@ async function speak(text){
   currentAudio.onerror=()=>{orb.classList.remove('speaking');voiceState.textContent='No se pudo reproducir el audio.';};
   await currentAudio.play();
  }catch(err){
+  // Alternativa gratuita: usar la síntesis de voz integrada en el dispositivo/navegador.
   orb.classList.remove('speaking');
-  voiceState.textContent='Voz IA no disponible: '+(err.message||'revisá la configuración');
+  if('speechSynthesis' in window && typeof SpeechSynthesisUtterance!=='undefined'){
+   try{
+    window.speechSynthesis.cancel();
+    const utterance=new SpeechSynthesisUtterance(spoken);
+    utterance.lang='es-AR';
+    utterance.rate=0.96;
+    utterance.pitch=0.92;
+    const voices=window.speechSynthesis.getVoices();
+    const spanish=voices.filter(v=>/^es(-|_)/i.test(v.lang));
+    const preferred=spanish.find(v=>/argentina|es-ar/i.test(v.lang+' '+v.name))||spanish.find(v=>/male|mascul|diego|jorge|pablo/i.test(v.name))||spanish[0];
+    if(preferred)utterance.voice=preferred;
+    utterance.onstart=()=>{orb.classList.add('speaking');voiceState.textContent='JARVIS está hablando · voz del dispositivo';};
+    utterance.onend=()=>{orb.classList.remove('speaking');voiceState.textContent='Sistemas en espera';};
+    utterance.onerror=()=>{orb.classList.remove('speaking');voiceState.textContent='No se pudo reproducir la voz. Revisá el volumen y la configuración de voz del celular.';};
+    window.speechSynthesis.speak(utterance);
+   }catch(fallbackError){
+    voiceState.textContent='Voz no disponible en este navegador.';
+   }
+  }else{
+   voiceState.textContent='Este navegador no tiene síntesis de voz. Probá con Chrome.';
+  }
  }
 }
 function demo(raw){
