@@ -88,44 +88,69 @@ module.exports = async function handler(req, res) {
     "Respondé en forma práctica y ordenada, con el detalle que requiera la consulta."
   ].join("\n");
 
-  try {
-    const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":generateContent",
-      {
-        method: "POST",
-        headers: {
-          "x-goog-api-key": process.env.GEMINI_API_KEY,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: instructions }] },
-          contents: safeMessages,
-          generationConfig: { maxOutputTokens: 1200, temperature: 0.7 }
-        }),
-        signal: AbortSignal.timeout(45000)
+  const primaryModel = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+  const models = [...new Set([primaryModel, "gemini-2.5-flash"])];
+  const payload = {
+    systemInstruction: { parts: [{ text: instructions }] },
+    contents: safeMessages,
+    generationConfig: { maxOutputTokens: 1200, temperature: 0.7 }
+  };
+
+  let lastStatus = 0;
+  let lastMessage = "";
+  for (const model of models) {
+    // Dos intentos breves para absorber errores transitorios del proveedor.
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const response = await fetch(
+          "https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":generateContent",
+          {
+            method: "POST",
+            headers: {
+              "x-goog-api-key": process.env.GEMINI_API_KEY,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload),
+            signal: AbortSignal.timeout(25000)
+          }
+        );
+        const data = await response.json().catch(() => ({}));
+        if (response.ok) {
+          const answer = (data?.candidates?.[0]?.content?.parts || [])
+            .map((part) => typeof part.text === "string" ? part.text : "")
+            .join("")
+            .trim();
+          if (answer) return send(res, 200, { answer, model });
+          lastStatus = 502;
+          lastMessage = "Gemini no devolvió texto.";
+          break;
+        }
+
+        lastStatus = response.status;
+        lastMessage = data?.error?.message || "";
+        if (response.status === 401 || response.status === 403) {
+          console.error("Gemini authentication error", response.status, lastMessage.slice(0, 200));
+          return send(res, 502, { error: "Google rechazó la clave de Gemini o no tiene acceso al modelo. Revisá la clave y el proyecto en AI Studio." });
+        }
+        if (response.status === 429) {
+          console.error("Gemini quota/rate limit", response.status, lastMessage.slice(0, 200));
+          return send(res, 429, { error: "Gemini alcanzó el límite de uso o cuota. Esperá a que se restablezca o revisá los límites del proyecto." });
+        }
+
+        console.error("Gemini API error", model, response.status, lastMessage.slice(0, 200));
+        // Reintentar sólo errores temporales; ante 5xx se prueba luego el modelo alternativo.
+        if (response.status < 500) break;
+      } catch (error) {
+        lastMessage = error?.name || "Error de conexión";
+        console.error("JARVIS Gemini attempt failed", model, attempt + 1, lastMessage);
       }
-    );
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      const providerMessage = data?.error?.message || "";
-      if (response.status === 401 || response.status === 403) {
-        return send(res, 502, { error: "Google rechazó la clave de Gemini o no tiene acceso al modelo. Revisá la clave y el proyecto en AI Studio." });
-      }
-      if (response.status === 429) {
-        return send(res, 429, { error: "Gemini alcanzó el límite de uso gratuito. Esperá a que se restablezca la cuota o revisá los límites del proyecto." });
-      }
-      console.error("Gemini API error", response.status, providerMessage.slice(0, 300));
-      return send(res, 502, { error: "Gemini no pudo completar la consulta. Probá nuevamente en unos segundos." });
     }
-    const answer = (data?.candidates?.[0]?.content?.parts || [])
-      .map((part) => typeof part.text === "string" ? part.text : "")
-      .join("")
-      .trim();
-    if (!answer) return send(res, 502, { error: "Gemini no devolvió texto. Probá de nuevo." });
-    return send(res, 200, { answer, model });
-  } catch (error) {
-    console.error("JARVIS Gemini request failed", error?.name || "Error");
-    return send(res, 504, { error: "La consulta tardó demasiado o no se pudo conectar. Probá de nuevo." });
   }
+
+  if (lastStatus === 502 && lastMessage === "Gemini no devolvió texto.") {
+    return send(res, 502, { error: "Gemini no devolvió una respuesta. Probá de nuevo." });
+  }
+  return send(res, 503, {
+    error: "Los modelos de Gemini están temporalmente ocupados o no responden. JARVIS ya intentó una alternativa; esperá unos segundos y volvé a intentar."
+  });
 };
