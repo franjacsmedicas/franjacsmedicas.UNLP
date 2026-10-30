@@ -8,6 +8,6 @@ module.exports = function handler(req, res) {
   return res.status(200).end(JSON.stringify({
     service: "JARVIS API",
     status: "online",
-    aiConfigured: Boolean(process.env.GEMINI_API_KEY)
+    aiConfigured: Boolean(process.env.GEMINI_API_KEY),\n    voiceConfigured: Boolean(process.env.ELEVENLABS_API_KEY && process.env.ELEVENLABS_VOICE_ID)
   }));
 };
