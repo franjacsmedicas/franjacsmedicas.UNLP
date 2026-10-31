@@ -51,7 +51,7 @@ obstetricia:{name:'Lic. en Obstetricia',years:[
 ['Primer año',[['Obstetricia Normal'],['Anatomía, Histología y Embriología'],['Biología Celular y Genética'],['Ciencias Sociales y Obstetricia'],['Psicología']]],
 ['Segundo año',[['Obstetricia Patológica',['Obstetricia Normal'],['Obstetricia Normal']],['La Salud Materno Infantil'],['Microbiología, Parasitología',['Biología Celular y Genética'],['Biología Celular y Genética']],['Farmacología General'],['Epidemiología'],['Educación para la Salud Reproductiva'],['Fisiología Humana',['Anatomía, Histología y Embriología','Biología Celular y Genética'],['Biología Celular y Genética']]]],
 ['Tercer año',[['Clínica Obstétrica Normal y Patológica',['Obstetricia Normal','Obstetricia Patológica'],['Obstetricia Normal','Obstetricia Patológica']],['Salud Pública',['Ciencias Sociales y Obstetricia','Epidemiología']],['Neonatología Normal y Patológica',['Obstetricia Normal','Obstetricia Patológica']],['Investigación en Salud'],['Terapéutica: Bases Farmacológicas',['Farmacología General']]]],
-['Cuarto año',[['Taller de Tesis – Tesina Final',['Investigación en Salud'],['Terapéutica: Bases Farmacológicas','Enfermedades Infecciosas']],['Enfermedades Infecciosas',['Microbiología, Parasitología','Farmacología General','Epidemiología','Terapéutica: Bases Farmacológicas'],['Biología Celular y Genética','Microbiología, Parasitología','Epidemiología']],['Ética, Deontología y Obstetricia Legal'],['Informática Aplicada a las Cs. de la Salud'],['Inglés Técnico'],['Práctica Final Obligatoria']]]]},
+['Cuarto año',[['Taller de Tesis – Tesina Final',['Investigación en Salud'],['Materias identificadas con los códigos 15 a 21 del plan oficial']],['Enfermedades Infecciosas',['Microbiología, Parasitología','Farmacología General','Epidemiología','Terapéutica: Bases Farmacológicas'],['Biología Celular y Genética','Microbiología, Parasitología','Epidemiología']],['Ética, Deontología y Obstetricia Legal'],['Informática Aplicada a las Cs. de la Salud'],['Inglés Técnico'],['Práctica Final Obligatoria']]]]},
 nutricion:{name:'Lic. en Nutrición',years:[
 ['Primer año',[['Bioquímica'],['Anatomía'],['Biología e introducción a la biología molecular'],['Elementos de física y matemática'],['Introducción al proceso intelectual'],['Fisiología',['Anatomía','Biología e introducción a la biología molecular'],['Anatomía']],['Educación para la salud'],['Estadística',['Elementos de física y matemática']],['Informática',[],[], 'Cursada optativa; final obligatorio.']]],
 ['Segundo año',[['Bromatología',['Biología e introducción a la biología molecular','Elementos de física y matemática','Fisiología'],['Bioquímica','Anatomía']],['Fisiopatología',['Biología e introducción a la biología molecular','Elementos de física y matemática','Fisiología'],['Bioquímica','Anatomía'],['Fisiología']],['Nutrición normal del adulto',['Biología e introducción a la biología molecular','Elementos de física y matemática','Fisiología'],['Bioquímica','Anatomía'],['Biología e introducción a la biología molecular','Fisiología']],['Técnica dietética',['Biología e introducción a la biología molecular','Elementos de física y matemática','Fisiología'],['Bioquímica','Anatomía']],['Laboratorio de gastronomía I',['Biología e introducción a la biología molecular','Elementos de física y matemática','Fisiología'],['Bioquímica','Anatomía']],['Socioantropología',['Biología e introducción a la biología molecular','Elementos de física y matemática','Fisiología'],['Bioquímica','Anatomía']],['Introducción a la salud pública',['Biología e introducción a la biología molecular','Elementos de física y matemática','Fisiología','Socioantropología'],['Bioquímica','Anatomía','Educación para la salud'],['Socioantropología']]]],
@@ -73,27 +73,27 @@ function render(){
   const section=document.createElement('section');section.className='year';const h=document.createElement('h2');h.textContent=year;section.appendChild(h);
   const grid=document.createElement('div');grid.className='nodes';
   matches.forEach(item=>{
-   const a=Array.isArray(item)?item:[item,[],[]];const [name,course=[],final=[],extra='']=a;
+   const a=Array.isArray(item)?item:[item,[],[]];const [name,course=[],final=[],sit=[],extra='']=a;
    const b=document.createElement('button');b.type='button';b.className='node';b.setAttribute('aria-pressed','false');
    const strong=document.createElement('strong');strong.textContent=name;b.appendChild(strong);
-   const count=course.length+final.length+(extra?1:0);const small=document.createElement('small');small.textContent=count?('Requisitos detallados · '+count):'Sin correlativa indicada';b.appendChild(small);
-   b.addEventListener('click',()=>showDetail(name,course,final,extra,b));grid.appendChild(b);
+   const count=course.length+final.length+sit.length+(extra?1:0);const small=document.createElement('small');small.textContent=count?('Requisitos detallados · '+count):'Sin correlativa indicada';b.appendChild(small);
+   b.addEventListener('click',()=>showDetail(name,course,final,sit,extra,b));grid.appendChild(b);
   });section.appendChild(grid);map.appendChild(section);
  });
  if(!map.children.length)map.innerHTML='<div class="empty">No encontramos materias con ese nombre. Probá con otra búsqueda.</div>';
 }
-function showDetail(name,course,final,extra,button){
+function showDetail(name,course,final,sit,extra,button){
  document.querySelectorAll('.node').forEach(n=>n.setAttribute('aria-pressed','false'));button.setAttribute('aria-pressed','true');
  detail.className='detail show';detail.innerHTML='';
  const h=document.createElement('h3');h.textContent=name;detail.appendChild(h);
  const p=document.createElement('div');p.className='muted';p.textContent=data[career.value].name;detail.appendChild(p);
  const g=document.createElement('div');g.className='detail-grid';
- [[ 'Para cursar',course],['Para rendir final',final]].forEach(([label,arr])=>{const box=document.createElement('div');box.className='detail-box';const b=document.createElement('b');b.textContent=label;box.appendChild(b);const t=document.createElement('p');t.textContent=arr.length?arr.join(' · '):'La ficha oficial no indica correlativas específicas en este apartado.';box.appendChild(t);g.appendChild(box)});
+ const boxes=career.value==='nutricion'?[[ 'Para cursar · cursada aprobada',course],['Para cursar · final aprobado',final],['Para rendir final · final aprobado',sit]]:career.value==='obstetricia'?[[ 'Para cursar',course],['Para rendir final',final]]:career.value==='enfermeria'||career.value==='cardio'?[[ 'Correlativas indicadas en el plan',course]]:[[ 'Correlatividades',course]];\n boxes.forEach(([label,arr])=>{const box=document.createElement('div');box.className='detail-box';const b=document.createElement('b');b.textContent=label;box.appendChild(b);const t=document.createElement('p');t.textContent=arr.length?arr.join(' · '):'La ficha oficial no indica correlativas específicas en este apartado.';box.appendChild(t);g.appendChild(box)});
  detail.appendChild(g);
  if(extra){const n=document.createElement('div');n.className='notice';n.textContent=extra;detail.appendChild(n)}
  const link=document.createElement('a');link.className='source';link.href=sources[career.value];link.target='_blank';link.rel='noopener';link.textContent='Consultar plan oficial ↗';detail.appendChild(link);
  detail.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-career.addEventListener('change',render);search.addEventListener('input',render);render();
+career.addEventListener('change',render);search.addEventListener('input',render);\nconst requested=(location.hash||'').slice(1);if(data[requested])career.value=requested;render();
 </script>
 </body></html>
